@@ -1,0 +1,110 @@
+{
+    "godRolls": {
+      "Crimson": [
+        {
+          "attributes": ["Magic Find", "Veteran"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        }
+      ],
+      "Aurora": [
+        {
+          "attributes": ["Mana Pool", "Mana Regeneration"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        }
+      ],
+      "Molten": [
+        {
+          "attributes": ["Lifeline", "Mana Pool"],
+          "pieces": ["Cloak", "Belt", "Bracelet"]
+        },
+        {
+          "attributes": ["Dominance", "Speed"],
+          "pieces": ["Cloak", "Belt", "Bracelet"]
+        },
+        {
+          "attributes": ["Dominance", "Mana Pool"],
+          "pieces": ["Necklace", "Belt", "Bracelet"]
+        }
+      ],
+      "Terror": [
+        {
+          "attributes": ["Lifeline", "Mana Pool"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        },
+        {
+          "attributes": ["Dominance", "Speed"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        }
+      ]
+    },
+    "goodRolls": {
+      "Crimson": [
+        {
+          "attributes": ["Vitality", "Veteran"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        },
+        {
+          "attributes": ["Magic Find", "Vitality"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        },
+        {
+          "attributes": ["Mana Pool", "Mana Regeneration"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        }
+      ],
+      "Aurora": [
+        {
+          "attributes": ["Mana Pool", "Vitality"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        },
+        {
+          "attributes": ["Mana Pool", "Veteran"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        },
+        {
+          "attributes": ["Mana Pool", "Breeze"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        }
+      ],
+      "Molten": [
+        {
+          "attributes": ["Magic Find", "Vitality"],
+          "pieces": ["Cloak", "Belt", "Bracelet"]
+        }
+      ],
+      "Terror": [
+        {
+          "attributes": ["Dominance", "Mana Pool"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        },
+        {
+          "attributes": ["Dominance", "Vitality"],
+          "pieces": ["Boots", "Leggings", "Chestplate"]
+        }
+      ]
+    },
+    "attributes": [
+      "Arachno", "Attack Speed", "Blazing", "Combo", "Elite", "Ender", "Ignition", 
+      "Life Recovery", "Mana Steel", "Midas Touch", "Undead", "Warrior", "Deadeye", 
+      "Arachno Resistant", "Blazing Resistance", "Breeze", "Dominance", "Ender Resistance", 
+      "Experience", "Fortitude", "Life Regeneration", "Lifeline", "Magic Find", 
+      "Mana Pool", "Mana Regeneration", "Vitality", "Speed", "Undead Resistance", 
+      "Veteran", "Blazing Fortune", "Fishing Experience", "Infection", "Double Hook", 
+      "Fisherman", "Fishing Speed", "Hunter", "Trophy Hunter"
+    ],
+    "baseItems": ["Crimson", "Aurora", "Fervor", "Hollow", "Molten", "Terror"],
+    "armorPieces": ["Helmet", "Chestplate", "Leggings", "Boots"],
+    "moltenPieces": ["Necklace", "Gauntlet", "Cloak", "Belt"],
+    "specialDrops": {
+      "red": ["Mandraa", "Kuudra Mandible", "Aurora Staff", "Hollow Wand"],
+      "green": ["Burning Kuudra Core", "Wheel of Fate", "Enrager", "Tentacle Dye"],
+      "yellow": []
+    },
+    "attributeShards": {
+        "yellow": ["Fishing Experience", "Blazing Fortune", "Mana Pool", "Breeze"]
+    },
+    "enchantedBooks": {
+        "green": ["Fatal Tempo", "Inferno"],
+        "red": ["Strong Mana", "Ferocious Mana", "Hardened Mana", "Mana Vampire"]
+    }
+}
