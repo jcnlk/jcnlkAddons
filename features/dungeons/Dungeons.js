@@ -1,5 +1,6 @@
 import Config from "../../config";
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
+import { showSimplePopup } from "../../utils/Popup";
 
 // Global variables
 let killedCrypts = 0;
@@ -118,9 +119,37 @@ function sendCryptReminder(currentTime) {
             const message = Config.cryptReminderMessage.replace("{count}", cryptsNeeded);
             ChatLib.say(`/pc ${message}`);
             showDebugMessage(`Sent crypt reminder: ${message}`);
+            
+            // Show popup if enabled
+            if (Config.enableCryptReminderPopup) {
+                showCryptReminderPopup(cryptsNeeded);
+                playCryptReminderSound();
+            }
+            
             reminderSent = true;
         }
     }
+}
+
+function showCryptReminderPopup(cryptsNeeded) {
+    if (!Config.enableCryptReminderPopup) return;
+
+    const colorCodes = ["§c", "§a", "§b", "§e", "§f", "§d"];
+    const selectedColor = colorCodes[Config.cryptReminderPopupColor];
+    
+    const popupMessage = `Need ${cryptsNeeded} more crypts!`;
+    
+    showSimplePopup(popupMessage, 5000, true, "Crypt Reminder", selectedColor);
+    showDebugMessage(`Showing crypt reminder popup: ${popupMessage}`);
+}
+
+function playCryptReminderSound() {
+    if (!Config.enableCryptReminderPopup) return;
+
+    const sounds = ["random.orb", "random.levelup", "random.pop", "note.pling", "mob.enderdragon.growl"];
+    const selectedSound = sounds[Config.cryptReminderSound];
+    World.playSound(selectedSound, Config.cryptReminderSoundVolume, 1);
+    showDebugMessage(`Played crypt reminder sound: ${selectedSound} at volume ${Config.cryptReminderSoundVolume}`);
 }
 
 /**

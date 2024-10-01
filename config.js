@@ -83,6 +83,43 @@ class Config {
     })
     cryptReminderMessage = "Crypt Reminder: We need {count} more Crypts!";
 
+    @SwitchProperty({
+        name: "Enable Crypt Reminder Popup",
+        description: "Show a popup for crypt reminders",
+        category: "Dungeons",
+        subcategory: "Crypt Reminder"
+    })
+    enableCryptReminderPopup = true;
+
+    @SelectorProperty({
+        name: "Crypt Reminder Popup Color",
+        description: "Choose the color for crypt reminder popups",
+        category: "Dungeons",
+        subcategory: "Crypt Reminder",
+        options: ["§cRed§r", "§aGreen§r", "§bBlue§r", "§eYellow§r", "§fWhite§r", "§dPink§r"]
+    })
+    cryptReminderPopupColor = 0;
+    
+    @SelectorProperty({
+        name: "Crypt Reminder Sound",
+        description: "Choose the sound for crypt reminders",
+        category: "Dungeons",
+        subcategory: "Crypt Reminder",
+        options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
+    })
+    cryptReminderSound = 0;
+    
+    @DecimalSliderProperty({
+        name: "Crypt Reminder Sound Volume",
+        description: "Volume of the crypt reminder sound (0 to turn it §cOFF§r)",
+        category: "Dungeons",
+        subcategory: "Crypt Reminder",
+        minF: 0,
+        maxF: 2.0,
+        decimalPlaces: 1
+    })
+    cryptReminderSoundVolume = 0.5;
+
     // Party Commands
     @SwitchProperty({
         name: "Enable Party Commands",
@@ -307,6 +344,10 @@ class Config {
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
+        this.addDependency("Crypt Reminder Popup Color", "Enable Crypt Reminder Popup");
+        this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder Popup");
+        this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder Popup");
+
 
         // Add dependencies for WIP
         this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting")
