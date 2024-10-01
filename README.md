@@ -1,47 +1,82 @@
 # jcnlkAddons
 
-jcnlkAddons is a ChatTriggers module for Minecraft 1.8.9 that enhances the gameplay experience with various features and utilities.
+jcnlkAddons is a Minecraft mod designed to enhance the gameplay experience on Hypixel SkyBlock. It provides various quality-of-life features, party commands, and dungeon utilities.
 
 ## Features
 
-- **Dungeon Assistance**: Tracks crypt count and provides reminders in dungeons.
-- **Party Commands**: Various fun and utility commands for party chat.
-- **DM Commands**: Useful commands that can be triggered via direct messages.
-- **Attribute Scanner**: Scans and highlights items with special attributes.
-- **Reminder System**: Set and manage reminders within the game.
-- **Customizable Popups**: Display important information as in-game popups.
+### General
+- Attribute Abbreviations: Display attribute abbreviations on items in the inventory.
+- Reminders: Set and manage reminders with customizable messages and sounds.
+
+### Dungeons
+- Crypt Reminder: Get notified about the number of crypts that need to be cleared.
+
+### Party Commands
+A variety of fun and useful party commands, including:
+- !rng: Generate random numbers.
+- !cf: Coin flip.
+- !8ball: Ask the magic 8-ball a question.
+- !throw: Simulate throwing an item.
+- !dice: Roll a die.
+- !pet: Pet another player.
+- !joke: Tell a joke.
+- And more!
+
+### DM Commands
+Useful commands that can be triggered via direct messages:
+- !p: Send a party invite.
+- !kick: Kick a player from the party.
+
+### Kuudra Loot Highlighting
+- Highlight valuable loot in Kuudra chests.
+- Chat output for chest contents.
 
 ## Installation
 
-1. Ensure you have [ChatTriggers](https://www.chattriggers.com/) installed for Minecraft 1.8.9.
-2. Download the latest release of jcnlkAddons from the [releases page](https://github.com/jcnlk/jcnlkAddons/releases).
-3. Place the downloaded `jcnlkAddons` folder into your `.minecraft/config/ChatTriggers/modules/` directory.
-4. Restart Minecraft or type `/ct reload` in-game.
+1. Ensure you have Minecraft 1.8.9 with Forge installed.
+2. Install the ChatTriggers mod for Minecraft 1.8.9.
+3. Download the latest release of jcnlkAddons from the [releases page](https://github.com/jcnlk/jcnlkAddons/releases).
+4. Place the downloaded `.js` files into your `.minecraft/config/ChatTriggers/modules/jcnlkAddons/` directory.
+5. Launch Minecraft and join Hypixel SkyBlock.
 
 ## Usage
 
-- Use `/ja` to access the main command and open the configuration GUI.
-- Party commands start with `!`, e.g., `!rng`, `!cf`, `!8ball`.
-- DM commands also start with `!`, e.g., `!p`, `!kick`.
-- For a full list of commands, use `!commands` in party chat.
+- Use `/ja` to access the main command interface.
+- Use `/ja help` to see available subcommands.
+- Party commands can be used in party chat by typing the command (e.g., `!rng`).
+- DM commands can be used by sending a direct message to a player with the command.
 
 ## Configuration
 
-Most features can be customized through the in-game configuration GUI. Access it by typing `/ja` in the chat.
+To configure jcnlkAddons:
+
+1. In-game, use the command `/ja` to open the configuration GUI.
+2. Adjust settings for various features according to your preferences.
+3. Save the configuration and restart the game for changes to take effect.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions to jcnlkAddons are welcome! If you have a bug to report or a feature to suggest, please open an issue on the GitHub repository. If you'd like to contribute code:
+
+1. Fork the repository.
+2. Create a new branch for your feature.
+3. Make your changes and commit them with clear, descriptive messages.
+4. Push your changes to your fork.
+5. Submit a pull request with a clear description of your changes.
+
+## Support
+
+If you encounter any issues or have questions about jcnlkAddons, please open an issue on the GitHub repository or contact the maintainer directly.
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
 
-## Support
-
-If you encounter any issues or have questions, please [open an issue](https://github.com/jcnlk/jcnlkAddons/issues) on GitHub.
-
 ## Acknowledgements
 
-- Thanks to the ChatTriggers community for their invaluable resources and support.
-- Special thanks to all contributors and testers who have helped improve this module.
+- Thanks to the Hypixel community for inspiration and support.
+- Special thanks to the ChatTriggers team for their amazing mod.
+
+---
+
+Enjoy using jcnlkAddons, and may your Hypixel SkyBlock adventures be ever more enjoyable!
