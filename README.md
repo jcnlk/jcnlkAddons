@@ -14,7 +14,7 @@ jcnlkAddons is a ChatTriggers module for Minecraft 1.8.9 that enhances the gamep
 ## Installation
 
 1. Ensure you have [ChatTriggers](https://www.chattriggers.com/) installed for Minecraft 1.8.9.
-2. Download the latest release of jcnlkTools from the [releases page](https://github.com/jcnlk/jcnlkAddons/releases).
+2. Download the latest release of jcnlkAddons from the [releases page](https://github.com/jcnlk/jcnlkAddons/releases).
 3. Place the downloaded `jcnlkAddons` folder into your `.minecraft/config/ChatTriggers/modules/` directory.
 4. Restart Minecraft or type `/ct reload` in-game.
 
