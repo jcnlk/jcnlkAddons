@@ -93,121 +93,120 @@ class Config {
     enablePartyCommands = true;
 
     @SwitchProperty({
-        name: "!rng",
-        description: "Enable the !rng command",
+        name: "RNG Command &3!rng&r",
+        description: "Enable the rng command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     rngCommand = true;
 
     @SwitchProperty({
-        name: "!cf",
-        description: "Enable the !cf command",
+        name: "Coinflip Command &3!cf&r",
+        description: "Enable the coinflip command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     coinFlipCommand = true;
 
     @SwitchProperty({
-        name: "!8ball",
-        description: "Enable the !8ball command",
+        name: "8ball Command &3!8ball&r",
+        description: "Enable the 8ball command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     eightBallCommand = true;
 
     @SwitchProperty({
-        name: "!throw",
-        description: "Enable the !throw command",
+        name: "Throw Command &3!throw&r",
+        description: "Enable the throw command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     throwCommand = true;
 
     @SwitchProperty({
-        name: "!dice",
-        description: "Enable the !dice command",
+        name: "Dice Command &3!dice&r",
+        description: "Enable the dice command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     diceCommand = true;
 
     @SwitchProperty({
-        name: "!pet",
-        description: "Enable the !pet command",
+        name: "Pet Command &3!pet&r",
+        description: "Enable the pet command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     petCommand = true;
 
     @SwitchProperty({
-        name: "!joke",
-        description: "Enable the !joke command",
+        name: "Joke Command &3!joke&r",
+        description: "Enable the joke command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     jokeCommand = true;
 
     @SwitchProperty({
-        name: "!commands help",
-        description: "Enable the !commands help feature",
+        name: "Help Command &3!commands help&r",
+        description: "Enable the help command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     commandsHelpCommand = true;
 
     @SwitchProperty({
-        name: "!mod",
-        description: "Enable the !mod command",
+        name: "Mod Command &3!mod&r",
+        description: "Enable the mod command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     modCommand = true;
 
     @SwitchProperty({
-        name: "!simp",
-        description: "Enable the !simp command",
+        name: "Simp Command &3!simp&r",
+        description: "Enable the simp command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     simpCommand = true;
 
     @SwitchProperty({
-        name: "!sweat",
-        description: "Enable the !sweat command",
+        name: "Sweat Command &3!sweat&r",
+        description: "Enable the sweat command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     sweatCommand = true;
 
     @SwitchProperty({
-
-        name: "!sus",
-        description: "Enable the !sus command",
+        name: "Sus Command &3!sus&r",
+        description: "Enable the sus command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     susCommand = true;
 
     @SwitchProperty({
-        name: "!kick/!pk",
-        description: "Enable the !kick/!pk command",
+        name: "Kick Command (Party) &3!<kick, pk>&r",
+        description: "Enable the kick command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     partyKickCommand = true;
 
     @SwitchProperty({
-        name: "!p (Party)",
-        description: "Enable the !p command",
+        name: "Invite Command (Party) &3!p&r ",
+        description: "Enable the invite command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
     partyInviteCommand = true;
 
     @SwitchProperty({
-        name: "!reminder",
-        description: "Enable the !reminder command",
+        name: "Reminder Command &3!reminder&r",
+        description: "Enable the reminder command in Party Chat",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -223,16 +222,16 @@ class Config {
     enableDmCommands = true;
 
     @SwitchProperty({
-        name: "!p",
-        description: "Enable the !p command in DMs",
+        name: "Invite Command (DMs) &3!p&r",
+        description: "Enable the invite command in DMs",
         category: "DM Commands",
         subcategory: "DM Commands"
     })
     partyCommand = true;
 
     @SwitchProperty({
-        name: "!kick",
-        description: "Enable the !kick command in DMs",
+        name: "Kick Command (DMs) &3!kick&r",
+        description: "Enable the kick Command command in DMs",
         category: "DM Commands",
         subcategory: "DM Commands"
     })
@@ -240,100 +239,20 @@ class Config {
 
     //WIP Stuff
     @SwitchProperty({
-        name: "Enable Chest Scanning",
-        description: "Automatically scan chests content when opened",
+        name: "Enable Chest Highlighting",
+        description: "Highlights loot in different colors according to their value (God Roll, Good Roll, Bad Roll)",
         category: "WIP",
-        subcategory: "Chest Scanning (§aALMOST FINISH, SHOULD WORK§r)"
+        subcategory: "Kuudra Loot Highlight (§aSHOULD WORK§r)"
     })
     enableChestScanning = true;
 
     @SwitchProperty({
-        name: "Enable Chest Content in Chat",
-        description: "Show information about the chest content in chat",
+        name: "Enable Chat Output of Chest Content",
+        description: "Output your loot in Chat",
         category: "WIP",
-        subcategory: "Chest Scanning (§aALMOST FINISH, SHOULD WORK§r)"
+        subcategory: "Kuudra Loot Highlight (§aSHOULD WORK§r)"
     })
     enableAttributeChatOutput = true;
-
-    @SwitchProperty({
-        name: "Enable Per-User Cooldown",
-        description: "Enable cooldown for commands per user",
-        category: "WIP",
-        subcategory: "Per-User Settings (§cTOTALLY NOT WORKING RN§r)"
-    })
-    enablePerUserCooldown = false;
-
-    @DecimalSliderProperty({
-        name: "Per-User Cooldown Duration",
-        description: "How long a user must wait before executing another command (in seconds)",
-        category: "WIP",
-        subcategory: "Per-User Settings (§cTOTALLY NOT WORKING RN§r)",
-        minF: 0.0,
-        maxF: 30.0,
-        decimalPlaces: 1
-    })
-    perUserCooldownDuration = 5.0;
-
-    @DecimalSliderProperty({
-        name: "Per-User Command Limit Period",
-        description: "Time period in which the maximum number of commands per user applies (in seconds)",
-        category: "WIP",
-        subcategory: "Per-User Settings (§cTOTALLY NOT WORKING RN§r)",
-        minF: 1.0,
-        maxF: 180.0,
-        decimalPlaces: 1
-    })
-    perUserLimitPeriod = 60.0;
-
-    @SliderProperty({
-        name: "Max Commands Per User",
-        description: "Maximum number of commands a user can execute within the limit period",
-        category: "WIP",
-        subcategory: "Per-User Settings (§cTOTALLY NOT WORKING RN§r)",
-        min: 1,
-        max: 20
-    })
-    maxCommandsPerUser = 5;
-
-    @SwitchProperty({
-        name: "Enable Global Cooldown",
-        description: "Enable a shared cooldown for all users",
-        category: "WIP",
-        subcategory: "Global Settings (§cTOTALLY NOT WORKING RN§r)"
-    })
-    enableGlobalCooldown = false;
-
-    @DecimalSliderProperty({
-        name: "Global Cooldown Duration",
-        description: "How long all users must wait before a new command can be executed (in seconds)",
-        category: "WIP",
-        subcategory: "Global Settings (§cTOTALLY NOT WORKING RN§r)",
-        minF: 0.0,
-        maxF: 10.0,
-        decimalPlaces: 1
-    })
-    globalCooldownDuration = 1.0;
-
-    @DecimalSliderProperty({
-        name: "Global Command Limit Period",
-        description: "Time period in which the maximum number of global commands applies (in seconds)",
-        category: "WIP",
-        subcategory: "Global Settings (§cTOTALLY NOT WORKING RN§r)",
-        minF: 1.0,
-        maxF: 180.0,
-        decimalPlaces: 1
-    })
-    globalLimitPeriod = 60.0;
-
-    @SliderProperty({
-        name: "Max Global Commands",
-        description: "Maximum number of commands that can be executed globally within the global limit period",
-        category: "WIP",
-        subcategory: "Global Settings (§cTOTALLY NOT WORKING RN§r)",
-        min: 1,
-        max: 50
-    })
-    maxGlobalCommands = 20;
 
     //Dev Stuff
     @SwitchProperty({
@@ -377,28 +296,20 @@ class Config {
         this.addDependency("Reminder Sound Volume", "Enable Reminders")
 
         // Add dependencies for Party Commands
-        const partyCommands = ["!rng", "!cf", "!8ball", "!throw", "!dice", "!pet", "!joke", "!commands help", "!mod", "!simp", "!sweat", "!sus", "!kick/!pk", "!p (Party)", "!reminder"];
+        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Pet Command &3!pet&r", "Joke Command &3!joke&r", "Help Command &3!commands help&r", "Mod Command &3!mod&r", "Simp Command &3!simp&r", "Sweat Command &3!sweat&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
         partyCommands.forEach(command => this.addDependency(command, "Enable Party Commands"));
 
         // Add dependencies for DM Commands
         this.addDependency("Test Command", "Enable DM Commands");
-        this.addDependency("!p", "Enable DM Commands");
-        this.addDependency("!kick", "Enable DM Commands");
+        this.addDependency("Invite Command (DMs) &3!p&r", "Enable DM Commands");
+        this.addDependency("Kick Command (DMs) &3!kick&r", "Enable DM Commands");
 
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
 
         // Add dependencies for WIP
-        this.addDependency("Enable Chest Content in Chat", "Enable Chest Scanning")
-
-        this.addDependency("Per-User Cooldown Duration", "Enable Per-User Cooldown");
-        this.addDependency("Per-User Command Limit Period", "Enable Per-User Cooldown");
-        this.addDependency("Max Commands Per User", "Enable Per-User Cooldown");
-
-        this.addDependency("Global Cooldown Duration", "Enable Global Cooldown");
-        this.addDependency("Global Command Limit Period", "Enable Global Cooldown");
-        this.addDependency("Max Global Commands", "Enable Global Cooldown");
+        this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting")
     }
 }
 

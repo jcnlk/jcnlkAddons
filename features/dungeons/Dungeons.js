@@ -1,4 +1,5 @@
 import Config from "../../config";
+import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 
 // Global variables
 let killedCrypts = 0;
@@ -29,14 +30,14 @@ function checkInDungeon() {
     try {
         const tabList = TabList.getNames();
         if (!tabList) {
-            console.error("[JA] TabList is null");
+            showDebugMessage("TabList is null", 'error');
             return false;
         }
         return tabList.some(line => 
             ChatLib.removeFormatting(line).includes("Dungeon:")
         );
     } catch (error) {
-        console.error("[JA] Error in checkInDungeon:", error);
+        showDebugMessage(`Error in checkInDungeon: ${error}`, 'error');
         return false;
     }
 }
@@ -49,7 +50,7 @@ function getCryptCountFromTablist() {
     try {
         const tabList = TabList.getNames();
         if (!tabList) {
-            console.error("[JA] TabList is null in getCryptCountFromTablist");
+            showDebugMessage("TabList is null in getCryptCountFromTablist", 'error');
             return 0;
         }
         for (let line of tabList) {
@@ -60,7 +61,7 @@ function getCryptCountFromTablist() {
             }
         }
     } catch (error) {
-        console.error("[JA] Error in getCryptCountFromTablist:", error);
+        showDebugMessage(`Error in getCryptCountFromTablist: ${error}`, 'error');
     }
     return 0;
 }
@@ -95,7 +96,7 @@ function updateCryptCount() {
     const newCount = getCryptCountFromTablist();
     if (newCount !== killedCrypts) {
         killedCrypts = newCount;
-        ChatLib.chat(`§3[JA]§r Updated Killed Crypts: ${formatCryptCount(killedCrypts)}`);
+        showGeneralJAMessage(`Updated Killed Crypts: ${formatCryptCount(killedCrypts)}`);
         return true;
     }
     return false;
@@ -116,118 +117,9 @@ function sendCryptReminder(currentTime) {
         if (cryptsNeeded > 0) {
             const message = Config.cryptReminderMessage.replace("{count}", cryptsNeeded);
             ChatLib.say(`/pc ${message}`);
-            if (Config.debugMode) {
-                ChatLib.chat(`§c[JA-DEBUG]§r Sent crypt reminder: ${message}`);
-            }
+            showDebugMessage(`Sent crypt reminder: ${message}`);
             reminderSent = true;
         }
-    }
-}
-
-/**
- * Extracts time from a scoreboard line
- * @param {Object} line - Scoreboard line object
- * @returns {number|null} Time in seconds or null if not found
- */
-function extractTimeFromLine(line) {
-    if (line && line.getName) {
-        const cleanLine = ChatLib.removeFormatting(line.getName()).trim();
-        if (cleanLine.includes("Time Elapsed:")) {
-            const timeStr = cleanLine.split("Time Elapsed:")[1].trim();
-            const match = timeStr.match(/(?:(\d+)m\s*)?(\d+)s/);
-            if (match) {
-                const minutes = parseInt(match[1] || "0");
-                const seconds = parseInt(match[2]);
-                return minutes * 60 + seconds;
-            }
-            if (Config.debugMode) {
-                ChatLib.chat(`§c[JA-DEBUG]§r Failed to parse time: "${timeStr}"`);
-            }
-        }
-    }
-    return null;
-}
-
-/**
- * Searches for the time line in the scoreboard
- */
-function searchForTimeLine() {
-    if (searchingForTimeLine) return;
-    searchingForTimeLine = true;
-    timeScoreboardLine = null;
-
-    let currentLine = 5; // Starting from line 6 (index 5)
-    
-    function checkNextLine() {
-        if (currentLine > 9 || timeScoreboardLine !== null) {
-            searchingForTimeLine = false;
-            if (timeScoreboardLine === null && Config.debugMode) {
-                ChatLib.chat(`§c[JA-DEBUG]§r Time not found in scoreboard lines 6-10`);
-            }
-            return;
-        }
-
-        const scoreboardLines = Scoreboard.getLines();
-        if (currentLine < scoreboardLines.length) {
-            const line = scoreboardLines[currentLine];
-            const time = extractTimeFromLine(line);
-            
-            if (Config.debugMode) {
-                ChatLib.chat(`§c[JA-DEBUG]§r Checking line ${currentLine + 1}: ${ChatLib.removeFormatting(line.getName()).trim()}`);
-                if (time !== null) {
-                    ChatLib.chat(`§c[JA-DEBUG]§r Extracted time: ${formatTime(time)}`);
-                }
-            }
-
-            if (time !== null) {
-                timeScoreboardLine = currentLine;
-                if (Config.debugMode) {
-                    ChatLib.chat(`§c[JA-DEBUG]§r Time found in line ${currentLine + 1}`);
-                }
-                searchingForTimeLine = false;
-                return;
-            }
-        }
-
-        currentLine++;
-        setTimeout(checkNextLine, 50);
-    }
-
-    checkNextLine();
-}
-
-/**
- * Gets the current time from the scoreboard
- * @returns {number|null} Time in seconds or null if not found
- */
-function getTimeFromScoreboard() {
-    if (timeScoreboardLine === null) {
-        if (Config.debugMode) {
-            ChatLib.chat(`§c[JA-DEBUG]§r Time line not set, starting search`);
-        }
-        searchForTimeLine();
-        return null;
-    }
-
-    const scoreboardLines = Scoreboard.getLines();
-    if (timeScoreboardLine < scoreboardLines.length) {
-        const time = extractTimeFromLine(scoreboardLines[timeScoreboardLine]);
-        if (time === null) {
-            if (Config.debugMode) {
-                ChatLib.chat(`§c[JA-DEBUG]§r Time not found in expected line ${timeScoreboardLine + 1}, restarting search`);
-            }
-            timeScoreboardLine = null;
-            searchForTimeLine();
-            return null;
-        }
-        return time;
-    } else {
-        if (Config.debugMode) {
-            ChatLib.chat(`§c[JA-DEBUG]§r Expected time line ${timeScoreboardLine + 1} out of range, restarting search`);
-        }
-        timeScoreboardLine = null;
-        searchForTimeLine();
-        return null;
     }
 }
 
@@ -245,14 +137,14 @@ function startMainLoop() {
 
                 if (inDungeon !== wasInDungeon) {
                     if (inDungeon) {
-                        ChatLib.chat("§3[JA]§r Entered Dungeon. Starting Crypt Reminder.");
+                        showGeneralJAMessage("Entered Dungeon. Starting Crypt Reminder.");
                         killedCrypts = 0;
                         reminderSent = false;
                         reminderEligibleTime = 0;
                         timeScoreboardLine = null;
                         searchForTimeLine();
                     } else {
-                        ChatLib.chat("§3[JA]§r Left Dungeon. Stopping Crypt Reminder.");
+                        showGeneralJAMessage("Left Dungeon. Stopping Crypt Reminder.");
                         reminderSent = false;
                         reminderEligibleTime = 0;
                         timeScoreboardLine = null;
@@ -266,7 +158,7 @@ function startMainLoop() {
                         sendCryptReminder(currentDungeonTime);
                         
                         if (Config.debugMode && currentDungeonTime % 30 === 0) {
-                            ChatLib.chat(`§c[JA-DEBUG]§r Status: Crypts: ${formatCryptCount(killedCrypts)}, Time: ${formatTime(currentDungeonTime)}, Time Line: ${timeScoreboardLine !== null ? timeScoreboardLine + 1 : 'Searching'}`);
+                            showDebugMessage(`Status: Crypts: ${formatCryptCount(killedCrypts)}, Time: ${formatTime(currentDungeonTime)}, Time Line: ${timeScoreboardLine !== null ? timeScoreboardLine + 1 : 'Searching'}`);
                         }
                     }
                 }

@@ -1,4 +1,5 @@
 import Config from "../config";
+import { showDebugMessage } from "./ChatUtils";
 
 let titles = [];
 
@@ -12,7 +13,7 @@ let titles = [];
  */
 function showSimplePopup(text, duration = 3000, shadow = false, subtitle = "", color = "§e") {
     if (Config.debugMode) {
-        ChatLib.chat(`§9[JA-DEBUG]§r Showing popup: "${text}" with duration ${duration}ms`);
+        showDebugMessage(`Showing popup: "${text}" with duration ${duration}ms`, 'info');
     }
     titles.forEach(title => { if (title) title.unregister(); });
     titles = [];
@@ -33,7 +34,7 @@ function showSimplePopup(text, duration = 3000, shadow = false, subtitle = "", c
         if (overlay) overlay.unregister();
         titles = titles.filter(title => title !== overlay);
         if (Config.debugMode) {
-            ChatLib.chat(`§9[JA-DEBUG]§r Removed popup: "${text}"`);
+            showDebugMessage(`Removed popup: "${text}"`, 'info');
         }
     }, duration);
 }

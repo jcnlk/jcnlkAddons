@@ -1,7 +1,5 @@
 import Config from "../config";
-
-const PREFIX_GENERAL = "§3[JA]§r";
-const PREFIX_DEBUG = "§9[JA-DEBUG]§r";
+import { showDebugMessage, showGeneralJAMessage } from "./ChatUtils";
 
 // Load Kuudra loot data
 let kuudraLoot;
@@ -16,7 +14,7 @@ try {
         throw new Error("Invalid JSON format in KuudraLoot.json");
     }
 } catch (error) {
-    console.error("Error loading KuudraLoot.json:", error);
+    showDebugMessage(`Error loading KuudraLoot.json: ${error}`, 'error');
     kuudraLoot = {
         godRolls: {},
         goodRolls: {},
@@ -41,16 +39,6 @@ const romanNumerals = {
 };
 
 let itemsWithAttributes = [];
-
-/**
- * Shows a debug message if debug mode is enabled
- * @param {string} message - The message to show
- */
-function showDebugMessage(message) {
-    if (Config.debugMode) {
-        ChatLib.chat(PREFIX_DEBUG + " " + message);
-    }
-}
 
 /**
  * Gets the coordinates of a slot in the GUI
@@ -174,7 +162,7 @@ function scanItemAttributes(item) {
 
     try {
         const name = ChatLib.removeFormatting(item.getName());
-        showDebugMessage("Scanning item: " + name);
+        showDebugMessage(`Scanning item: ${name}`);
 
         isSpecial = isSpecialDrop(name);
         if (isSpecial) {
@@ -229,18 +217,18 @@ function scanItemAttributes(item) {
             }
         }
     } catch (error) {
-        showDebugMessage("Error scanning item attributes: " + error.message);
-        showDebugMessage("Error stack: " + error.stack);
+        showDebugMessage(`Error scanning item attributes: ${error.message}`, 'error');
+        showDebugMessage(`Error stack: ${error.stack}`, 'error');
     }
 
     const isGodRollItem = isGodRoll(baseItem, foundAttributes);
     const isGoodRollItem = !isGodRollItem && isGoodRoll(baseItem, foundAttributes);
 
-    showDebugMessage("Base Item: " + baseItem);
-    showDebugMessage("Found Attributes: " + JSON.stringify(foundAttributes));
-    showDebugMessage("Is GodRoll: " + isGodRollItem + ", Is GoodRoll: " + isGoodRollItem);
-    showDebugMessage("Is Attribute Shard: " + isAttributeShardItem);
-    showDebugMessage("Is Enchanted Book: " + isEnchantedBookItem + ", Enchantment: " + enchantment);
+    showDebugMessage(`Base Item: ${baseItem}`);
+    showDebugMessage(`Found Attributes: ${JSON.stringify(foundAttributes)}`);
+    showDebugMessage(`Is GodRoll: ${isGodRollItem}, Is GoodRoll: ${isGoodRollItem}`);
+    showDebugMessage(`Is Attribute Shard: ${isAttributeShardItem}`);
+    showDebugMessage(`Is Enchanted Book: ${isEnchantedBookItem}, Enchantment: ${enchantment}`);
 
     return { 
         attributes: foundAttributes, 
@@ -303,12 +291,12 @@ function scanContents(container) {
     }
 
     if (!isValidChest(container)) {
-        showDebugMessage("Not a valid chest to scan: " + container.getName());
+        showDebugMessage(`Not a valid chest to scan: ${container.getName()}`);
         return;
     }
 
-    showDebugMessage("Starting scan of " + container.getName() + "...");
-    showDebugMessage("Container size: " + container.getSize());
+    showDebugMessage(`Starting scan of ${container.getName()}...`);
+    showDebugMessage(`Container size: ${container.getSize()}`);
 
     itemsWithAttributes = [];
     let foundBaseItems = new Set();
@@ -347,7 +335,7 @@ function scanContents(container) {
 
     if (itemsWithAttributes.length > 0) {
         if (Config.enableAttributeChatOutput) {
-            ChatLib.chat(PREFIX_GENERAL + " Items with attributes, special drops, attribute shards, or enchanted books found:");
+            showGeneralJAMessage("Items with attributes, special drops, attribute shards, or enchanted books found:");
             itemsWithAttributes.forEach(function(item) {
                 let rollType;
                 if (item.isSpecialDrop) {
@@ -363,10 +351,10 @@ function scanContents(container) {
                 } else {
                     rollType = "§c[NORMAL]";
                 }
-                ChatLib.chat("  " + rollType + " §e" + item.name + (item.enchantment ? " (" + item.enchantment + ")" : '') + ":");
+                showGeneralJAMessage(`  ${rollType} §e${item.name}${item.enchantment ? " (" + item.enchantment + ")" : ''}:`);
                 if (Object.keys(item.attributes).length > 0) {
                     Object.entries(item.attributes).forEach(function([attr, level]) {
-                        ChatLib.chat("    §a" + attr + ": §b" + level);
+                        showGeneralJAMessage(`    §a${attr}: §b${level}`);
                     });
                 }
             });
@@ -376,7 +364,7 @@ function scanContents(container) {
         clearHighlight.register();
     } else {
         if (Config.enableAttributeChatOutput) {
-            ChatLib.chat(PREFIX_GENERAL + " §cNo items with attributes, special drops, attribute shards, or enchanted books found.");
+            showGeneralJAMessage("No items with attributes, special drops, attribute shards, or enchanted books found.", 'error');
         }
     }
 }

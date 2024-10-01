@@ -1,75 +1,13 @@
 import Config from "../../config";
+import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 
-// User cooldown and command count tracking
-let userCooldowns = {};
-let userCommandCounts = {};
-let globalCommandCount = 0;
-let globalLastCommandTime = 0;
-
-/**
- * Checks if a user is allowed to execute a command based on cooldowns and limits
- * @param {string} playerName - The name of the player
- * @param {Function} showDebugMessage - Function to show debug messages
- * @returns {boolean} - Whether the user is allowed to execute the command
- */
-function isUserAllowed(playerName, showDebugMessage) {
-    const currentTime = Date.now();
-    
-    // Check global cooldown
-    if (Config.enableGlobalCooldown) {
-        if (currentTime - globalLastCommandTime < Config.globalCooldownDuration * 1000) {
-            showDebugMessage(`Global cooldown active for ${playerName}. Time remaining: ${((Config.globalCooldownDuration * 1000) - (currentTime - globalLastCommandTime)) / 1000}s`);
-            return false;
-        }
-
-        if (currentTime - globalLastCommandTime > Config.globalLimitPeriod * 1000) {
-            globalCommandCount = 0;
-        }
-
-        if (globalCommandCount >= Config.maxGlobalCommands) {
-            showDebugMessage(`Global command limit reached. Count: ${globalCommandCount}/${Config.maxGlobalCommands}`);
-            return false;
-        }
-
-        globalCommandCount++;
-        globalLastCommandTime = currentTime;
-    }
-
-    // Check per-user cooldown
-    if (Config.enablePerUserCooldown) {
-        if (!userCooldowns[playerName]) {
-            userCooldowns[playerName] = 0;
-            userCommandCounts[playerName] = { count: 0, lastResetTime: currentTime };
-        }
-
-        if (currentTime - userCooldowns[playerName] < Config.perUserCooldownDuration * 1000) {
-            showDebugMessage(`User cooldown active for ${playerName}. Time remaining: ${((Config.perUserCooldownDuration * 1000) - (currentTime - userCooldowns[playerName])) / 1000}s`);
-            return false;
-        }
-
-        if (currentTime - userCommandCounts[playerName].lastResetTime > Config.perUserLimitPeriod * 1000) {
-            userCommandCounts[playerName] = { count: 0, lastResetTime: currentTime };
-        }
-
-        if (userCommandCounts[playerName].count >= Config.maxCommandsPerUser) {
-            showDebugMessage(`User command limit reached for ${playerName}. Count: ${userCommandCounts[playerName].count}/${Config.maxCommandsPerUser}`);
-            return false;
-        }
-
-        userCommandCounts[playerName].count++;
-        userCooldowns[playerName] = currentTime;
-    }
-
-    return true;
-}
-
-module.exports = (showDebugMessage, showGeneralJTMessage) => {
+module.exports = () => {
     /**
      * Handles the test command
      * @param {string} senderName - Name of the command sender
      */
     function handleTestCommand(senderName) {
-        showGeneralJTMessage("DM Command Test successful!");
+        showGeneralJAMessage("DM Command Test successful!");
         showDebugMessage(`Test command executed successfully for ${senderName}`);
     }
 
@@ -118,11 +56,6 @@ module.exports = (showDebugMessage, showGeneralJTMessage) => {
 
         if (!Config.enableDmCommands) {
             showDebugMessage(`DM commands are currently disabled.`);
-            return;
-        }
-
-        if (!isUserAllowed(senderName, showDebugMessage)) {
-            showDebugMessage(`Command ${command} from ${senderName} was blocked due to cooldown or limit`);
             return;
         }
 

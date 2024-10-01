@@ -1,15 +1,11 @@
 import Config from "../../config";
 import * as Reminders from "../general/Reminders";
-
-let userCooldowns = {};
-let userCommandCounts = {};
-let globalCommandCount = 0;
-let globalLastCommandTime = 0;
+import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 
 let commandOutputs;
 try {
     const jsonPath = "./data/PartyCommands.json";
-    const jsonContent = FileLib.read("jcnlkTools", jsonPath);
+    const jsonContent = FileLib.read("jcnlkAddons", jsonPath);
     if (!jsonContent) {
         throw new Error(`PartyCommands.json is empty or not found at path: ${jsonPath}`);
     }
@@ -22,56 +18,7 @@ try {
     commandOutputs = {}; // Set an empty object fallback
 }
 
-function isUserAllowed(playerName, showDebugMessage) {
-    const currentTime = Date.now();
-    
-    if (Config.enableGlobalCooldown) {
-        if (currentTime - globalLastCommandTime < Config.globalCooldownDuration * 1000) {
-            showDebugMessage(`Global cooldown active for ${playerName}. Time remaining: ${((Config.globalCooldownDuration * 1000) - (currentTime - globalLastCommandTime)) / 1000}s`);
-            return false;
-        }
-
-        if (currentTime - globalLastCommandTime > Config.globalLimitPeriod * 1000) {
-            globalCommandCount = 0;
-        }
-
-        if (globalCommandCount >= Config.maxGlobalCommands) {
-            showDebugMessage(`Global command limit reached. Count: ${globalCommandCount}/${Config.maxGlobalCommands}`);
-            return false;
-        }
-
-        globalCommandCount++;
-        globalLastCommandTime = currentTime;
-    }
-
-    if (Config.enablePerUserCooldown) {
-        if (!userCooldowns[playerName]) {
-            userCooldowns[playerName] = 0;
-            userCommandCounts[playerName] = { count: 0, lastResetTime: currentTime };
-        }
-
-        if (currentTime - userCooldowns[playerName] < Config.perUserCooldownDuration * 1000) {
-            showDebugMessage(`User cooldown active for ${playerName}. Time remaining: ${((Config.perUserCooldownDuration * 1000) - (currentTime - userCooldowns[playerName])) / 1000}s`);
-            return false;
-        }
-
-        if (currentTime - userCommandCounts[playerName].lastResetTime > Config.perUserLimitPeriod * 1000) {
-            userCommandCounts[playerName] = { count: 0, lastResetTime: currentTime };
-        }
-
-        if (userCommandCounts[playerName].count >= Config.maxCommandsPerUser) {
-            showDebugMessage(`User command limit reached for ${playerName}. Count: ${userCommandCounts[playerName].count}/${Config.maxCommandsPerUser}`);
-            return false;
-        }
-
-        userCommandCounts[playerName].count++;
-        userCooldowns[playerName] = currentTime;
-    }
-
-    return true;
-}
-
-module.exports = (showDebugMessage, showGeneralJTMessage) => {
+module.exports = () => {
     function sendPartyChatMessage(message) {
         ChatLib.say(`/pc ${message}`);
         showDebugMessage(`Sent party chat message: ${message}`);
@@ -131,7 +78,7 @@ module.exports = (showDebugMessage, showGeneralJTMessage) => {
         showDebugMessage(`Handling !commands command with args: ${args.join(', ')}`);
         
         if (!commandOutputs.commands) {
-            showGeneralJTMessage("Error: Commands information not available");
+            showGeneralJAMessage("Error: Commands information not available");
             return;
         }
     
@@ -184,11 +131,6 @@ module.exports = (showDebugMessage, showGeneralJTMessage) => {
         let targetName = commandParts[1] && !commandParts[1].startsWith('!') ? commandParts[1] : senderName;
 
         showDebugMessage(`Received command: ${command} from player: ${senderName}, target: ${targetName}`);
-
-        if (!isUserAllowed(senderName, showDebugMessage)) {
-            showDebugMessage(`Command ${command} from ${senderName} was blocked due to cooldown or limit`);
-            return;
-        }
 
         if (!Config.enablePartyCommands) {
             showDebugMessage(`Party commands are currently disabled.`);
@@ -314,7 +256,7 @@ module.exports = (showDebugMessage, showGeneralJTMessage) => {
         if (generatedMessage) {
             sendPartyChatMessage(generatedMessage);
         } else {
-            showGeneralJTMessage(`Error: Unable to generate message for ${command}`);
+            showGeneralJAMessage(`Error: Unable to generate message for ${command}`);
             showDebugMessage(`Failed to generate message for ${command}. Command type might be missing in PartyCommands.json`);
         }
     }).setChatCriteria("Party > ${player}: ${message}");
