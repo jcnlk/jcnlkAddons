@@ -20,7 +20,7 @@ jcnlkAddons is a ChatTriggers module for Minecraft 1.8.9 that enhances the gamep
 
 ## Usage
 
-- Use `/jt` to access the main command and open the configuration GUI.
+- Use `/ja` to access the main command and open the configuration GUI.
 - Party commands start with `!`, e.g., `!rng`, `!cf`, `!8ball`.
 - DM commands also start with `!`, e.g., `!p`, `!kick`.
 - For a full list of commands, use `!commands` in party chat.
