@@ -1,6 +1,6 @@
-# jcnlkTools
+# jcnlkAddons
 
-jcnlkTools is a ChatTriggers module for Minecraft 1.8.9 that enhances the gameplay experience with various features and utilities.
+jcnlkAddons is a ChatTriggers module for Minecraft 1.8.9 that enhances the gameplay experience with various features and utilities.
 
 ## Features
 
@@ -14,7 +14,7 @@ jcnlkTools is a ChatTriggers module for Minecraft 1.8.9 that enhances the gamepl
 ## Installation
 
 1. Ensure you have [ChatTriggers](https://www.chattriggers.com/) installed for Minecraft 1.8.9.
-2. Download the latest release of jcnlkTools from the [releases page](https://github.com/jcnlk/jcnlkTools/releases).
+2. Download the latest release of jcnlkTools from the [releases page](https://github.com/jcnlk/jcnlkAddons/releases).
 3. Place the downloaded `jcnlkTools` folder into your `.minecraft/config/ChatTriggers/modules/` directory.
 4. Restart Minecraft or type `/ct reload` in-game.
 
@@ -27,7 +27,7 @@ jcnlkTools is a ChatTriggers module for Minecraft 1.8.9 that enhances the gamepl
 
 ## Configuration
 
-Most features can be customized through the in-game configuration GUI. Access it by typing `/jt` in the chat.
+Most features can be customized through the in-game configuration GUI. Access it by typing `/ja` in the chat.
 
 ## Contributing
 
@@ -39,7 +39,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Support
 
-If you encounter any issues or have questions, please [open an issue](https://github.com/jcnlk/jcnlkTools/issues) on GitHub.
+If you encounter any issues or have questions, please [open an issue](https://github.com/jcnlk/jcnlkAddons/issues) on GitHub.
 
 ## Acknowledgements
 
