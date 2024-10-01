@@ -124,6 +124,106 @@ function sendCryptReminder(currentTime) {
 }
 
 /**
+ * Extracts time from a scoreboard line
+ * @param {Object} line - Scoreboard line object
+ * @returns {number|null} Time in seconds or null if not found
+ */
+function extractTimeFromLine(line) {
+    if (line && line.getName) {
+        const cleanLine = ChatLib.removeFormatting(line.getName()).trim();
+        if (cleanLine.includes("Time Elapsed:")) {
+            const timeStr = cleanLine.split("Time Elapsed:")[1].trim();
+            const match = timeStr.match(/(?:(\d+)m\s*)?(\d+)s/);
+            if (match) {
+                const minutes = parseInt(match[1] || "0");
+                const seconds = parseInt(match[2]);
+                return minutes * 60 + seconds;
+            }
+            if (Config.debugMode) {
+                ChatLib.chat(`Failed to parse time: "${timeStr}"`);
+            }
+        }
+    }
+    return null;
+}
+/**
+ * Searches for the time line in the scoreboard
+ */
+function searchForTimeLine() {
+    if (searchingForTimeLine) return;
+    searchingForTimeLine = true;
+    timeScoreboardLine = null;
+    let currentLine = 5; // Starting from line 6 (index 5)
+    
+    function checkNextLine() {
+        if (currentLine > 9 || timeScoreboardLine !== null) {
+            searchingForTimeLine = false;
+            if (timeScoreboardLine === null && Config.debugMode) {
+                showDebugMessage(`Time not found in scoreboard lines 6-10`);
+            }
+            return;
+        }
+        const scoreboardLines = Scoreboard.getLines();
+        if (currentLine < scoreboardLines.length) {
+            const line = scoreboardLines[currentLine];
+            const time = extractTimeFromLine(line);
+            
+            if (Config.debugMode) {
+                showDebugMessage(`Checking line ${currentLine + 1}: ${ChatLib.removeFormatting(line.getName()).trim()}`);
+                if (time !== null) {
+                    showDebugMessage(`Extracted time: ${formatTime(time)}`);
+                }
+            }
+            if (time !== null) {
+                timeScoreboardLine = currentLine;
+                if (Config.debugMode) {
+                    showDebugMessage(`Time found in line ${currentLine + 1}`);
+                }
+                searchingForTimeLine = false;
+                return;
+            }
+        }
+        currentLine++;
+        setTimeout(checkNextLine, 50);
+    }
+    checkNextLine();
+}
+
+/**
+ * Gets the current time from the scoreboard
+ * @returns {number|null} Time in seconds or null if not found
+ */
+function getTimeFromScoreboard() {
+    if (timeScoreboardLine === null) {
+        if (Config.debugMode) {
+            showGeneralJAMessage(`Time line not set, starting search`);
+        }
+        searchForTimeLine();
+        return null;
+    }
+    const scoreboardLines = Scoreboard.getLines();
+    if (timeScoreboardLine < scoreboardLines.length) {
+        const time = extractTimeFromLine(scoreboardLines[timeScoreboardLine]);
+        if (time === null) {
+            if (Config.debugMode) {
+                showGeneralJAMessage(`Time not found in expected line ${timeScoreboardLine + 1}, restarting search`);
+            }
+            timeScoreboardLine = null;
+            searchForTimeLine();
+            return null;
+        }
+        return time;
+    } else {
+        if (Config.debugMode) {
+            showGeneralJAMessage(`Expected time line ${timeScoreboardLine + 1} out of range, restarting search`);
+        }
+        timeScoreboardLine = null;
+        searchForTimeLine();
+        return null;
+    }
+}
+
+/**
  * Starts the main loop for dungeon tracking
  */
 function startMainLoop() {
