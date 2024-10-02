@@ -120,6 +120,14 @@ class Config {
     })
     cryptReminderSoundVolume = 0.5;
 
+    @SwitchProperty({
+        name: "Enable Puzzle State Tracking",
+        description: "Track and display the state of puzzles in dungeons",
+        category: "Dungeons",
+        subcategory: "Puzzle Tracking"
+    })
+    enablePuzzleStateTracking = true;
+
     // Party Commands
     @SwitchProperty({
         name: "Enable Party Commands",

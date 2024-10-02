@@ -6,6 +6,7 @@ import { showSimplePopup } from "./utils/Popup";
 import { scanItemAttributes } from "./utils/KuudraLootScanner";
 import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
+import  "./features/dungeons/PuzzleState";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");
 
