@@ -1,15 +1,23 @@
 import Config from "../../config";
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 import { showSimplePopup } from "../../utils/Popup";
+import {
+    checkInDungeon,
+    getCryptCountFromTablist,
+    getTimeFromTablist,
+    analyzePuzzleInfo,
+    formatTime,
+    formatCryptCount
+} from "./DungeonUtils";
 
 // Global variables
 let killedCrypts = 0;
 let inDungeon = false;
 let reminderSent = false;
 let reminderEligibleTime = 0;
-let timeScoreboardLine = null;
-let searchingForTimeLine = false;
 let checkDungeonTimeout = null;
+let puzzleStates = {};
+let lastTotalPuzzles = 0;
 
 /**
  * Initializes the Dungeon module
@@ -21,70 +29,6 @@ function initialize() {
     }
     
     startMainLoop();
-}
-
-/**
- * Checks if the player is currently in a dungeon
- * @returns {boolean} True if in dungeon, false otherwise
- */
-export function checkInDungeon() {
-    try {
-        const tabList = TabList.getNames();
-        if (!tabList) {
-            showDebugMessage("TabList is null", 'error');
-            return false;
-        }
-        return tabList.some(line => 
-            ChatLib.removeFormatting(line).includes("Dungeon:")
-        );
-    } catch (error) {
-        showDebugMessage(`Error in checkInDungeon: ${error}`, 'error');
-        return false;
-    }
-}
-
-/**
- * Gets the current crypt count from the tablist
- * @returns {number} The current crypt count
- */
-function getCryptCountFromTablist() {
-    try {
-        const tabList = TabList.getNames();
-        if (!tabList) {
-            showDebugMessage("TabList is null in getCryptCountFromTablist", 'error');
-            return 0;
-        }
-        for (let line of tabList) {
-            line = ChatLib.removeFormatting(line);
-            if (line.includes("Crypts: ")) {
-                const count = parseInt(line.split("Crypts: ")[1]);
-                return isNaN(count) ? 0 : count;
-            }
-        }
-    } catch (error) {
-        showDebugMessage(`Error in getCryptCountFromTablist: ${error}`, 'error');
-    }
-    return 0;
-}
-
-/**
- * Formats time in seconds to a string
- * @param {number} seconds - Time in seconds
- * @returns {string} Formatted time string
- */
-function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}m ${remainingSeconds}s`;
-}
-
-/**
- * Formats crypt count for display
- * @param {number} count - Crypt count
- * @returns {string} Formatted crypt count
- */
-function formatCryptCount(count) {
-    return count > 5 ? "5+" : count.toString();
 }
 
 /**
@@ -131,6 +75,10 @@ function sendCryptReminder(currentTime) {
     }
 }
 
+/**
+ * Shows a popup for crypt reminders
+ * @param {number} cryptsNeeded - Number of crypts needed
+ */
 function showCryptReminderPopup(cryptsNeeded) {
     if (!Config.enableCryptReminderPopup) return;
 
@@ -143,6 +91,9 @@ function showCryptReminderPopup(cryptsNeeded) {
     showDebugMessage(`Showing crypt reminder popup: ${popupMessage}`);
 }
 
+/**
+ * Plays a sound for crypt reminders
+ */
 function playCryptReminderSound() {
     if (!Config.enableCryptReminderPopup) return;
 
@@ -152,29 +103,6 @@ function playCryptReminderSound() {
     showDebugMessage(`Played crypt reminder sound: ${selectedSound} at volume ${Config.cryptReminderSoundVolume}`);
 }
 
-/**
- * Extracts time from a scoreboard line
- * @param {Object} line - Scoreboard line object
- * @returns {number|null} Time in seconds or null if not found
- */
-function extractTimeFromLine(line) {
-    if (line && line.getName) {
-        const cleanLine = ChatLib.removeFormatting(line.getName()).trim();
-        if (cleanLine.includes("Time Elapsed:")) {
-            const timeStr = cleanLine.split("Time Elapsed:")[1].trim();
-            const match = timeStr.match(/(?:(\d+)m\s*)?(\d+)s/);
-            if (match) {
-                const minutes = parseInt(match[1] || "0");
-                const seconds = parseInt(match[2]);
-                return minutes * 60 + seconds;
-            }
-            if (Config.debugMode) {
-                ChatLib.chat(`Failed to parse time: "${timeStr}"`);
-            }
-        }
-    }
-    return null;
-}
 /**
  * Searches for the time line in the scoreboard
  */
@@ -192,25 +120,14 @@ export function searchForTimeLine() {
             }
             return;
         }
-        const scoreboardLines = Scoreboard.getLines();
-        if (currentLine < scoreboardLines.length) {
-            const line = scoreboardLines[currentLine];
-            const time = extractTimeFromLine(line);
-            
+        const time = getTimeFromScoreboard(currentLine);
+        if (time !== null) {
+            timeScoreboardLine = currentLine;
             if (Config.debugMode) {
-                showDebugMessage(`Checking line ${currentLine + 1}: ${ChatLib.removeFormatting(line.getName()).trim()}`);
-                if (time !== null) {
-                    showDebugMessage(`Extracted time: ${formatTime(time)}`);
-                }
+                showDebugMessage(`Time found in line ${currentLine + 1}`);
             }
-            if (time !== null) {
-                timeScoreboardLine = currentLine;
-                if (Config.debugMode) {
-                    showDebugMessage(`Time found in line ${currentLine + 1}`);
-                }
-                searchingForTimeLine = false;
-                return;
-            }
+            searchingForTimeLine = false;
+            return;
         }
         currentLine++;
         setTimeout(checkNextLine, 50);
@@ -219,37 +136,64 @@ export function searchForTimeLine() {
 }
 
 /**
- * Gets the current time from the scoreboard
- * @returns {number|null} Time in seconds or null if not found
+ * Outputs changes in puzzle states
  */
-function getTimeFromScoreboard() {
-    if (timeScoreboardLine === null) {
-        if (Config.debugMode) {
-            showGeneralJAMessage(`Time line not set, starting search`);
-        }
-        searchForTimeLine();
-        return null;
+function outputPuzzleChanges() {
+    const analysis = analyzePuzzleInfo();
+    if (!analysis) return;
+
+    const { counts, totalPuzzles } = analysis;
+    let changesDetected = false;
+
+    // Check for changes in total puzzles
+    if (lastTotalPuzzles !== totalPuzzles) {
+        showGeneralJAMessage(`Total puzzles changed from ${lastTotalPuzzles} to ${totalPuzzles}`);
+        lastTotalPuzzles = totalPuzzles;
+        changesDetected = true;
     }
-    const scoreboardLines = Scoreboard.getLines();
-    if (timeScoreboardLine < scoreboardLines.length) {
-        const time = extractTimeFromLine(scoreboardLines[timeScoreboardLine]);
-        if (time === null) {
-            if (Config.debugMode) {
-                showGeneralJAMessage(`Time not found in expected line ${timeScoreboardLine + 1}, restarting search`);
-            }
-            timeScoreboardLine = null;
-            searchForTimeLine();
-            return null;
+
+    // Compare new counts with previous states to detect changes
+    for (const [state, count] of Object.entries(counts)) {
+        if (puzzleStates[state] !== count) {
+            const stateCapitalized = state.charAt(0).toUpperCase() + state.slice(1);
+            showGeneralJAMessage(`${stateCapitalized} puzzles changed from ${puzzleStates[state] || 0} to ${count}`);
+            puzzleStates[state] = count;
+            changesDetected = true;
         }
-        return time;
-    } else {
-        if (Config.debugMode) {
-            showGeneralJAMessage(`Expected time line ${timeScoreboardLine + 1} out of range, restarting search`);
-        }
-        timeScoreboardLine = null;
-        searchForTimeLine();
-        return null;
     }
+
+    // Only output the current status if changes were detected
+    if (changesDetected) {
+        showGeneralJAMessage(`Current puzzle status: ${counts.unexplored} unexplored, ${counts.explored} explored, ${counts.finished} finished, ${counts.failed} failed`);
+    }
+}
+
+/**
+ * Displays current puzzle status
+ */
+export function displayPuzzleStatus() {
+    const analysis = analyzePuzzleInfo();
+    if (!analysis) {
+        showGeneralJAMessage("Not in a dungeon or no puzzle information available.");
+        return;
+    }
+
+    const { counts, totalPuzzles } = analysis;
+    showGeneralJAMessage("Current Puzzle Status:");
+    showGeneralJAMessage(`Total Puzzles: ${totalPuzzles}`);
+    showGeneralJAMessage(`Unexplored: ${counts.unexplored}`);
+    showGeneralJAMessage(`Explored: ${counts.explored}`);
+    showGeneralJAMessage(`Finished: ${counts.finished}`);
+    showGeneralJAMessage(`Failed: ${counts.failed}`);
+}
+
+/**
+ * Resets the puzzle state
+ */
+function resetPuzzleState() {
+    puzzleStates = {};
+    lastTotalPuzzles = 0;
+    showDebugMessage("Puzzle state reset");
 }
 
 /**
@@ -266,28 +210,28 @@ function startMainLoop() {
 
                 if (inDungeon !== wasInDungeon) {
                     if (inDungeon) {
-                        showGeneralJAMessage("Entered Dungeon. Starting Crypt Reminder.");
+                        showGeneralJAMessage("Entered Dungeon. Starting Crypt Reminder and Puzzle Tracking.");
                         killedCrypts = 0;
                         reminderSent = false;
                         reminderEligibleTime = 0;
-                        timeScoreboardLine = null;
-                        searchForTimeLine();
+                        resetPuzzleState();
                     } else {
-                        showGeneralJAMessage("Left Dungeon. Stopping Crypt Reminder.");
+                        showGeneralJAMessage("Left Dungeon. Stopping Crypt Reminder and Puzzle Tracking.");
                         reminderSent = false;
                         reminderEligibleTime = 0;
-                        timeScoreboardLine = null;
+                        resetPuzzleState();
                     }
                 }
 
                 if (inDungeon) {
-                    const currentDungeonTime = getTimeFromScoreboard();
+                    const currentDungeonTime = getTimeFromTablist();
                     if (currentDungeonTime !== null) {
                         updateCryptCount();
                         sendCryptReminder(currentDungeonTime);
+                        outputPuzzleChanges();
                         
                         if (Config.debugMode && currentDungeonTime % 30 === 0) {
-                            showDebugMessage(`Status: Crypts: ${formatCryptCount(killedCrypts)}, Time: ${formatTime(currentDungeonTime)}, Time Line: ${timeScoreboardLine !== null ? timeScoreboardLine + 1 : 'Searching'}`);
+                            showDebugMessage(`Status: Crypts: ${formatCryptCount(killedCrypts)}, Time: ${formatTime(currentDungeonTime)}`);
                         }
                     }
                 }
@@ -302,8 +246,5 @@ function startMainLoop() {
 initialize();
 
 export {
-    killedCrypts,
-    inDungeon,
-    updateCryptCount,
-    getTimeFromScoreboard
+    updateCryptCount
 };
