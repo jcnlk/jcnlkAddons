@@ -120,14 +120,6 @@ class Config {
     })
     cryptReminderSoundVolume = 0.5;
 
-    @SwitchProperty({
-        name: "Enable Puzzle State Tracking",
-        description: "Track and display the state of puzzles in dungeons",
-        category: "Dungeons",
-        subcategory: "Puzzle Tracking"
-    })
-    enablePuzzleStateTracking = true;
-
     // Party Commands
     @SwitchProperty({
         name: "Enable Party Commands",
@@ -308,22 +300,6 @@ class Config {
      })
     debugMode = false;
 
-    @SwitchProperty({
-        name: "Test Command",
-        description: "Enable the §b/ja test§r command",
-        category: "Dev Stuff",
-        subcategory: "Debug"
-    })
-    testCommand = false;
-
-    @SwitchProperty({
-        name: "Test Popup Command",
-        description: "Enable the §b/testpopup§r command",
-        category: "Dev Stuff",
-        subcategory: "Debug"
-    })
-    testPopupCommand = false;
-
     constructor() {
         this.initialize(this);
 
@@ -345,7 +321,6 @@ class Config {
         partyCommands.forEach(command => this.addDependency(command, "Enable Party Commands"));
 
         // Add dependencies for DM Commands
-        this.addDependency("Test Command", "Enable DM Commands");
         this.addDependency("Invite Command (DMs) &3!p&r", "Enable DM Commands");
         this.addDependency("Kick Command (DMs) &3!kick&r", "Enable DM Commands");
 

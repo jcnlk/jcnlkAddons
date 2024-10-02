@@ -79,12 +79,7 @@ function initializeSlashCommands() {
                 showDebugMessage("Displayed puzzle status");
                 break;
             case "test":
-                if (config.enableTestCommand) {
                     showGeneralJAMessage("The Module is actually running!");
-                    showDebugMessage("Executed /ja test command");
-                } else {
-                    showGeneralJAMessage("/ja test is currently disabled in the config");
-                }
                 break;
             case "help":
                 showGeneralJAMessage("Available subcommands: crypts, help, puzzles, test");
@@ -102,7 +97,7 @@ function initializeSlashCommands() {
             message = "This is a Test Popup!";
         }
         const fullMessage = [message, ...args].join(" ");
-        showSimplePopup(fullMessage, 3000, true, "JT Popup");
+        showSimplePopup(fullMessage, 3000, true, "JA Popup");
         showDebugMessage(`Displayed test popup with message: ${fullMessage}`);
     });
 

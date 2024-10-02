@@ -178,7 +178,7 @@ function extractTimeFromLine(line) {
 /**
  * Searches for the time line in the scoreboard
  */
-function searchForTimeLine() {
+export function searchForTimeLine() {
     if (searchingForTimeLine) return;
     searchingForTimeLine = true;
     timeScoreboardLine = null;
@@ -304,5 +304,6 @@ initialize();
 export {
     killedCrypts,
     inDungeon,
-    updateCryptCount
+    updateCryptCount,
+    getTimeFromScoreboard
 };
