@@ -27,7 +27,7 @@ function initialize() {
  * Checks if the player is currently in a dungeon
  * @returns {boolean} True if in dungeon, false otherwise
  */
-function checkInDungeon() {
+export function checkInDungeon() {
     try {
         const tabList = TabList.getNames();
         if (!tabList) {

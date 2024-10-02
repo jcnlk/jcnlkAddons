@@ -6,7 +6,7 @@ import { showSimplePopup } from "./utils/Popup";
 import { scanItemAttributes } from "./utils/KuudraLootScanner";
 import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
-import  "./features/dungeons/PuzzleState";
+import { displayPuzzleStatus } from "./features/dungeons/PuzzleState";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");
 
@@ -74,6 +74,10 @@ function initializeSlashCommands() {
                     showGeneralJAMessage("Crypt Reminder is currently disabled.");
                 }
                 break;
+            case "puzzles":
+                displayPuzzleStatus();
+                showDebugMessage("Displayed puzzle status");
+                break;
             case "test":
                 if (config.enableTestCommand) {
                     showGeneralJAMessage("The Module is actually running!");
@@ -83,14 +87,14 @@ function initializeSlashCommands() {
                 }
                 break;
             case "help":
-                showGeneralJAMessage("Available subcommands: crypts, help, test");
+                showGeneralJAMessage("Available subcommands: crypts, help, puzzles, test");
                 showDebugMessage("Displayed /ja help information");
                 break;
             default:
-                showGeneralJAMessage("Unknown subcommand. Use 'crypts' to see crypt count, 'help' for more info.");
+                showGeneralJAMessage("Unknown subcommand. Use 'crypts' to see crypt count, 'puzzles' to see puzzle status, or 'help' for more info.");
                 showDebugMessage(`Unknown /ja subcommand: ${subCommand}`);
         }
-    }, ["crypts", "help", "test"]);
+    }, ["crypts", "help", "puzzles", "test"]);
 
     // /testpopup command
     registerSlashCommand("testpopup", "Show a test popup", (message, ...args) => {

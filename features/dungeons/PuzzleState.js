@@ -1,91 +1,156 @@
-import { showDebugMessage } from "../../utils/ChatUtils";
+import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
+import { checkInDungeon } from "../dungeons/Dungeons";
 
 // Initialize variables
-let debugTrigger = null;
+let puzzleStates = {};
+let lastTotalPuzzles = 0;
+let inDungeon = false;
+let checkDungeonTimeout = null;
 
 /**
- * Outputs the puzzle information from tablist with detailed debugging
+ * Analyzes the puzzle information from tablist and returns changes
+ * @returns {Object} An object containing puzzle state changes and total counts
  */
-function outputPuzzleInfo() {
-    showDebugMessage("Starting puzzle info analysis...");
-
-    const tabList = TabList.getNames();
-    showDebugMessage(`Tablist length: ${tabList.length}`);
-
-    if (!tabList || tabList.length < 48) {
-        showDebugMessage("Tablist is not long enough to read puzzle information", 'warning');
-        return;
+function analyzePuzzleInfo() {
+    if (!inDungeon) {
+        return null;
     }
 
-    // Extract total puzzles from line 47
-    const puzzleLine = ChatLib.removeFormatting(tabList[47]);
-    showDebugMessage(`Puzzle line (47): ${puzzleLine}`);
+    const tabList = TabList.getNames();
+    if (!tabList || tabList.length < 48) {
+        showDebugMessage("Tablist is not long enough to read puzzle information", 'warning');
+        return null;
+    }
 
+    const puzzleLine = ChatLib.removeFormatting(tabList[47]);
     const totalPuzzlesMatch = puzzleLine.match(/Puzzles: \((\d+)\)/);
     const totalPuzzles = totalPuzzlesMatch ? parseInt(totalPuzzlesMatch[1]) : 0;
 
-    showDebugMessage(`Total Puzzles: ${totalPuzzles}`);
-
     if (totalPuzzles === 0) {
-        showDebugMessage("No puzzles to analyze");
-        return;
+        return null;
     }
 
-    // Create a local copy of the relevant part of the tabList
     const puzzleLines = tabList.slice(48, 48 + totalPuzzles);
-    showDebugMessage(`Extracted puzzle lines: ${JSON.stringify(puzzleLines)}`);
+    let changes = {};
+    let counts = { unexplored: 0, explored: 0, finished: 0, failed: 0 };
 
-    // Analyze puzzle states for the corresponding number of lines
-    let unexploredPuzzles = 0;
     puzzleLines.forEach((line, index) => {
-        const lineIndex = 48 + index;
-        showDebugMessage(`Checking line index: ${lineIndex}`);
+        const cleanLine = ChatLib.removeFormatting(line).trim();
+        let newState;
 
-        const cleanLine = ChatLib.removeFormatting(line);
-        showDebugMessage(`Line ${lineIndex} content: "${cleanLine}"`);
-
-        if (cleanLine === " ???: [✦]") {
-            unexploredPuzzles++;
-            showDebugMessage(`Line ${lineIndex}: Unexplored Puzzle`);
+        if (cleanLine === "???: [✦]") {
+            newState = "unexplored";
+            counts.unexplored++;
+        } else if (cleanLine.match(/^.+: \[✦\]$/)) {
+            newState = "explored";
+            counts.explored++;
+        } else if (cleanLine.match(/^.+: \[✔\]$/)) {
+            newState = "finished";
+            counts.finished++;
+        } else if (cleanLine.match(/^.+: \[✖\](\s*\([^)]*\))?$/)) {
+            newState = "failed";
+            counts.failed++;
         } else {
-            showDebugMessage(`Line ${lineIndex}: Explored or different content`);
+            newState = "unknown";
+        }
+
+        const puzzleName = cleanLine.split(":")[0];
+        if (puzzleStates[puzzleName] !== newState) {
+            changes[puzzleName] = { from: puzzleStates[puzzleName], to: newState };
+            puzzleStates[puzzleName] = newState;
         }
     });
 
-    showDebugMessage(`Unexplored Puzzles: ${unexploredPuzzles}`);
-    showDebugMessage("Puzzle info analysis complete.");
+    // Check if total puzzles changed
+    if (lastTotalPuzzles !== totalPuzzles) {
+        changes.totalPuzzlesChanged = { from: lastTotalPuzzles, to: totalPuzzles };
+        lastTotalPuzzles = totalPuzzles;
+    }
+
+    return { changes, counts, totalPuzzles };
 }
 
 /**
- * Starts the puzzle info output trigger
+ * Outputs changes in puzzle states
  */
-function startPuzzleInfoOutput() {
-    if (debugTrigger) {
-        debugTrigger.unregister();
+function outputPuzzleChanges() {
+    const analysis = analyzePuzzleInfo();
+    if (!analysis) return;
+
+    const { changes, counts, totalPuzzles } = analysis;
+
+    for (const [puzzleName, change] of Object.entries(changes)) {
+        if (puzzleName === 'totalPuzzlesChanged') {
+            showGeneralJAMessage(`Total puzzles changed from ${change.from} to ${change.to}`);
+        } else {
+            showGeneralJAMessage(`Puzzle "${puzzleName}" changed from ${change.from || 'unknown'} to ${change.to}`);
+        }
     }
-    debugTrigger = register("step", outputPuzzleInfo).setDelay(30); // 30 seconds
-    showDebugMessage("Started Puzzle State info output (30s interval)");
+
+    if (Object.keys(changes).length > 0) {
+        showGeneralJAMessage(`Current puzzle status: ${counts.unexplored} unexplored, ${counts.explored} explored, ${counts.finished} finished, ${counts.failed} failed`);
+    }
 }
 
 /**
- * Stops the puzzle info output trigger
+ * Displays current puzzle status
  */
-function stopPuzzleInfoOutput() {
-    if (debugTrigger) {
-        debugTrigger.unregister();
-        debugTrigger = null;
-        showDebugMessage("Stopped Puzzle State info output");
+function displayPuzzleStatus() {
+    const analysis = analyzePuzzleInfo();
+    if (!analysis) {
+        showGeneralJAMessage("Not in a dungeon or no puzzle information available.");
+        return;
+    }
+
+    const { counts, totalPuzzles } = analysis;
+    showGeneralJAMessage("Current Puzzle Status:");
+    showGeneralJAMessage(`Total Puzzles: ${totalPuzzles}`);
+    showGeneralJAMessage(`Unexplored: ${counts.unexplored}`);
+    showGeneralJAMessage(`Explored: ${counts.explored}`);
+    showGeneralJAMessage(`Finished: ${counts.finished}`);
+    showGeneralJAMessage(`Failed: ${counts.failed}`);
+}
+
+/**
+ * Resets the puzzle state
+ */
+function resetPuzzleState() {
+    puzzleStates = {};
+    lastTotalPuzzles = 0;
+    showDebugMessage("Puzzle state reset");
+}
+
+/**
+ * Checks dungeon status and updates accordingly
+ */
+function checkDungeonStatus() {
+    if (checkDungeonTimeout === null) {
+        checkDungeonTimeout = setTimeout(() => {
+            const wasInDungeon = inDungeon;
+            inDungeon = checkInDungeon();
+
+            if (inDungeon !== wasInDungeon) {
+                if (inDungeon) {
+                    showGeneralJAMessage("Entered Dungeon. Starting Puzzle Tracking.");
+                    resetPuzzleState();
+                } else {
+                    showGeneralJAMessage("Left Dungeon. Stopping Puzzle Tracking.");
+                    resetPuzzleState();
+                }
+            }
+
+            checkDungeonTimeout = null;
+        }, 5000); // 5 seconds delay
     }
 }
 
-// Start the puzzle info output when the game loads
-register("gameLoad", startPuzzleInfoOutput);
+// Start tracking puzzle changes and dungeon status
+register("step", () => {
+    checkDungeonStatus();
+    if (inDungeon) {
+        outputPuzzleChanges();
+    }
+}).setFps(1); // Check every second
 
-// Stop the puzzle info output when the game unloads
-register("gameUnload", stopPuzzleInfoOutput);
-
-// Export functions if needed
-export {
-    startPuzzleInfoOutput,
-    stopPuzzleInfoOutput
-};
+// Export the displayPuzzleStatus function to be used in index.js
+export { displayPuzzleStatus };
