@@ -7,7 +7,8 @@ import {
     getTimeFromTablist,
     analyzePuzzleInfo,
     formatTime,
-    formatCryptCount
+    formatCryptCount,
+    getDungeonFloor
 } from "./DungeonUtils";
 
 // Global variables
@@ -200,17 +201,18 @@ function resetPuzzleState() {
  * Starts the main loop for dungeon tracking
  */
 function startMainLoop() {
-    register("step", () => {
+    register("step", function() {
         if (!Config.enableCryptReminder) return;
 
         if (checkDungeonTimeout === null) {
-            checkDungeonTimeout = setTimeout(() => {
+            checkDungeonTimeout = setTimeout(function() {
                 const wasInDungeon = inDungeon;
                 inDungeon = checkInDungeon();
 
                 if (inDungeon !== wasInDungeon) {
                     if (inDungeon) {
-                        showGeneralJAMessage("Entered Dungeon. Starting Crypt Reminder and Puzzle Tracking.");
+                        const currentFloor = getDungeonFloor();
+                        showGeneralJAMessage("Entered Dungeon" + (currentFloor ? " (" + currentFloor + ")" : '') + ". Starting Crypt Reminder and Puzzle Tracking.");
                         killedCrypts = 0;
                         reminderSent = false;
                         reminderEligibleTime = 0;
@@ -231,7 +233,8 @@ function startMainLoop() {
                         outputPuzzleChanges();
                         
                         if (Config.debugMode && currentDungeonTime % 30 === 0) {
-                            showDebugMessage(`Status: Crypts: ${formatCryptCount(killedCrypts)}, Time: ${formatTime(currentDungeonTime)}`);
+                            const currentFloor = getDungeonFloor();
+                            showDebugMessage("Status: Floor: " + (currentFloor || 'Unknown') + ", Crypts: " + formatCryptCount(killedCrypts) + ", Time: " + formatTime(currentDungeonTime));
                         }
                     }
                 }

@@ -19,12 +19,14 @@ try {
         godRolls: {},
         goodRolls: {},
         attributes: [],
+        attributeAbbreviations: {},
         baseItems: [],
         armorPieces: [],
         moltenPieces: [],
         specialDrops: { red: [], green: [], yellow: [] },
         attributeShards: { yellow: [] },
-        enchantedBooks: { green: [], red: [] }
+        enchantedBooks: { green: [], red: [] },
+        romanNumerals: {}
     };
 }
 
@@ -32,11 +34,6 @@ try {
 const attributePattern = new RegExp("(" + kuudraLoot.attributes.join('|') + ")\\s+(\\d+|[IVX]+)(?:\\s+.*)?$", 'i');
 const baseItemPattern = new RegExp("(" + kuudraLoot.baseItems.join('|') + ") (" + [...kuudraLoot.armorPieces, ...kuudraLoot.moltenPieces].join('|') + ")", 'i');
 const enchantmentPattern = new RegExp("(" + [...kuudraLoot.enchantedBooks.green, ...kuudraLoot.enchantedBooks.red].join('|') + ")\\s+(\\d+|[IVX]+)", 'i');
-
-const romanNumerals = {
-    'I': 1, 'II': 2, 'III': 3, 'IV': 4, 'V': 5,
-    'VI': 6, 'VII': 7, 'VIII': 8, 'IX': 9, 'X': 10
-};
 
 let itemsWithAttributes = [];
 
@@ -69,9 +66,8 @@ function isGodRoll(baseItem, attributes) {
     return godRolls.some(function(roll) {
         if (!roll.pieces.includes(piece)) return false;
         return roll.attributes.every(function(attr) {
-            return Object.keys(attributes).some(function(itemAttr) {
-                return itemAttr.toLowerCase() === attr.toLowerCase();
-            });
+            const abbreviation = kuudraLoot.attributeAbbreviations[attr] || attr;
+            return Object.keys(attributes).includes(abbreviation);
         });
     });
 }
@@ -91,9 +87,8 @@ function isGoodRoll(baseItem, attributes) {
     return goodRolls.some(function(roll) {
         if (!roll.pieces.includes(piece)) return false;
         return roll.attributes.every(function(attr) {
-            return Object.keys(attributes).some(function(itemAttr) {
-                return itemAttr.toLowerCase() === attr.toLowerCase();
-            });
+            const abbreviation = kuudraLoot.attributeAbbreviations[attr] || attr;
+            return Object.keys(attributes).includes(abbreviation);
         });
     });
 }
@@ -204,10 +199,11 @@ function scanItemAttributes(item) {
                 const level = match[2];
                 let numericLevel = parseInt(level);
                 if (isNaN(numericLevel)) {
-                    numericLevel = romanNumerals[level] || 0;
+                    numericLevel = kuudraLoot.romanNumerals[level] || 0;
                 }
-                foundAttributes[attribute] = numericLevel;
-                showDebugMessage("Found attribute: " + attribute + " = " + numericLevel);
+                const abbreviation = kuudraLoot.attributeAbbreviations[attribute] || attribute;
+                foundAttributes[abbreviation] = numericLevel;
+                showDebugMessage(`Found attribute: ${attribute} (${abbreviation}) = ${numericLevel}`);
 
                 if (name.includes("Attribute Shard")) {
                     isAttributeShardItem = isAttributeShard(name, attribute);
@@ -317,58 +313,67 @@ function scanContents(container) {
                              ", Is GoodRoll: " + scanResult.isGoodRoll + ", Is Special Drop: " + scanResult.isSpecialDrop + 
                              ", Is Attribute Shard: " + scanResult.isAttributeShard + ", Is Enchanted Book: " + scanResult.isEnchantedBook);
 
-            if (Object.keys(scanResult.attributes).length > 0 || scanResult.isSpecialDrop || scanResult.isAttributeShard || scanResult.isEnchantedBook) {
-                itemsWithAttributes.push(Object.assign({
-                    name: item.getName(),
-                    slot: i
-                }, scanResult));
-            }
-            if (scanResult.baseItem) {
-                foundBaseItems.add(scanResult.baseItem);
-            }
-        }
-    }
-
-    if (Config.debugMode && foundBaseItems.size > 0) {
-        showDebugMessage("Found base items: " + Array.from(foundBaseItems).join(', '));
-    }
-
-    if (itemsWithAttributes.length > 0) {
-        if (Config.enableAttributeChatOutput) {
-            showGeneralJAMessage("Items with attributes, special drops, attribute shards, or enchanted books found:");
-            itemsWithAttributes.forEach(function(item) {
-                let rollType;
-                if (item.isSpecialDrop) {
-                    rollType = "§" + (item.isSpecialDrop === 'red' ? 'c' : item.isSpecialDrop === 'green' ? 'a' : 'e') + "[SPECIAL]";
-                } else if (item.isAttributeShard) {
-                    rollType = "§" + (item.isAttributeShard === 'yellow' ? 'e' : 'c') + "[SHARD]";
-                } else if (item.isEnchantedBook) {
-                    rollType = "§" + (item.isEnchantedBook === 'green' ? 'a' : 'c') + "[BOOK]";
-                } else if (item.isGodRoll) {
-                    rollType = "§a[GODROLL]";
-                } else if (item.isGoodRoll) {
-                    rollType = "§e[GOODROLL]";
-                } else {
-                    rollType = "§c[NORMAL]";
+                             if (Object.keys(scanResult.attributes).length > 0 || scanResult.isSpecialDrop || scanResult.isAttributeShard || scanResult.isEnchantedBook) {
+                                itemsWithAttributes.push(Object.assign({
+                                    name: item.getName(),
+                                    slot: i
+                                }, scanResult));
+                            }
+                            if (scanResult.baseItem) {
+                                foundBaseItems.add(scanResult.baseItem);
+                            }
+                        }
+                    }
+                
+                    if (Config.debugMode && foundBaseItems.size > 0) {
+                        showDebugMessage("Found base items: " + Array.from(foundBaseItems).join(', '));
+                    }
+                
+                    if (itemsWithAttributes.length > 0) {
+                        if (Config.enableAttributeChatOutput) {
+                            ChatLib.chat("&6&l========= Kuudra Loot =========");
+                            itemsWithAttributes.forEach(function(item) {
+                                let rollType;
+                                if (item.isSpecialDrop) {
+                                    rollType = item.isSpecialDrop === 'red' ? '&c-' : item.isSpecialDrop === 'green' ? '§a++' : '§e+';
+                                } else if (item.isAttributeShard) {
+                                    rollType = item.isAttributeShard === 'yellow' ? '&e+' : '&c-';
+                                } else if (item.isEnchantedBook) {
+                                    rollType = item.isEnchantedBook === 'green' ? '&a++' : '&c-';
+                                } else if (item.isGodRoll) {
+                                    rollType = '&6++';
+                                } else if (item.isGoodRoll) {
+                                    rollType = '&e+';
+                                } else {
+                                    rollType = '&7-';
+                                }
+                    
+                                let itemName = item.name.replace(/§./g, '');
+                                let enchantmentInfo = item.enchantment ? ` (${item.enchantment})` : '';
+                                
+                                let outputString = `${rollType} &f${itemName}${enchantmentInfo}`;
+                    
+                                if (Object.keys(item.attributes).length > 0) {
+                                    let attributeString = Object.entries(item.attributes)
+                                        .map(([attr, level]) => `${attr}&f:&b${level}`)
+                                        .join('&f & &a');
+                                    outputString += ` &r&8> &f(&a${attributeString}&f)&r`;
+                                }
+                                
+                                ChatLib.chat(outputString);
+                            });
+                            ChatLib.chat("&6&l=============================");
+                        }
+                    
+                        renderHighlight.register();
+                        clearHighlight.register();
+                    } else {
+                        if (Config.enableAttributeChatOutput) {
+                            showGeneralJAMessage("&cNo notable Kuudra loot found.");
+                        }
+                    }
                 }
-                showGeneralJAMessage(`  ${rollType} §e${item.name}${item.enchantment ? " (" + item.enchantment + ")" : ''}:`);
-                if (Object.keys(item.attributes).length > 0) {
-                    Object.entries(item.attributes).forEach(function([attr, level]) {
-                        showGeneralJAMessage(`    §a${attr}: §b${level}`);
-                    });
-                }
-            });
-        }
-
-        renderHighlight.register();
-        clearHighlight.register();
-    } else {
-        if (Config.enableAttributeChatOutput) {
-            showGeneralJAMessage("No items with attributes, special drops, attribute shards, or enchanted books found.", 'error');
-        }
-    }
-}
-
+                
 /**
  * Checks if a container is a valid chest to scan
  * @param {Object} container - The container to check
@@ -422,7 +427,6 @@ register("guiOpened", function(event) {
     }, 50);
 });
 
-// Export necessary functions
 export {
     scanItemAttributes,
     scanContents

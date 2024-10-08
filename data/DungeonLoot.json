@@ -1,0 +1,114 @@
+{
+    "items": {
+      "green": [
+        "Bonzo's Mask",
+        "Bonzo's Staff",
+        "Fuming Potato Book",
+        "Recombobulator 3000",
+        "Scarf's Studies",
+        "First Master Star",
+        "Spirit Bone",
+        "Spirit Wing",
+        "Second Master Star",
+        "Shadow Assassin Chestplate",
+        "Shadow Fury",
+        "Third Master Star",
+        "Giant's Sword",
+        "Fourth Master Star",
+        "Wither Chestplate",
+        "Auto Recombobulator",
+        "Implosion",
+        "Necron's Handle",
+        "Shadow Warp",
+        "Wither Shield",
+        "Fifth Master Star",
+        "Necron Dye"
+      ],
+      "yellow": [
+        "Hot Potato Book",
+        "Adaptive Blade",
+        "Adaptive Boots",
+        "Adaptive Helmet",
+        "Suspicious Vial",
+        "Adaptive Chestplate",
+        "Adaptive Leggings",
+        "Master Skull - Tier 1",
+        "Master Skull - Tier 2",
+        "Master Skull - Tier 3",
+        "Master Skull - Tier 4",
+        "Master Skull - Tier 5",
+        "[Lvl 1] Spirit",
+        "Spirit Stone",
+        "Spirit Boots",
+        "Spirit Bow",
+        "Spirit Sword",
+        "Shadow Assassin Boots",
+        "Shadow Assassin Helmet",
+        "Warped Stone",
+        "Livid Dagger",
+        "Shadow Assassin Leggings",
+        "Last Breath",
+        "Shadow Assassin Leggings",
+        "Giant Tooth",
+        "Summoning Ring",
+        "Necromancer Lord Chestplate",
+        "Precursor Eye",
+        "Precursor Gear",
+        "Wither Boots",
+        "Wither Catalyst",
+        "Wither Helmet",
+        "Soul Eater",
+        "Wither Cloak Sword",
+        "Wither Leggings",
+        "Wither Blood",
+        "Dark Claymore"
+        
+        
+      ],
+      "red": [
+        "Necromancer's Brooch",
+        "Red Nose",
+        "Dungeon Disc",
+        "Clown Disc",
+        "Necron Disc",
+        "Watcher Disc",
+        "Old Disc",
+        "Dark Orb",
+        "Ancient Rose",
+        "Necromancer Lord Boots",
+        "Necromancer Lord Helmet",
+        "Sadan's Brooch",
+        "Necromancer Lord Leggings",
+        "Necromancer Sword",
+        "Goldor the Fish",
+        "Maxor the Fish",
+        "Storm the Fish"
+        
+      ]
+    },
+    "books": {
+      "green": [
+        "Overload",
+        "Legion",
+        "One For All",
+        "Thunderlord"
+      ],
+      "yellow": [
+        "Rejuvenate",
+        "Ultimate Wise",
+        "Wisdom",
+        "Last Stand",
+        "Rend",
+        "Lethality",
+        "Swarm"
+      ],
+      "red": [
+        "Feather Falling",
+        "Infinite Quiver",
+        "Bank",
+        "Ultimate Jerry",
+        "Combo",
+        "No Pain No Gain"
+      ]
+    }
+  }

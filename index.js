@@ -7,6 +7,7 @@ import { scanItemAttributes } from "./utils/KuudraLootScanner";
 import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
 import "./features/dungeons/DungeonUtils"
+import "./utils/DungeonLootScanner";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");
 
@@ -168,7 +169,7 @@ function initializeJAModule() {
     showDebugMessage("Starting jcnlkAddons initialization", 'warning');
     
     let successCount = 0;
-    const totalModules = 4;  // SlashCommands, Dungeons, PartyCommands, DmCommands
+    const totalModules = 5;  // SlashCommands, Dungeons, PartyCommands, DmCommands, LootScanners
 
     initializeSlashCommands();
     successCount++;
@@ -181,6 +182,24 @@ function initializeJAModule() {
     
     successCount += initializeModule("Party Commands", () => PartyCommands(showDebugMessage, showGeneralJAMessage));
     successCount += initializeModule("DM Commands", () => DmCommands(showDebugMessage, showGeneralJAMessage));
+    
+    // Initialize Loot Scanners
+    successCount += initializeModule("Loot Scanners", () => {
+        if (Config.enableChestScanning) {
+            register("guiOpened", (event) => {
+                if (event.gui.toString().includes("GuiChest")) {
+                    const container = Player.getContainer();
+                    if (container) {
+                        scanKuudraContents(container);
+                        scanDungeonContents(container);
+                    }
+                }
+            });
+            showDebugMessage("Loot Scanners initialized successfully", 'success');
+        } else {
+            showDebugMessage("Loot Scanners skipped (not enabled in config)", 'info');
+        }
+    });
 
     showDebugMessage("jcnlkAddons initialization completed", 'success');
 

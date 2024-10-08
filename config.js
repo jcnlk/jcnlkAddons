@@ -285,11 +285,27 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Chat Output of Chest Content",
-        description: "Output your loot in Chat",
+        description: "Output Kuudra loot information in chat",
         category: "WIP",
         subcategory: "Kuudra Loot Highlight (§aSHOULD WORK§r)"
     })
     enableAttributeChatOutput = true;
+
+    @SwitchProperty({
+        name: "Enable Dungeon Chest Scanning",
+        description: "Enable scanning of dungeon chests for valuable loot",
+        category: "WIP",
+        subcategory: "Dungeons"
+    })
+    enableDungeonChestScanning = true;
+
+    @SwitchProperty({
+        name: "Enable Dungeon Loot Chat Output",
+        description: "Output dungeon loot information in chat",
+        category: "WIP",
+        subcategory: "Dungeons"
+    })
+    enableDungeonLootChatOutput = true;
 
     //Dev Stuff
     @SwitchProperty({
@@ -308,7 +324,7 @@ class Config {
         this.setCategoryDescription("Dungeons", "Settings for dungeon-related features");
         this.setCategoryDescription("Party Commands", "Configure party command settings");
         this.setCategoryDescription("DM Commands", "Configure DM command settings");
-        this.setCategoryDescription("WIP", "All the Stuff here is Work In Progess. Let's pray that it's working")
+        this.setCategoryDescription("WIP", "All the Stuff here is Work In Progess. Let's pray that it works")
         this.setCategoryDescription("Dev Stuff", "No interesting Stuff for you :(");
 
         // Add dependencies for General

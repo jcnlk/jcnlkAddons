@@ -45,25 +45,40 @@ export function getCryptCountFromTablist() {
 }
 
 /**
- * Extracts time from a scoreboard line
- * @param {Object} line - Scoreboard line object
- * @returns {number|null} Time in seconds or null if not found
+ * Extracts the current Dungeon Floor from the scoreboard
+ * @returns {string|null} The current Dungeon Floor (e.g., "F1", "M2") or null if not found
  */
-export function extractTimeFromLine(line) {
-    if (line && line.getName) {
-        const cleanLine = ChatLib.removeFormatting(line.getName()).trim();
-        if (cleanLine.includes("Time Elapsed:")) {
-            const timeStr = cleanLine.split("Time Elapsed:")[1].trim();
-            const match = timeStr.match(/(?:(\d+)m\s*)?(\d+)s/);
-            if (match) {
-                const minutes = parseInt(match[1] || "0");
-                const seconds = parseInt(match[2]);
-                return minutes * 60 + seconds;
-            }
-            showDebugMessage(`Failed to parse time: "${timeStr}"`, 'warning');
+export function getDungeonFloor() {
+    try {
+        const scoreboard = Scoreboard.getLines();
+        if (!scoreboard || scoreboard.length < 10) {
+            showDebugMessage("Scoreboard is not long enough to read floor information", 'warning');
+            return null;
         }
+
+        const floorLine = ChatLib.removeFormatting(scoreboard[8].getName()).trim();
+        showDebugMessage("Extracted floor line: \"" + floorLine + "\"", 'info');
+
+        // More tolerant regex that allows for potential changes in the future
+        const floorMatch = floorLine.match(/(?:⏣ )?The Catacombs \(([FM][1-7])\)/);
+        
+        if (floorMatch) {
+            showDebugMessage("Detected Dungeon Floor: " + floorMatch[1], 'info');
+            return floorMatch[1];
+        } else {
+            // If the main regex fails, try a more lenient approach
+            const fallbackMatch = floorLine.match(/([FM][1-7])/);
+            if (fallbackMatch) {
+                showDebugMessage("Detected Dungeon Floor (fallback): " + fallbackMatch[1], 'info');
+                return fallbackMatch[1];
+            }
+            showDebugMessage("Failed to parse Dungeon Floor from: \"" + floorLine + "\"", 'warning');
+            return null;
+        }
+    } catch (error) {
+        showDebugMessage("Error in getDungeonFloor: " + error, 'error');
+        return null;
     }
-    return null;
 }
 
 /**
