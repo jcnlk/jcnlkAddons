@@ -92,7 +92,6 @@ module.exports = () => {
                 Config.diceCommand && "!dice",
                 Config.petCommand && "!pet",
                 Config.jokeCommand && "!joke",
-                Config.modCommand && "!mod",
                 Config.simpCommand && "!simp",
                 Config.sweatCommand && "!sweat",
                 Config.susCommand && "!sus",
@@ -148,7 +147,6 @@ module.exports = () => {
             case "!joke": isCommandEnabled = Config.jokeCommand; break;
             case "!commands": 
             case "!command": isCommandEnabled = true; break;
-            case "!mod": isCommandEnabled = Config.modCommand; break;
             case "!simp": isCommandEnabled = Config.simpCommand; break;
             case "!sweat": isCommandEnabled = Config.sweatCommand; break;
             case "!sus": isCommandEnabled = Config.susCommand; break;
@@ -201,9 +199,6 @@ module.exports = () => {
             case "!command":
                 handleCommandsCommand(commandParts.slice(1), command, senderName);
                 return;
-            case "!mod":
-                generatedMessage = generateMessage("mod");
-                break;
             case "!simp":
             case "!sweat":
             case "!sus":

@@ -3,11 +3,12 @@ import config from "./config";
 import * as Dungeons from "./features/dungeons/Dungeons";
 import * as Reminders from "./features/general/Reminders";
 import { showSimplePopup } from "./utils/Popup";
-import { scanItemAttributes } from "./utils/KuudraLootScanner";
+import { scanItemAttributes } from "./utils/LootScanner.js";
 import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
 import "./features/dungeons/DungeonUtils"
-import "./utils/DungeonLootScanner";
+import "./utils/HighlightSlots"
+import * as CustomEmotes from "./features/general/CustomEmotes";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");
 
@@ -79,18 +80,46 @@ function initializeSlashCommands() {
                 displayPuzzleStatus();
                 showDebugMessage("Displayed puzzle status");
                 break;
+            case "emote":
+                if (args.length < 1) {
+                    showGeneralJAMessage("Usage: /ja emote [add|remove|list] [emotename] [emote]");
+                    return;
+                }
+                const emoteAction = args[0].toLowerCase();
+                switch (emoteAction) {
+                    case "add":
+                        if (args.length !== 3) {
+                            showGeneralJAMessage("Usage: /ja emote add [emotename] [emote]");
+                            return;
+                        }
+                        CustomEmotes.addCustomEmote(args[1], args[2]);
+                        break;
+                    case "remove":
+                        if (args.length !== 2) {
+                            showGeneralJAMessage("Usage: /ja emote remove [emotename]");
+                            return;
+                        }
+                        CustomEmotes.removeCustomEmote(args[1]);
+                        break;
+                    case "list":
+                        CustomEmotes.listCustomEmotes();
+                    break;
+                default:
+                    showGeneralJAMessage("Unknown emote action. Use add, remove, or list.");
+            }
+            break;
             case "test":
                     showGeneralJAMessage("The Module is actually running!");
                 break;
             case "help":
-                showGeneralJAMessage("Available subcommands: crypts, help, puzzles, test");
+                showGeneralJAMessage("Available subcommands: crypts, help, puzzles, emote, test");
                 showDebugMessage("Displayed /ja help information");
                 break;
             default:
                 showGeneralJAMessage("Unknown subcommand. Use 'crypts' to see crypt count, 'puzzles' to see puzzle status, or 'help' for more info.");
                 showDebugMessage(`Unknown /ja subcommand: ${subCommand}`);
         }
-    }, ["crypts", "help", "puzzles", "test"]);
+    }, ["crypts", "help", "puzzles","emote", "test"]);
 
     // /testpopup command
     registerSlashCommand("testpopup", "Show a test popup", (message, ...args) => {
@@ -169,7 +198,7 @@ function initializeJAModule() {
     showDebugMessage("Starting jcnlkAddons initialization", 'warning');
     
     let successCount = 0;
-    const totalModules = 5;  // SlashCommands, Dungeons, PartyCommands, DmCommands, LootScanners
+    const totalModules = 5;  // SlashCommands, Dungeons, PartyCommands, DmCommands, Custom Emotes
 
     initializeSlashCommands();
     successCount++;
@@ -182,24 +211,7 @@ function initializeJAModule() {
     
     successCount += initializeModule("Party Commands", () => PartyCommands(showDebugMessage, showGeneralJAMessage));
     successCount += initializeModule("DM Commands", () => DmCommands(showDebugMessage, showGeneralJAMessage));
-    
-    // Initialize Loot Scanners
-    successCount += initializeModule("Loot Scanners", () => {
-        if (Config.enableChestScanning) {
-            register("guiOpened", (event) => {
-                if (event.gui.toString().includes("GuiChest")) {
-                    const container = Player.getContainer();
-                    if (container) {
-                        scanKuudraContents(container);
-                        scanDungeonContents(container);
-                    }
-                }
-            });
-            showDebugMessage("Loot Scanners initialized successfully", 'success');
-        } else {
-            showDebugMessage("Loot Scanners skipped (not enabled in config)", 'info');
-        }
-    });
+    successCount += initializeModule("Custom Emotes", () => CustomEmotes.initialize());
 
     showDebugMessage("jcnlkAddons initialization completed", 'success');
 
