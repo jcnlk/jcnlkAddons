@@ -8,7 +8,7 @@
       "${playerName}'s RNG${dropString} is at ${rng}%. Even a Zombie Villager would feel sorry for them!",
       "With ${rng}% RNG${dropString}, ${playerName} might as well try fishing in the Void.",
       "${playerName} rolled a ${rng}%${dropString}. Time to change their IGN to 'Unlucky${PlayerName}'!",
-      "${playerName}'s luck${dropString} bottomed out at ${rng}%. Did they anger RNGesus by killing Jerries?",
+      "${playerName}'s luck${dropString} bottomed out at ${rng}%. Did they anger RNGesus by killing Jerries?"
     ],
     "medium": [
       "${playerName}'s RNG stands at a solid ${rng}%${dropString}. Not great, not terrible, just like their skill average!",
