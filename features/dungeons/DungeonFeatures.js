@@ -218,7 +218,7 @@ function startMainLoop() {
                         reminderEligibleTime = 0;
                         resetPuzzleState();
                     } else {
-                        showGeneralJAMessage("Left Dungeon. Stopping Crypt Reminder and Puzzle Tracking.");
+                        showGeneralJAMessage("Dungeon Left!");
                         reminderSent = false;
                         reminderEligibleTime = 0;
                         resetPuzzleState();

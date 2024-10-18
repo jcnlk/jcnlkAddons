@@ -1,13 +1,21 @@
-// Import necessary modules and configurations
 import config from "./config";
-import * as Dungeons from "./features/dungeons/Dungeons";
+import * as Dungeons from "./features/dungeons/DungeonFeatures";
 import * as Reminders from "./features/general/Reminders";
 import { showSimplePopup } from "./utils/Popup";
-import { scanItemAttributes } from "./utils/LootScanner.js";
+import { scanItemAttributes } from "./utils/KuudraLootScanner.js";
 import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
 import "./features/dungeons/DungeonUtils"
 import "./utils/HighlightSlots"
+import "./utils/Area"
+import "./utils/ItemID"
+import "./utils/Dungeon"
+import "./utils/FormatCoins";
+import "./utils/Hud";
+import "./utils/HudManager";
+import "./utils/InventoryHud";
+import "./utils/EnchantedBookDetail"
+import "./features/dungeons/HighlightDungeonLoot"
 import * as CustomEmotes from "./features/general/CustomEmotes";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");
@@ -81,28 +89,30 @@ function initializeSlashCommands() {
                 showDebugMessage("Displayed puzzle status");
                 break;
             case "emote":
-                if (args.length < 1) {
-                    showGeneralJAMessage("Usage: /ja emote [add|remove|list] [emotename] [emote]");
-                    return;
-                }
-                const emoteAction = args[0].toLowerCase();
-                switch (emoteAction) {
-                    case "add":
-                        if (args.length !== 3) {
-                            showGeneralJAMessage("Usage: /ja emote add [emotename] [emote]");
-                            return;
-                        }
-                        CustomEmotes.addCustomEmote(args[1], args[2]);
-                        break;
-                    case "remove":
-                        if (args.length !== 2) {
-                            showGeneralJAMessage("Usage: /ja emote remove [emotename]");
-                            return;
-                        }
-                        CustomEmotes.removeCustomEmote(args[1]);
-                        break;
-                    case "list":
-                        CustomEmotes.listCustomEmotes();
+            if (args.length < 1) {
+                showGeneralJAMessage("Usage: /ja emote [add|remove|list] [emotename] [emote]");
+                return;
+            }
+            const emoteAction = args[0].toLowerCase();
+            switch (emoteAction) {
+                case "add":
+                    if (args.length < 3) {
+                        showGeneralJAMessage("Usage: /ja emote add [emotename] [emote]");
+                        return;
+                    }
+                    const emoteName = args[1];
+                    const emote = args.slice(2).join(" "); 
+                    CustomEmotes.addCustomEmote(emoteName, emote);
+                    break;
+                case "remove":
+                    if (args.length !== 2) {
+                        showGeneralJAMessage("Usage: /ja emote remove [emotename]");
+                        return;
+                    }
+                    CustomEmotes.removeCustomEmote(args[1]);
+                    break;
+                case "list":
+                    CustomEmotes.listCustomEmotes();
                     break;
                 default:
                     showGeneralJAMessage("Unknown emote action. Use add, remove, or list.");
@@ -139,7 +149,7 @@ function initializeSlashCommands() {
         }
 
         if (args.length === 0) {
-            showGeneralJAMessage("Usage: /reminder [add|remove|list] [name] [time]");
+            showGeneralJAMessage("Usage: /reminder [add|remove|list] [name|index] [time]");
             return;
         }
 
@@ -163,26 +173,30 @@ function initializeSlashCommands() {
                 break;
             case "remove":
                 if (args.length < 2) {
-                    showGeneralJAMessage("Usage: /reminder remove [name]");
+                    showGeneralJAMessage("Usage: /reminder remove [name|index]");
                     return;
                 }
-                const removeName = args.slice(1).join(" ");
-                if (Reminders.removeReminder(removeName)) {
-                    showGeneralJAMessage(`Reminder '${removeName}' removed`, 'success');
+                const removeIdentifier = args[1];
+                const removeIndex = parseInt(removeIdentifier);
+                if (Reminders.removeReminder(isNaN(removeIndex) ? removeIdentifier : removeIndex)) {
+                    showGeneralJAMessage(`Reminder '${removeIdentifier}' removed`, 'success');
                 } else {
-                    showGeneralJAMessage(`No reminder found with name '${removeName}'`, 'error');
+                    showGeneralJAMessage(`No reminder found with identifier '${removeIdentifier}'`, 'error');
                 }
                 break;
             case "list":
                 const list = Reminders.listReminders();
                 if (list.length > 0) {
-                    showGeneralJAMessage(`Active reminders: ${list.join(", ")}`);
+                    showGeneralJAMessage("Active reminders:");
+                    list.forEach(reminder => {
+                        showGeneralJAMessage(`${reminder.index}. ${reminder.name} - Time left: ${Reminders.formatTime(reminder.timeLeft)}`);
+                    });
                 } else {
                     showGeneralJAMessage("No active reminders");
                 }
-                break;
+            break;
             default:
-                showGeneralJAMessage("Usage: /reminder [add|remove|list] [name] [time]");
+                showGeneralJAMessage("Usage: /reminder [add|remove|list] [name|index] [time]");
         }
     }, ["add", "remove", "list"]);
 

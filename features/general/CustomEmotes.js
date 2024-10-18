@@ -6,7 +6,7 @@ let customEmotes = new Map();
 // Load custom emotes from storage
 function loadCustomEmotes() {
     try {
-        const storedEmotes = FileLib.read("jcnlkAddons", "data/customEmotes.json");
+        const storedEmotes = FileLib.read("jcnlkAddons", "data/CustomEmotes.json");
         if (storedEmotes) {
             customEmotes = new Map(JSON.parse(storedEmotes));
             showDebugMessage(`Loaded ${customEmotes.size} custom emotes`);
@@ -20,7 +20,7 @@ function loadCustomEmotes() {
 function saveCustomEmotes() {
     try {
         const emoteArray = Array.from(customEmotes.entries());
-        FileLib.write("jcnlkAddons", "data/customEmotes.json", JSON.stringify(emoteArray));
+        FileLib.write("jcnlkAddons", "data/CustomEmotes.json", JSON.stringify(emoteArray));
         showDebugMessage(`Saved ${customEmotes.size} custom emotes`);
     } catch (error) {
         showDebugMessage(`Error saving custom emotes: ${error}`, 'error');

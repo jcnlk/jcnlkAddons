@@ -1,4 +1,13 @@
-import { @Vigilant, @SwitchProperty, @DecimalSliderProperty, @TextProperty, @SliderProperty, @SelectorProperty } from 'Vigilance';
+import { 
+    @Vigilant, 
+    @SwitchProperty, 
+    @DecimalSliderProperty, 
+    @TextProperty, 
+    @SliderProperty, 
+    @SelectorProperty, 
+    @ColorProperty, 
+    @ButtonProperty,    
+    @CheckboxProperty   } from 'Vigilance';
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
@@ -6,6 +15,7 @@ import { @Vigilant, @SwitchProperty, @DecimalSliderProperty, @TextProperty, @Sli
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
+
 class Config {
     //General Settings
     @SwitchProperty({
@@ -15,6 +25,14 @@ class Config {
         subcategory: "Attributes"
     })
     enableAttributeAbbreviations = true;
+
+    @SwitchProperty({
+        name: "Enable Custom Emotes",
+        description: "Enable the use of custom emotes in chat",
+        category: "General",
+        subcategory: "Chat"
+    })
+    enableCustomEmotes = true;
 
     //Reminder Settings
     @SwitchProperty({
@@ -45,7 +63,7 @@ class Config {
 
     @DecimalSliderProperty({
         name: "Reminder Sound Volume",
-        description: "Volume of the reminder sound (0 to turn it §cOFF§r)",
+        description: "Volume of the reminder sound \n(0 to turn it §cOFF§r)",
         category: "General",
         subcategory: "Reminders",
         minF: 0,
@@ -65,25 +83,25 @@ class Config {
 
     @DecimalSliderProperty({
         name: "Crypt Reminder Time",
-        description: "Time in minutes to remind about crypts (0 to turn it §cOFF§r)",
+        description: "Time in minutes to remind about crypts \n(0 to turn it §cOFF§r)",
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         minF: 0.0,
-        maxF: 5.0,
+        maxF: 3.0,
         decimalPlaces: 1
     })
     cryptReminderTime = 1.5;
 
     @TextProperty({
         name: "Crypt Reminder Message",
-        description: "Message to send as a crypt reminder. Use §b{count}§r for the number of needed crypts.",
+        description: "Message to send as a crypt reminder. \nUse §b{count}§r for the number of needed crypts.",
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         placeholder: "We need {count} more crypts!"
     })
     cryptReminderMessage = "Crypt Reminder: We need {count} more Crypts!";
 
-    @SwitchProperty({
+    @CheckboxProperty({
         name: "Enable Crypt Reminder Popup",
         description: "Show a popup for crypt reminders",
         category: "Dungeons",
@@ -111,7 +129,7 @@ class Config {
     
     @DecimalSliderProperty({
         name: "Crypt Reminder Sound Volume",
-        description: "Volume of the crypt reminder sound (0 to turn it §cOFF§r)",
+        description: "Volume of the crypt reminder sound \n(0 to turn it §cOFF§r)",
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         minF: 0,
@@ -194,14 +212,6 @@ class Config {
     commandsHelpCommand = true;
 
     @SwitchProperty({
-        name: "Mod Command &3!mod&r",
-        description: "Enable the mod command in Party Chat",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    modCommand = true;
-
-    @SwitchProperty({
         name: "Simp Command &3!simp&r",
         description: "Enable the simp command in Party Chat",
         category: "Party Commands",
@@ -277,7 +287,7 @@ class Config {
     //WIP Stuff
     @SwitchProperty({
         name: "Enable Chest Highlighting",
-        description: "Highlights loot in different colors according to their value (God Roll, Good Roll, Bad Roll)",
+        description: "Highlights loot in kuudra chests according to their value \n(§aGod Roll§r, §eGood Roll§r, §cBad Roll§r)",
         category: "WIP",
         subcategory: "Kuudra Loot Highlight (§aSHOULD WORK§r)"
     })
@@ -285,28 +295,28 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Chat Output of Chest Content",
-        description: "Output Kuudra loot information in chat",
+        description: "Displays kuudra loot in Chat",
         category: "WIP",
         subcategory: "Kuudra Loot Highlight (§aSHOULD WORK§r)"
     })
     enableAttributeChatOutput = true;
 
     @SwitchProperty({
-        name: "Enable Dungeon Chest Scanning",
-        description: "Enable scanning of dungeon chests for valuable loot",
+        name: "Enable Dungeon Chest Highlighting",
+        description: "Highlights loot in dungeon chests",
         category: "WIP",
-        subcategory: "Dungeons"
+        subcategory: "Dungeon Loot Highlighting (§aSHOULD WORK§r)"
     })
-    enableDungeonChestScanning = true;
-
+    enableDungeonChestHighlighting = true;
+    
     @SwitchProperty({
         name: "Enable Dungeon Loot Chat Output",
-        description: "Output dungeon loot information in chat",
+        description: "Displays dungeon loot in the chat",
         category: "WIP",
-        subcategory: "Dungeons"
+        subcategory: "Dungeon Loot Highlighting (§aSHOULD WORK§r)"
     })
     enableDungeonLootChatOutput = true;
-
+    
     //Dev Stuff
     @SwitchProperty({
         name: "Debug Mode",
@@ -324,7 +334,7 @@ class Config {
         this.setCategoryDescription("Dungeons", "Settings for dungeon-related features");
         this.setCategoryDescription("Party Commands", "Configure party command settings");
         this.setCategoryDescription("DM Commands", "Configure DM command settings");
-        this.setCategoryDescription("WIP", "All the Stuff here is Work In Progess. Let's pray that it works")
+        this.setCategoryDescription("WIP", "All the Stuff here is Work In Progess. Let's pray that it's working")
         this.setCategoryDescription("Dev Stuff", "No interesting Stuff for you :(");
 
         // Add dependencies for General
@@ -333,7 +343,7 @@ class Config {
         this.addDependency("Reminder Sound Volume", "Enable Reminders")
 
         // Add dependencies for Party Commands
-        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Pet Command &3!pet&r", "Joke Command &3!joke&r", "Help Command &3!commands help&r", "Mod Command &3!mod&r", "Simp Command &3!simp&r", "Sweat Command &3!sweat&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
+        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Pet Command &3!pet&r", "Joke Command &3!joke&r", "Help Command &3!commands help&r", "Simp Command &3!simp&r", "Sweat Command &3!sweat&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
         partyCommands.forEach(command => this.addDependency(command, "Enable Party Commands"));
 
         // Add dependencies for DM Commands
@@ -343,13 +353,14 @@ class Config {
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Popup Color", "Enable Crypt Reminder Popup");
-        this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder Popup");
-        this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder Popup");
-
+        this.addDependency("Enable Crypt Reminder Popup", "Enable Crypt Reminder");
+        this.addDependency("Crypt Reminder Popup Color", "Enable Crypt Reminder");
+        this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder");
+        this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder");
 
         // Add dependencies for WIP
         this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting")
+        this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting")
     }
 }
 

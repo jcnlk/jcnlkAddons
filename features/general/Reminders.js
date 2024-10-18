@@ -35,7 +35,7 @@ function saveData() {
     const data = { reminders: reminderData };
     const jsonString = JSON.stringify(data, null, 2);
     try {
-        FileLib.write("jcnlkAddons", "data/storage.json", jsonString);
+        FileLib.write("jcnlkAddons", "data/Reminders.json", jsonString);
         if (Config.debugMode) {
             showDebugMessage(`Saved ${reminderData.length} reminders to storage.`, 'success');
         }
@@ -48,7 +48,7 @@ function saveData() {
  * Loads reminder data from a file
  */
 function loadData() {
-    if (!FileLib.exists("jcnlkAddons", "data/storage.json")) {
+    if (!FileLib.exists("jcnlkAddons", "data/Reminders.json")) {
         if (Config.debugMode) {
             showDebugMessage("Storage file does not exist. Creating a new one.", 'warning');
         }
@@ -58,7 +58,7 @@ function loadData() {
     
     let jsonString;
     try {
-        jsonString = FileLib.read("jcnlkAddons", "data/storage.json");
+        jsonString = FileLib.read("jcnlkAddons", "data/Reminders.json");
     } catch (error) {
         showDebugMessage(`Error reading storage file: ${error}`, 'error');
         return;
@@ -188,36 +188,60 @@ function addPartyReminder(senderName, name, time, callback) {
 
 /**
  * Removes a reminder
- * @param {string} name - The name of the reminder to remove
+ * @param {string|number} identifier - The name or index of the reminder to remove
  * @returns {boolean} - Whether the reminder was successfully removed
  */
-function removeReminder(name) {
-    if (reminders.has(name)) {
-        reminders.delete(name);
+function removeReminder(identifier) {
+    if (typeof identifier === 'number') {
+        // Remove by index
+        const reminderList = listReminders();
+        if (identifier > 0 && identifier <= reminderList.length) {
+            const reminderToRemove = reminderList[identifier - 1];
+            reminders.delete(reminderToRemove.name);
+            saveData();
+            if (Config.debugMode) {
+                showDebugMessage(`Removed reminder "${reminderToRemove.name}" by index ${identifier}`);
+            }
+            return true;
+        }
+    } else if (reminders.has(identifier)) {
+        // Remove by name
+        reminders.delete(identifier);
         saveData();
         if (Config.debugMode) {
-            showDebugMessage(`Removed reminder "${name}"`, 'info');
+            showDebugMessage(`Removed reminder "${identifier}"`);
         }
         return true;
     }
     if (Config.debugMode) {
-        showDebugMessage(`Reminder "${name}" not found.`, 'warning');
+        showDebugMessage(`Reminder "${identifier}" not found.`);
     }
     return false;
 }
 
 /**
  * Lists all active reminders
- * @returns {string[]} - An array of reminder names
+ * @returns {Object[]} - An array of reminder objects with name, timeLeft, and index
  */
 function listReminders() {
+    const now = Date.now();
+    let reminderList = [];
+    let index = 1;
+    reminders.forEach((reminder, name) => {
+        reminderList.push({
+            name: name,
+            timeLeft: reminder.timeLeft,
+            index: index++
+        });
+    });
     if (Config.debugMode) {
-        reminders.forEach((reminder, name) => {
-            showDebugMessage(`Reminder: ${name}, Time left: ${formatTime(reminder.timeLeft)}`, 'info');
+        reminderList.forEach(reminder => {
+            showDebugMessage(`Reminder: ${reminder.index}. ${reminder.name}, Time left: ${formatTime(reminder.timeLeft)}`);
         });
     }
-    return Array.from(reminders.keys());
+    return reminderList;
 }
+
 
 /**
  * Parses a time string into milliseconds
@@ -241,9 +265,9 @@ function parseTime(time) {
 }
 
 /**
- * Formats a time in milliseconds to a readable string
- * @param {number} ms - The time in milliseconds
- * @returns {string} - A formatted time string
+ * Formats time in milliseconds to a readable string
+ * @param {number} ms - Time in milliseconds
+ * @returns {string} - Formatted time string
  */
 function formatTime(ms) {
     const seconds = Math.floor(ms / 1000);
@@ -315,10 +339,10 @@ function showReminderPopup(name) {
     }
 }
 
-// Export functions
-export { 
-    addReminder, 
-    removeReminder, 
-    listReminders, 
-    addPartyReminder 
+export {
+    addReminder,
+    removeReminder,
+    listReminders,
+    addPartyReminder,
+    formatTime
 };
