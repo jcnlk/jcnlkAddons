@@ -188,22 +188,6 @@ class Config {
     diceCommand = true;
 
     @SwitchProperty({
-        name: "Pet Command &3!pet&r",
-        description: "Enable the pet command in Party Chat",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    petCommand = true;
-
-    @SwitchProperty({
-        name: "Joke Command &3!joke&r",
-        description: "Enable the joke command in Party Chat",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    jokeCommand = true;
-
-    @SwitchProperty({
         name: "Help Command &3!commands help&r",
         description: "Enable the help command in Party Chat",
         category: "Party Commands",
@@ -218,14 +202,6 @@ class Config {
         subcategory: "Party Commands"
     })
     simpCommand = true;
-
-    @SwitchProperty({
-        name: "Sweat Command &3!sweat&r",
-        description: "Enable the sweat command in Party Chat",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    sweatCommand = true;
 
     @SwitchProperty({
         name: "Sus Command &3!sus&r",
@@ -343,7 +319,7 @@ class Config {
         this.addDependency("Reminder Sound Volume", "Enable Reminders")
 
         // Add dependencies for Party Commands
-        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Pet Command &3!pet&r", "Joke Command &3!joke&r", "Help Command &3!commands help&r", "Simp Command &3!simp&r", "Sweat Command &3!sweat&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
+        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Help Command &3!commands help&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
         partyCommands.forEach(command => this.addDependency(command, "Enable Party Commands"));
 
         // Add dependencies for DM Commands

@@ -4,37 +4,28 @@
       "${playerName}'s RNG is at a measly ${rng}%${dropString}! Even Jerry has better luck!",
       "Ouch! ${playerName}'s luck${dropString} just hit rock bottom at ${rng}%. Time to pet some black cats for good measure!",
       "${playerName}'s RNG${dropString} is so low (${rng}%), they might actually have a chance at winning a 'Worst Luck' competition!",
-      "Alert: ${playerName}'s RNG${dropString} has reached ${rng}%! The Banker just offered them a loan out of pity.",
-      "${playerName} stumbled upon a cursed RNG scroll${dropString}. It reads: '${rng}% chance'. Yikes, maybe it's time to reforge that rabbit foot!",
+      "${playerName} stumbled upon a cursed RNG scroll${dropString}. It reads: '${rng}% chance'. Yikes, maybe it's time to stop hopping!",
       "${playerName}'s RNG${dropString} is at ${rng}%. Even a Zombie Villager would feel sorry for them!",
       "With ${rng}% RNG${dropString}, ${playerName} might as well try fishing in the Void.",
-      "${playerName} rolled a ${rng}%${dropString}. Time to change their IGN to 'UnluckySteve'!",
+      "${playerName} rolled a ${rng}%${dropString}. Time to change their IGN to 'Unlucky${PlayerName}'!",
       "${playerName}'s luck${dropString} bottomed out at ${rng}%. Did they anger RNGesus by killing Jerries?",
-      "Alert: ${playerName}'s RNG${dropString} hit rock bottom at ${rng}%. Dante's about to offer them a sympathy coin!"
     ],
     "medium": [
       "${playerName}'s RNG stands at a solid ${rng}%${dropString}. Not great, not terrible, just like their skill average!",
       "The RNG gods grant ${playerName} a lukewarm ${rng}%${dropString}. Perfectly balanced, as all things should be... except the Skyblock economy.",
-      "${playerName} rolled a ${rng} on the Wheel of Mediocre Fortune${dropString}! That's almost as exciting as fishing for Sharks during Spooky Festival!",
       "Breaking news: ${playerName}'s luck meter${dropString} shows a steady ${rng}%! Time to buy a lottery ticket... in Monopoly!",
       "${playerName}'s RNG${dropString} is ${rng}%! That's like finding a Smite VI ... from a Revenant.",
-      "${playerName}'s RNG${dropString} sits at ${rng}%. As average as a non-upgraded Aspect of the End.",
+      "${playerName}'s RNG${dropString} sits at ${rng}%. As average as a non-upgraded Aspect of the Void.",
       "With ${rng}% luck${dropString}, ${playerName} is as middle-of-the-road as Hub island.",
-      "${playerName} scored ${rng}% RNG${dropString}. Perfectly balanced, like a Thanos snap in the Auction House.",
-      "${rng}% RNG for ${playerName}${dropString}. Not great, not terrible, just like Protector Dragon Armor.",
-      "${playerName}'s luck meter${dropString} shows ${rng}%. Time to gamble... in the Wheat minigame!"
+      "${rng}% RNG for ${playerName}${dropString}. Not great, not terrible, just like Superior Dragon Armor."
     ],
     "high": [
       "Holy! ${playerName}'s RNG just skyrocketed to ${rng}%${dropString}! Time to fight some Inquisitors while blindfolded!",
       "RNGesus shouts: ${playerName}, your chances${dropString} are ${rng}%!' Even Dante's statue is jumping for joy!",
       "${playerName} just broke the RNG-o-meter with a whopping ${rng}%${dropString}! That's higher than the chances of finding a lobby without beggars!",
-      "Dungeon Master gasps at ${playerName}'s RNG${dropString}: ${rng}/100. 'That's illegal,' he whispers, reaching for the ban hammer.",
-      "${playerName}'s luck${dropString} just hit ${rng}%! Quick, check if pigs are flying over the Pigman's Den!",
-      "${playerName}'s RNG${dropString} skyrocketed to ${rng}%! Time to fight Necron with a Wooden Sword!",
-      "With ${rng}% luck${dropString}, ${playerName} could probably find Necron's Handle in a Tier I Zombie Slayer drop!",
-      "${playerName} just hit ${rng}% RNG${dropString}! They should try crafting a 50/50 pet item, it might turn into a Legendary Ender Dragon!",
-      "RNGesus blessed ${playerName} with ${rng}% luck${dropString}! Quick, check if Mayor Cole is handing out free Hyperions!",
-      "${playerName}'s fortune${dropString} soared to ${rng}%! They could probably find a Wither Blade in Dwarven Mines right now!"
+      "${playerName}'s RNG${dropString} skyrocketed to ${rng}%! Time to fight Necron with an Aspect of the Jerry!",
+      "With ${rng}% luck${dropString}, ${playerName} could probably find Necron's Handle in the first run!",
+      "${playerName} just hit ${rng}% RNG${dropString}! They should try using Wheel of Fate, it might turn into a godroll!"
     ]
   },
   "cf": {
@@ -43,58 +34,43 @@
       "The coin speaks to ${playerName}: Heads! More reliable than Bazaar flipping, eh?",
       "${playerName}'s coin said Heads! If only dungeon runs were this predictable...",
       "Heads up, ${playerName}! You're officially ahead of the game now!",
-      "${playerName} flipped Heads! More reliable than their aim with a Juju Shortbow.",
-      "It's Heads for ${playerName}! Unlike their attempts to solve Melody's harp songs.",
       "The coin says Heads to ${playerName}! If only dungeon runs were this consistent.",
-      "Heads up, ${playerName}! Now if only they could 'head up' to Catacombs 50 this easily.",
-      "${playerName} got Heads! More predictable than Derpy's intelligence debuff."
+      "Heads up, ${playerName}! Now if only they could 'head up' to Catacombs 50 this easily."
     ],
     "tails": [
       "${playerName}'s coin flip resulted in Tails. Plot twist: it was a Bonzo Coin all along!",
       "Tails for ${playerName}! Still easier than flipping items on auction house.",
       "The cosmic coin toss for ${playerName} reveals: Tails! More suspenseful than waiting for Diana's event!",
       "Tails never fails for ${playerName}! Unless you're trying to get a Warden Helm, then it always fails.",
-      "${playerName} gets Tails! Time to stop flipping coins and start flipping Enchanted Books!",
-      "Tails for ${playerName}! Slipperier than trying to catch Jerry during the Jerry event.",
       "${playerName}'s coin shows Tails! Unlike the party finder, this result didn't disappoint.",
-      "It's Tails, ${playerName}! More unexpected than finding out there's no RNG in RNGesus drops.",
-      "Tails never fails for ${playerName}! Unless you're talking about their attempts at Mayor Derpy's parkour.",
-      "${playerName} flipped Tails! More decisive than choosing between AOTE and AOTV for early game."
+      "It's Tails, ${playerName}! More unexpected than finding out there's no RNG in RNGesus drops."
     ]
   },
   "throw": {
     "low": [
       "${playerName} threw the run with a devastating ${throwIntensity}% intensity! That's like dying to a T1 Rev while wearing Necron armor.",
-      "DEFCON 1 ALERT: ${playerName} just threw harder than Hypixel's servers during Skyblock's release! Throw level: ${throwIntensity}%",
+      "DEFCON 1 ALERT: ${playerName} just threw harder than Hypixel's servers during update releases! Throw level: ${throwIntensity}%",
       "${playerName} threw the run ${throwIntensity}%! That's more tragic than accidentally salvaging a Hyperion!",
       "${playerName}'s throw was so bad (${throwIntensity}%), even Watchdog got confused and banned a cheater!",
-      "${playerName} threw with ${throwIntensity}% intensity! That's like dying to a Zombie in the Hub while wearing full Storm.",
       "${playerName}'s ${throwIntensity}% throw was so bad, even Bonzo is facepalming!",
       "With a ${throwIntensity}% throw, ${playerName} just redefined the term 'skill issue'.",
-      "${playerName}'s throw was ${throwIntensity}%! They're now the official mascot for 'How Not to Play Skyblock'.",
-      "Alert: ${playerName} threw ${throwIntensity}%! That's more catastrophic than the Great Potato War!"
+      "${playerName}'s throw was ${throwIntensity}%! They're now the official mascot for 'How Not to Play Skyblock'."
     ],
     "medium": [
       "${playerName} threw the run with ${throwIntensity}% intensity! That's like forgetting to equip the right power stone... again.",
-      "${playerName}'s throw registered ${throwIntensity}% on the Yeet-o-meter! As mid as using Show Assassine armor in 2024.",
       "Alert: ${playerName} just threw harder than a Marina simp throws money at Shark Bait! Throw level: ${throwIntensity}%",
       "${playerName} threw the run ${throwIntensity}%! That's about as bad as using Livid Dagger in Master Mode Floor 3!",
       "${playerName}'s throw skills: ${throwIntensity}%. Comparable to using a Hyperion as a melee weapon!",
       "${playerName} achieved a ${throwIntensity}% throw! As middling as using a Golem Sword in Floor 7.",
-      "With a ${throwIntensity}% throw, ${playerName} is as consistent as Bazaar prices during a duping crisis.",
       "${playerName}'s throw: ${throwIntensity}%. Not great, not terrible, just like using a Juju Shortbow in Master Mode.",
-      "${playerName} threw ${throwIntensity}%! That's like bringing Lapis Armor to a Svens Slayer quest.",
       "Throw level for ${playerName}: ${throwIntensity}%. As average as the IQ of a Hub 1 Lowballer."
     ],
     "high": [
-      "${playerName} barely threw the run with ${throwIntensity}% intensity. That's like dying to a Skeleton... in the Hub.",
-      "${playerName} threw the run ${throwIntensity}%! That's less tragic than losing 1 coin to a Gaia Construct.",
+      "${playerName} threw the run ${throwIntensity}%! That's less tragic than losing 12 coin to a Gaia Construct.",
       "${playerName}'s throw skills: ${throwIntensity}%. Barely noticeable, like using Juju Shortbow in Dragon fights... wait, that's actually okay!",
-      "${playerName} barely threw with ${throwIntensity}%! That's like accidentally dealing damage in Melody's Harp songs.",
-      "With just a ${throwIntensity}% throw, ${playerName} is smoother than Silk-Edge Sword ability!",
       "${playerName}'s throw was only ${throwIntensity}%! They're more stable than Skyblock's economy!",
       "A mere ${throwIntensity}% throw from ${playerName}! They're more reliable than finding good teammates in Party Finder.",
-      "${playerName} threw ${throwIntensity}%! That's less noticeable than the difference between Renowned and Renowned reforges!"
+      "${playerName} threw ${throwIntensity}%! That's less noticeable than the difference between Heroic AOTV and Warped AOTV!"
     ]
   },
   "dice": {
@@ -102,10 +78,8 @@
       "${playerName} rolled a ${result}! That's ${result} more than their chances of dropping a Necron's Handle!",
       "The dice whisper to ${playerName}: ${result}! Still higher than the chances of getting a good random in F7!",
       "${playerName} shakes the dice and gets a ${result}. Wow, same as their brain cells during a Kuudra fight!",
-      "In a twist of fate, ${playerName}'s die landed on ${result}. More surprising than finding out there's no RNG in RNGesus drops!",
       "${playerName} rolls a ${result}. That's the same number of times they've touched grass this month!",
       "The dice whispers ${result} to ${playerName}. Even Jerrys have better luck!",
-      "With a roll of ${result}, ${playerName} might want to consider a career as an underground potato farmer.",
       "${playerName} got a ${result}. That's how many brain cells they have left after grinding Skills for 48 hours straight!"
     ],
     "medium": [
@@ -114,105 +88,19 @@
       "The RNG gods granted ${playerName} a ${result}. Still better odds than getting superior from dragons!",
       "${playerName} rolled ${result}. That's how many years it'll take for them to afford a Terminator at this rate!",
       "Dice result for ${playerName}: ${result}. Perfectly balanced, unlike Skyblock's economy!",
-      "${playerName} rolled a ${result}! As average as a day of Zealot farming.",
-      "The dice revealed a ${result} for ${playerName}. Perfectly balanced, like Hypixel's update schedule.",
       "${playerName}'s roll: ${result}. Not great, not terrible, just like their skill average.",
       "${playerName} got a ${result}. That's how many times they've touched grass this year!"
     ],
     "high": [
-      "${playerName} rolled a ${result}! They should try fighting Thunders with those odds!",
+      "${playerName} rolled a ${result}! They should try fighting Lord Jawbus with those odds!",
       "The dice bow to ${playerName}: ${result}! Now if only their damage was that high...",
       "${playerName} shakes the dice and gets a ${result}. Plot twist: it was actually their Catacombs level!",
-      "By some miracle, ${playerName}'s die landed on ${result}. Admins, we found your QA tester!",
       "${playerName} rolls a ${result}. That's it, we're nerfing dice rolls in the next patch.",
       "${playerName} rolled a ${result}! They should try fighting Thunders with those odds!",
       "The dice bows to ${playerName} with a ${result}! Even RNGesus is jealous.",
-      "${playerName} shakes the dice and gets a ${result}. Plot twist: it was actually their Catacombs level!",
-      "By some miracle, ${playerName}'s die landed on ${result}. Admins, we found your next nerf target!",
-      "${playerName} rolls a ${result}. That's it, we're nerfing dice rolls in the next patch."
+      "By some miracle, ${playerName}'s die landed on ${result}. Admins, we found your next nerf target!"
     ]
   },
-"pet": [
-    "${playerName} tried to pet a Zealot. It screamed 'SPECIAL' and teleported away with their wallet.",
-    "${playerName} attempted to cuddle a Magma Cube. They're now experiencing the true meaning of 'Fire Aspect'.",
-    "${playerName} gave belly rubs to a Wither. Surprisingly, it purred and coughed up some Necron's Handle fragments.",
-    "${playerName} tried to play fetch with an Enderman. The stick is now in the Backrooms, and so is ${playerName}.",
-    "${playerName} petted a Dragon. It's now following them around like a puppy, breathing fire on all the NPCs.",
-    "${playerName} offered a snack to a Ghoul. Turns out, the snack was their own arm. Oops!",
-    "${playerName} attempted to tame a Phoenix. They're now a pile of ashes with a 'Skyblock Sweat' nametag.",
-    "${playerName} tried to leash a Yeti. They're currently skiing down the Howling Caves without skis.",
-    "${playerName} whispered sweet nothings to a Slime. It blushed, split into smaller slimes, each demanding child support.",
-    "${playerName} shared their Century Cake with a Zombie. Now it's offering brains to other zombies. How the turntables...",
-    "${playerName} tried to befriend a Bal Boss. They're now cosplaying as a rotisserie chicken.",
-    "${playerName} attempted to ride a Giant. They're currently getting a bird's-eye view of the entire Crimson Isle.",
-    "${playerName} offered a Fire Rune to a Blaze. It's now having an existential crisis about its own existence.",
-    "${playerName} tried to teach a Sea Emperor to fish. Plot twist: It's now better at fishing than most Skyblock players.",
-    "${playerName} attempted to race with Young Dragon. They're still trying to catch up, legend says.",
-    "${playerName} tried to pet a Bonzo. Now they're stuck in a loop of bad jokes and confetti.",
-    "${playerName} gave scritches to a Baby Yeti. It responded by yeeting them across Skyblock.",
-    "${playerName} attempted to cuddle an Ender Dragon. They're now on a one-way trip to the Void.",
-    "${playerName} offered a carrot to Goldor. He mistook it for a golden carrot and now has an identity crisis.",
-    "${playerName} tried to leash a Gyrokinetic Wand. They're currently orbiting the Crystal Hollows.",
-    "${playerName} attempted to tame a Scatha. It burrowed away, along with all their mining fortune.",
-    "${playerName} whispered sweet nothings to a Terminator. It auto-shot them into next week.",
-    "${playerName} tried to befriend a Wither. Now they're cosplaying as a Wither Rose.",
-    "${playerName} offered Kookie to Sadan. He's now contemplating a career change to a baker.",
-    "${playerName} attempted to ride a Giant Mushroom Cow. They're now experiencing the true meaning of 'high as a kite'."
-  ],
-  "joke": [
-    "Why did ${playerName} bring a ladder to Derpy's interview? They heard the intelligence level was pretty low!",
-    "How does ${playerName} fix a broken Hyperion? With a No-hit-n' glue!",
-    "Why was ${playerName} arrested at the Auction House? For flea market manipulation!",
-    "What do you call ${playerName} in full Superior Dragon armor at Midas' place? A gold digger!",
-    "Why did ${playerName} fail their Skyblock history exam? They couldn't handle the Bazaar pressure!",
-    "How does ${playerName} stay cool in the Blazing Fortress? They use the Pig-man's AC/DC!",
-    "What's ${playerName}'s favorite type of music in Skyblock? Techno-blade! ...Too soon?",
-    "Why doesn't ${playerName} trust stairs in the Dwarven Mines? They're always up to something!",
-    "How did ${playerName} lose weight in Skyblock? They ran from their responsibilities and dragon fragments!",
-    "What's ${playerName}'s favorite Skyblock exercise? Dodging responsibilities and running money-making methods!",
-    "Why did ${playerName} get kicked out of the Auction House? They were caught flipping off the NPCs!",
-    "What do you call it when ${playerName} fails a Slayer quest? A Sven-tual disappointment!",
-    "Why did ${playerName} bring a compass to the End? To find their sense of direction after fighting the Dragon!",
-    "How does ${playerName} make holy water in Skyblock? They boil the hell out of it in the Crimson Isle!",
-    "What's ${playerName}'s favorite breakfast? Magma Cubes with a side of Blaze Rods!",
-    "Why did ${playerName} bring a fishing rod to the End? They heard there were Ender Fish-ermen!",
-    "How does ${playerName} keep their money safe in Skyblock? They put it in a Piggy Bank... oh wait.",
-    "What do you call ${playerName} after they lose all their coins to Marina? A Simp-le sailor!",
-    "Why was ${playerName} kicked out of the Farming Contest? They were caught using arti-fish-al bait!",
-    "How did ${playerName} light up their island? They used Glow-stone, Duh-iamond blocks, and End Rods!",
-    "What's ${playerName}'s favorite breakfast? Enchanted Bread with Concentrated Enchanted Carrot Jam!",
-    "Why doesn't ${playerName} trust Fairy Souls? They're always telling Fairy Tails!",
-    "How does ${playerName} make their armor shiny? They use Renowned Polish... ba dum tss!",
-    "What do you call ${playerName} wielding an Aspect of the Dragons? A Drag Queen!",
-    "Why did ${playerName} fail their Enchanting exam? They couldn't Table the discussion!"
-  ],
-  "8ball": [
-    "The Magic 8-Ball says to ${playerName}: '${response}' Sounds about as reliable as patch notes!",
-    "${playerName} shakes the Magic 8-Ball vigorously. It replies: '${response}' Well, that's clearer than Hypixel's update schedule!",
-    "Oh great 8-Ball, ${playerName} asks: '${question}' The response: '${response}' More cryptic than Aatrox's backstory!",
-    "The 8-Ball's verdict for ${playerName}: '${response}' Still makes more sense than the Skyblock economy!",
-    "${playerName}'s burning question ('${question}') gets this response: '${response}' Took less time than a Century Cake to process that one!",
-    "Magic 8-Ball to ${playerName}: '${response}' Somehow, still more helpful than most random hub advice!",
-    "${playerName} consults the oracle: '${question}' 8-Ball wisely states: '${response}' Wisdom rivaling that of the Grands on the Player Council!",
-    "For ${playerName}'s query ('${question}'), the 8-Ball decrees: '${response}' More decisive than choosing a money-making method!",
-    "${playerName} seeks wisdom: '${question}' 8-Ball: '${response}' Well, that's clearer than the drop rates for RNGesus drops!",
-    "The Great 8-Ball tells ${playerName}: '${response}' to '${question}' More reliable than Hypixel's server stability!",
-    "${playerName} whispers to the 8-Ball: '${question}' It echoes back: '${response}' Spookier than the Catacombs at 3 AM!",
-    "8-Ball prophecy for ${playerName}: '${response}' to '${question}' More accurate than Skyblock YouTuber predictions!",
-    "${playerName} gently nudges the 8-Ball. Its response: '${response}' Gentler than How-to-basic's egg tutorials!",
-    "In response to ${playerName}'s '${question}', the 8-Ball sagely advises: '${response}' Wiser than using a Hyperion in Crimson Isle!",
-    "The 8-Ball ponders ${playerName}'s '${question}' and declares: '${response}' More contemplative than a Philosopher in the Hub!",
-    "The Magic 8-Ball tells ${playerName}: '${response}' More reliable than Hypixel patch notes!",
-    "${playerName} shakes the 8-Ball. It says: '${response}' Clearer than the drop rates of RNGesus drops!",
-    "Oh wise 8-Ball, ${playerName} asks: '${question}' The sage reply: '${response}' More insightful than a Skyblock Forum thread!",
-    "The 8-Ball's wisdom for ${playerName}: '${response}' More decisive than choosing between Mage and Archer!",
-    "${playerName}'s burning question ('${question}') gets this response: '${response}' Faster than Hypixel support tickets!",
-    "Magic 8-Ball to ${playerName}: '${response}' Still more helpful than most Hub 1 advice!",
-    "${playerName} consults the oracle: '${question}' 8-Ball wisely states: '${response}' More reliable than finding competent teammates in Party Finder!",
-    "For ${playerName}'s query ('${question}'), the 8-Ball decrees: '${response}' Clearer than the logic behind Skyblock's economy!",
-    "${playerName} seeks wisdom: '${question}' 8-Ball: '${response}' More consistent than Hypixel's update schedule!",
-    "The Great 8-Ball tells ${playerName}: '${response}' to '${question}' More predictable than RNG drops!"
-  ],
   "8ballResponses": [
     "As certain as a Bonzo Staff nerf",
     "Outlook hazier than the Mist in Crystal Hollows",
@@ -271,7 +159,7 @@
     "Very likely (unlike finding a lobby without 'quitting' players)"
   ],
   "commands": {
-    "list": "Available commands: !rng, !cf, !8ball, !throw, !dice, !pet, !joke, !commands",
+    "list": "Available commands: !rng, !cf, !8ball, !throw, !dice, !commands",
     "help": "Use !commands help [command] for detailed help on a specific command.",
     "specific": {
       "rng": "!rng [player] [item]: Generates a random RNG percentage for a player and optional item.",
@@ -279,18 +167,9 @@
       "8ball": "!8ball [player] [question]: Asks the Magic 8-Ball a question for the specified player.",
       "throw": "!throw [player]: Shows how badly a player has thrown the run.",
       "dice": "!dice [player]: Rolls a six-sided die for the specified player.",
-      "pet": "!pet [player]: Shows what happened when the specified player tried to pet a random Skyblock creature.",
-      "joke": "!joke [player]: Tells a random, possibly terrible joke on behalf of the specified player.",
       "commands": "!commands: Lists all available commands. !commands help: Shows this help message. !commands help [command]: Shows detailed help for a specific command."
     }
   },
-  "mod": [
-    "This ChatTriggers module is currently in private development by jcnlk. Stay tuned for future updates!",
-    "Psst! This module is a work in progress by jcnlk. No sneak peeks allowed!",
-    "jcnlk is cooking up something special with this ChatTriggers module. Patience is a virtue!",
-    "This module is like a Skyblock special zealot - rare and developed by jcnlk!",
-    "jcnlk's working on this module harder than a sweaty tryhard grinding Catacombs XP!"
-  ],
 "simp": {
     "low": [
       "${playerName} is ${percentage}% simp. They wouldn't even donate to Marina's OnlyFins.",
@@ -300,47 +179,23 @@
       "At ${percentage}% simp, ${playerName} thinks Marina is just another fish in the sea."
     ],
     "medium": [
-      "${playerName} is ${percentage}% simp. They occasionally say 'hi' to Elle in the Auction House.",
+      "${playerName} is ${percentage}% simp. They occasionally say 'hi' to Elle.",
       "With a ${percentage}% simp rating, ${playerName} might buy flowers for Marina... if they're on sale.",
       "${playerName} scores ${percentage}% on the simp scale. They've considered changing their skin for an NPC... but didn't.",
       "${percentage}% simp energy radiates from ${playerName}. They've memorized half of Elle's dialogue... for efficiency, of course.",
       "At ${percentage}% simp, ${playerName} has thought about writing fanfic about Seymour... but decided to touch grass instead."
     ],
     "high": [
-      "${playerName} is ${percentage}% simp! They've proposed to Marina with a maxed Rod of the Sea!",
+      "${playerName} is ${percentage}% simp! They've proposed to Marina with a maxed Giant Fishing Rod!",
       "Alert! ${playerName} has reached ${percentage}% simp levels! They're trying to unlock 'Marry NPC' feature!",
       "At ${percentage}% simp, ${playerName} has a shrine dedicated to Elle in their island's basement!",
       "${playerName} is ${percentage}% simp. They're practicing Melody's Harp songs to serenade the Hub NPCs!",
       "With ${percentage}% simp power, ${playerName} is writing a petition to make Marina the permanent mayor!"
     ]
   },
-  "sweat": {
-    "low": [
-      "${playerName} is ${percentage}% sweat. They think Skyblock is just a fancy screensaver.",
-      "With ${percentage}% sweat, ${playerName} considers logging in once a week to be 'grinding'.",
-      "${playerName} is ${percentage}% sweat. They use a Wooden Sword because 'meta is overrated'.",
-      "${percentage}% sweat level for ${playerName}. They think 'Dungeon Grind' is a new coffee flavor.",
-      "At ${percentage}% sweat, ${playerName} believes 'min-maxing' is a new yoga position."
-    ],
-    "medium": [
-      "${playerName} is ${percentage}% sweat. They've memorized half the Skyblock Wiki... accidentally.",
-      "With a ${percentage}% sweat rating, ${playerName} occasionally forgets to sleep... because of 'one more Slayer quest'.",
-      "${playerName} scores ${percentage}% on the sweat scale. They've considered buying a second monitor for Skyblock... but haven't yet.",
-      "${percentage}% sweat energy radiates from ${playerName}. They know the exact spawn locations of Zealots... for scientific purposes.",
-      "At ${percentage}% sweat, ${playerName} has a Skyblock calendar next to their real one... for 'time management'."
-    ],
-    "high": [
-      "${playerName} is ${percentage}% sweat! Their keyboard is more worn than Bonzo's sense of humor!",
-      "Alert! ${playerName} has reached ${percentage}% sweat levels! They're trying to turn their PC fans into a Hyperion!",
-      "At ${percentage}% sweat, ${playerName} has developed a sixth sense for Special Zealot spawns!",
-      "${playerName} is ${percentage}% sweat. They're considering a lawsuit against Hypixel for not adding 'Touch Grass' skill!",
-      "With ${percentage}% sweat power, ${playerName} is more active in Skyblock than in real life!"
-    ]
-  },
   "sus": {
     "low": [
       "${playerName} is ${percentage}% sus. Even the Impostor thinks they're trustworthy.",
-      "With ${percentage}% sus, ${playerName} couldn't trick a Zealot into thinking they're Ender Armor.",
       "${playerName} is ${percentage}% sus. They're about as suspicious as a Gaia Construct doing taxes.",
       "${percentage}% sus level for ${playerName}. They couldn't fool a Silverfish into thinking they're stone.",
       "At ${percentage}% sus, ${playerName} is less suspicious than a Lapis Zombie in The End."

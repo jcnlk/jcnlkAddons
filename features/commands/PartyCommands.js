@@ -51,11 +51,7 @@ module.exports = () => {
                             variables.result <= 4 ? commandOutputs.dice.medium :
                             commandOutputs.dice.high;
                 break;
-            case 'mod':
-                templates = commandOutputs.mod;
-                break;
             case 'simp':
-            case 'sweat':
             case 'sus':
                 templates = variables.percentage <= 33 ? commandOutputs[commandType].low :
                             variables.percentage <= 66 ? commandOutputs[commandType].medium :
@@ -90,10 +86,7 @@ module.exports = () => {
                 Config.eightBallCommand && "!8ball",
                 Config.throwCommand && "!throw",
                 Config.diceCommand && "!dice",
-                Config.petCommand && "!pet",
-                Config.jokeCommand && "!joke",
                 Config.simpCommand && "!simp",
-                Config.sweatCommand && "!sweat",
                 Config.susCommand && "!sus",
                 Config.partyKickCommand && "!kick",
                 Config.partyInviteCommand && "!p",
@@ -143,12 +136,9 @@ module.exports = () => {
             case "!8ball": isCommandEnabled = Config.eightBallCommand; break;
             case "!throw": isCommandEnabled = Config.throwCommand; break;
             case "!dice": isCommandEnabled = Config.diceCommand; break;
-            case "!pet": isCommandEnabled = Config.petCommand; break;
-            case "!joke": isCommandEnabled = Config.jokeCommand; break;
             case "!commands": 
             case "!command": isCommandEnabled = true; break;
             case "!simp": isCommandEnabled = Config.simpCommand; break;
-            case "!sweat": isCommandEnabled = Config.sweatCommand; break;
             case "!sus": isCommandEnabled = Config.susCommand; break;
             case "!kick":
             case "!pk": isCommandEnabled = Config.partyKickCommand; break;
@@ -179,7 +169,7 @@ module.exports = () => {
             case "!8ball":
                 let question = commandParts.slice(1).join(" ");
                 let response = commandOutputs["8ballResponses"][Math.floor(Math.random() * commandOutputs["8ballResponses"].length)];
-                generatedMessage = generateMessage("8ball", {playerName: senderName, question, response});
+                generatedMessage = response;
                 break;
             case "!throw":
                 let throwIntensity = Math.floor(Math.random() * 101);
@@ -189,9 +179,6 @@ module.exports = () => {
                 let diceResult = Math.floor(Math.random() * 6) + 1;
                 generatedMessage = generateMessage("dice", {playerName: senderName, result: diceResult});
                 break;
-            case "!pet":
-                generatedMessage = generateMessage("pet", {playerName: targetName});
-                break;
             case "!joke":
                 generatedMessage = generateMessage("joke", {playerName: senderName});
                 break;
@@ -200,7 +187,6 @@ module.exports = () => {
                 handleCommandsCommand(commandParts.slice(1), command, senderName);
                 return;
             case "!simp":
-            case "!sweat":
             case "!sus":
                 let percentage = Math.floor(Math.random() * 101);
                 generatedMessage = generateMessage(command.slice(1), {playerName: targetName, percentage: percentage});
