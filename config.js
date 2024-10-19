@@ -11,7 +11,7 @@ import {
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Spam Protection", "WIP", "Dev Stuff"];
+        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "WIP", "Dev Stuff"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
@@ -260,6 +260,39 @@ class Config {
     })
     kickCommand = true;
 
+    //Miscellaneous
+    @SwitchProperty({
+        name: "Enable Math Teacher Solver",
+        description: "Enable the solver for Math Teacher questions",
+        category: "Miscellaneous",
+        subcategory: "Great Spook"
+    })
+    enableMathTeacherSolver = true;
+    
+    @SwitchProperty({
+        name: "Auto solve Math Teacher",
+        description: "Automatically send the answer to Math Teacher questions in chat \n§4[Use at your own Risk!]§r",
+        category: "Miscellaneous",
+        subcategory: "Great Spook"
+    })
+    autoSendMathTeacherAnswer = false;
+    
+    @SwitchProperty({
+        name: "Enable Public Speaking Demon Solver",
+        description: "Enable the solver for Public Speaking Demon challenge",
+        category: "Miscellaneous",
+        subcategory: "Great Spook"
+    })
+    enablePublicSpeakingDemonSolver = true;
+    
+    @SwitchProperty({
+        name: "Auto solve Public Speaking Demon",
+        description: "Automatically send a response to Public Speaking Demon in chat \n§4[Use at your own Risk!]§r",
+        category: "Miscellaneous",
+        subcategory: "Great Spook"
+    })
+    autoSendPublicSpeakingResponse = false;
+    
     //WIP Stuff
     @SwitchProperty({
         name: "Enable Chest Highlighting",
@@ -337,6 +370,10 @@ class Config {
         // Add dependencies for WIP
         this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting")
         this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting")
+
+        // Add dependencies for Miscellaneous
+        this.addDependency("Auto solve Math Teacher", "Enable Math Teacher Solver")
+        this.addDependency("Auto solve Public Speaking Demon", "Enable Public Speaking Demon Solver")
     }
 }
 

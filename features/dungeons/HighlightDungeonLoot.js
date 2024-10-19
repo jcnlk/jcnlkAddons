@@ -144,10 +144,10 @@ register("guiOpened", function(event) {
         return;
     }
 
-    showDebugMessage("GUI opened event triggered", 'info');
+    //showDebugMessage("GUI opened event triggered", 'info');
 
     if (isProcessingChestOpen) {
-        showDebugMessage("Already processing a chest open event, skipping", 'info');
+        //showDebugMessage("Already processing a chest open event, skipping", 'info');
         return;
     }
 
@@ -155,7 +155,7 @@ register("guiOpened", function(event) {
 
     setTimeout(function() {
         const screen = Client.currentGui.get();
-        showDebugMessage(`Current GUI: ${screen}`, 'info');
+        //showDebugMessage(`Current GUI: ${screen}`, 'info');
 
         if (screen && screen.toString().includes("GuiChest")) {
             showDebugMessage("Chest GUI detected", 'info');
@@ -171,7 +171,7 @@ register("guiOpened", function(event) {
         }
 
         isProcessingChestOpen = false;
-        showDebugMessage("Finished processing GUI open event", 'info');
+        //showDebugMessage("Finished processing GUI open event", 'info');
     }, 50);
 });
 

@@ -1,8 +1,8 @@
 import config from "../config";
 
 // Constants for chat prefixes and colors
-const PREFIX = "§3[JA]§r";
-const DEBUG_PREFIX = "§9[JA-DEBUG]§r";
+const PREFIX = "&8[&6JA&8]&r";
+const DEBUG_PREFIX = "&8[&cJA&8-&cDEBUG&8]&r";
 const COLORS = {
     info: "§e",
     success: "§a",
@@ -22,8 +22,7 @@ function showChatMessage(message, status = 'info', isDebug = false) {
     
     if (isDebug && !config.debugMode) return;
     
-    const timestamp = isDebug ? `§7[${new Date().toLocaleTimeString()}]§r ` : '';
-    ChatLib.chat(`${prefix} ${timestamp}${color}${message}§r`);
+    ChatLib.chat(`${prefix} ${color}${message}§r`);
 }
 
 /**

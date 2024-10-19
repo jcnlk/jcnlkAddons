@@ -387,7 +387,7 @@ register("guiOpened", function(event) {
                 showDebugMessage("No valid chest detected");
             }
         } else {
-            showDebugMessage("Opened GUI is not a container");
+            //showDebugMessage("Opened GUI is not a container");
         }
 
         isProcessingGuiOpen = false;
