@@ -9,6 +9,8 @@ import {
     @ButtonProperty,    
     @CheckboxProperty   } from 'Vigilance';
 
+const ConfigHeader = "§8[§6jcnlkAddons§8]§r §ev1.0.1 \nMade by jcnlk§r" 
+
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
         const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "WIP", "Dev Stuff"];
@@ -137,6 +139,22 @@ class Config {
         decimalPlaces: 1
     })
     cryptReminderSoundVolume = 0.5;
+
+    @SwitchProperty({
+        name: "Enable Dungeon Chest Highlighting",
+        description: "Highlights loot in dungeon chests",
+        category: "Dungeons",
+        subcategory: "Dungeon Loot Highlighting"
+    })
+    enableDungeonChestHighlighting = true;
+    
+    @SwitchProperty({
+        name: "Enable Dungeon Loot Chat Output",
+        description: "Displays dungeon loot in the chat",
+        category: "Dungeons",
+        subcategory: "Dungeon Loot Highlighting"
+    })
+    enableDungeonLootChatOutput = true;
 
     // Party Commands
     @SwitchProperty({
@@ -271,7 +289,7 @@ class Config {
     
     @SwitchProperty({
         name: "Auto solve Math Teacher",
-        description: "Automatically send the answer to Math Teacher questions in chat \n§4[Use at your own Risk!]§r",
+        description: "Automatically send the answer to Math Teacher questions in chat \n§4Technically a chat macro [UAYOR]§r",
         category: "Miscellaneous",
         subcategory: "Great Spook"
     })
@@ -287,7 +305,7 @@ class Config {
     
     @SwitchProperty({
         name: "Auto solve Public Speaking Demon",
-        description: "Automatically send a response to Public Speaking Demon in chat \n§4[Use at your own Risk!]§r",
+        description: "Automatically send a response to Public Speaking Demon in chat \n§4Technically a chat macro [UAYOR]§r",
         category: "Miscellaneous",
         subcategory: "Great Spook"
     })
@@ -309,22 +327,6 @@ class Config {
         subcategory: "Kuudra Loot Highlight (§aSHOULD WORK§r)"
     })
     enableAttributeChatOutput = true;
-
-    @SwitchProperty({
-        name: "Enable Dungeon Chest Highlighting",
-        description: "Highlights loot in dungeon chests",
-        category: "WIP",
-        subcategory: "Dungeon Loot Highlighting (§aSHOULD WORK§r)"
-    })
-    enableDungeonChestHighlighting = true;
-    
-    @SwitchProperty({
-        name: "Enable Dungeon Loot Chat Output",
-        description: "Displays dungeon loot in the chat",
-        category: "WIP",
-        subcategory: "Dungeon Loot Highlighting (§aSHOULD WORK§r)"
-    })
-    enableDungeonLootChatOutput = true;
     
     //Dev Stuff
     @SwitchProperty({
@@ -339,17 +341,27 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", "Configure general settings");
-        this.setCategoryDescription("Dungeons", "Settings for dungeon-related features");
-        this.setCategoryDescription("Party Commands", "Configure party command settings");
-        this.setCategoryDescription("DM Commands", "Configure DM command settings");
-        this.setCategoryDescription("WIP", "All the Stuff here is Work In Progess. Let's pray that it's working")
-        this.setCategoryDescription("Dev Stuff", "No interesting Stuff for you :(");
+        this.setCategoryDescription("General", `${ConfigHeader}\n\n§4§lCAUTION: Features marked with '[UAYOR]' are technically macros,\n§4§l so use at your own risk§r`);
+        this.setCategoryDescription("Dungeons", `${ConfigHeader}`);
+        this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n§4§lTechnically a chat macro [UAYOR]§r`);
+        this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n§4§lTechnically a chat macro [UAYOR]§r`);
+        this.setCategoryDescription("Miscellaneous", `${ConfigHeader}`);
+        this.setCategoryDescription("WIP", `${ConfigHeader}\n\nJust some Work In Progess Stuff.`)
+        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\nNo interesting Stuff for you :( `);
 
         // Add dependencies for General
         this.addDependency("Reminder Popup Color", "Enable Reminders")
         this.addDependency("Reminder Sound", "Enable Reminders")
         this.addDependency("Reminder Sound Volume", "Enable Reminders")
+
+        // Add dependencies for Dungeons
+        this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
+        this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
+        this.addDependency("Enable Crypt Reminder Popup", "Enable Crypt Reminder");
+        this.addDependency("Crypt Reminder Popup Color", "Enable Crypt Reminder");
+        this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder");
+        this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder");
+        this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting")
 
         // Add dependencies for Party Commands
         const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Help Command &3!commands help&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
@@ -359,21 +371,12 @@ class Config {
         this.addDependency("Invite Command (DMs) &3!p&r", "Enable DM Commands");
         this.addDependency("Kick Command (DMs) &3!kick&r", "Enable DM Commands");
 
-        // Add dependencies for Dungeons
-        this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
-        this.addDependency("Enable Crypt Reminder Popup", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Popup Color", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder");
-
-        // Add dependencies for WIP
-        this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting")
-        this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting")
-
         // Add dependencies for Miscellaneous
         this.addDependency("Auto solve Math Teacher", "Enable Math Teacher Solver")
         this.addDependency("Auto solve Public Speaking Demon", "Enable Public Speaking Demon Solver")
+
+        // Add dependencies for WIP
+        this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting")
     }
 }
 

@@ -81,12 +81,12 @@ function handlePublicSpeaking(playerName) {
     showGeneralJAMessage(`Public Speaking Demon activated! Say something in chat (not too short)!`);
     
     const suggestion = new TextComponent(`§7[§3Click for a suggestion§7]`);
-    suggestion.setClick("suggest_command", "/ac " + getRandomPublicSpeakingResponse());
-    suggestion.setHover("show_text", "§eClick to get a suggestion in chat");
+    suggestion.setClick("run_command", "/ac " + getRandomPublicSpeakingResponse());
+    suggestion.setHover("show_text", "§eClick to send suggetion in chat");
     ChatLib.chat(suggestion);
 
     if (Config.autoSendPublicSpeakingResponse) {
-        ChatLib.say(getRandomPublicSpeakingResponse());
+        ChatLib.say(`/ac getRandomPublicSpeakingResponse`);
         showDebugMessage('Auto-sent public speaking response', 'info');
     }
 }
@@ -133,9 +133,5 @@ register("command", () => {
     }
 }).setName("greatspookanswer");
 
-function testGreatSpook() {
-    showDebugMessage("Testing Great Spook Solver", 'info');
-    solveMath("1+1");
-}
 
-export { solveMath, testGreatSpook };
+export { solveMath };

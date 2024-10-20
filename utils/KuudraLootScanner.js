@@ -193,7 +193,7 @@ function scanItemAttributes(item) {
                 if (name.includes("Attribute Shard")) {
                     isAttributeShardItem = isAttributeShard(name, attribute);
                     showDebugMessage("Found Attribute Shard: " + attribute + ", color: " + isAttributeShardItem);
-                    break;  // We only need the first attribute for Attribute Shards
+                    break;
                 }
             }
         }
@@ -363,7 +363,6 @@ function isValidChest(container) {
     return false;
 }
 
-// Use a variable to track if we're already processing a GUI open event
 let isProcessingGuiOpen = false;
 
 /**
