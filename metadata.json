@@ -4,5 +4,5 @@
   "entry": "index.js",
   "version": "1.0.1",
   "description": "cool ct module ig", 
-  "requires": ["Vigilance"]
-}
+  "requires": ["Vigilance", "RenderLibV2, BeaconBeam"]
+} 

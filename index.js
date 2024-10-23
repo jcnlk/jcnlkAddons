@@ -10,15 +10,18 @@ import "./utils/HighlightSlots"
 import "./utils/Area"
 import "./utils/ItemID"
 import "./utils/Dungeon"
-import "./utils/FormatCoins";
-import "./utils/Hud";
-import "./utils/HudManager";
-import "./utils/InventoryHud";
+import "./utils/FormatCoins"
+import "./utils/Hud"
+import "./utils/HudManager"
+import "./utils/InventoryHud"
 import "./utils/EnchantedBookDetail"
 import "./features/dungeons/HighlightDungeonLoot"
 import "./utils/ItemAttribute"
-import "./features/miscellaneous/GreatSpookSolver";
+import "./features/miscellaneous/GreatSpookSolver"
 import "./utils/ClickableMessageContent"
+import "./utils/Constants"
+import "./utils/FormatCoords"
+import "./utils/Waypoints"
 import * as CustomEmotes from "./features/general/CustomEmotes";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");

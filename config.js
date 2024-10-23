@@ -1,4 +1,29 @@
 import { 
+    BLACK, 
+    DARK_BLUE, 
+    DARK_GREEN, 
+    DARK_AQUA, 
+    DARK_RED, 
+    DARK_PURPLE, 
+    GOLD, 
+    GRAY, 
+    DARK_GRAY, 
+    BLUE, 
+    GREEN, 
+    AQUA, 
+    RED, 
+    LIGHT_PURPLE, 
+    YELLOW, 
+    WHITE,
+    OBFUSCATED, 
+    BOLD, 
+    STRIKETHROUGH, 
+    UNDERLINE, 
+    ITALIC, 
+    RESET,
+    ModuleVersion,   
+    Creator} from "./utils/Constants";
+import { 
     @Vigilant, 
     @SwitchProperty, 
     @DecimalSliderProperty, 
@@ -9,7 +34,7 @@ import {
     @ButtonProperty,    
     @CheckboxProperty   } from 'Vigilance';
 
-const ConfigHeader = "§8[§6jcnlkAddons§8]§r §ev1.0.1 \nMade by jcnlk§r" 
+const ConfigHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YELLOW}${ModuleVersion} \nMade by ${Creator}${RESET}`
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
@@ -22,7 +47,7 @@ class Config {
     //General Settings
     @SwitchProperty({
         name: "Enable Attribute Abbreviations",
-        description: "Show attribute abbreviations on items in inventory",
+        description: "Show attribute abbreviations on items in inventory.",
         category: "General",
         subcategory: "Attributes"
     })
@@ -30,7 +55,7 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Custom Emotes",
-        description: "Enable the use of custom emotes in chat",
+        description: `Enable the use of custom emotes in chat. \nAdd custom emotes with ${AQUA}/ja emote${RESET}.`,
         category: "General",
         subcategory: "Chat"
     })
@@ -39,7 +64,7 @@ class Config {
     //Reminder Settings
     @SwitchProperty({
         name: "Enable Reminders",
-        description: "Enable the reminder feature",
+        description: "Enable the reminder feature.",
         category: "General",
         subcategory: "Reminders"
     })
@@ -47,16 +72,16 @@ class Config {
 
     @SelectorProperty({
         name: "Reminder Popup Color",
-        description: "Choose the color for reminder popups",
+        description: "Choose the color for reminder popups.",
         category: "General",
         subcategory: "Reminders",
-        options: ["§cRed§r", "§aGreen§r", "§bBlue§r", "§eYellow§r", "§fWhite§r", "§dPink§r"]
+        options: ["§cRed§r", "§aGreen§r", "§bCyan§r", "§eYellow§r", "§fWhite§r", "§dLight Pink§r"]
     })
     reminderPopupColor = 0;
 
     @SelectorProperty({
         name: "Reminder Sound",
-        description: "Choose the sound for reminders",
+        description: "Choose the sound for reminders.",
         category: "General",
         subcategory: "Reminders",
         options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
@@ -65,7 +90,7 @@ class Config {
 
     @DecimalSliderProperty({
         name: "Reminder Sound Volume",
-        description: "Volume of the reminder sound \n(0 to turn it §cOFF§r)",
+        description: `Volume of the reminder sound \n(0 to turn it ${RED}OFF${RESET}).`,
         category: "General",
         subcategory: "Reminders",
         minF: 0,
@@ -77,7 +102,7 @@ class Config {
     // Dungeons
     @SwitchProperty({
         name: "Enable Crypt Reminder",
-        description: "Enable the crypt reminder feature in dungeons",
+        description: "Enable the crypt reminder feature in dungeons.",
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
@@ -85,7 +110,7 @@ class Config {
 
     @DecimalSliderProperty({
         name: "Crypt Reminder Time",
-        description: "Time in minutes to remind about crypts \n(0 to turn it §cOFF§r)",
+        description: `Time in minutes to remind about crypts \n(0 to turn it ${RED}OFF${RESET}).`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         minF: 0.0,
@@ -96,7 +121,7 @@ class Config {
 
     @TextProperty({
         name: "Crypt Reminder Message",
-        description: "Message to send as a crypt reminder. \nUse §b{count}§r for the number of needed crypts.",
+        description: `Message to send as a crypt reminder. \nUse ${AQUA}{count}${RESET} for the number of needed crypts.`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         placeholder: "We need {count} more crypts!"
@@ -105,7 +130,7 @@ class Config {
 
     @CheckboxProperty({
         name: "Enable Crypt Reminder Popup",
-        description: "Show a popup for crypt reminders",
+        description: "Show a popup for crypt reminders.",
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
@@ -113,7 +138,7 @@ class Config {
 
     @SelectorProperty({
         name: "Crypt Reminder Popup Color",
-        description: "Choose the color for crypt reminder popups",
+        description: "Choose the color for crypt reminder popups.",
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         options: ["§cRed§r", "§aGreen§r", "§bBlue§r", "§eYellow§r", "§fWhite§r", "§dPink§r"]
@@ -122,7 +147,7 @@ class Config {
     
     @SelectorProperty({
         name: "Crypt Reminder Sound",
-        description: "Choose the sound for crypt reminders",
+        description: "Choose the sound for crypt reminders.",
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
@@ -131,7 +156,7 @@ class Config {
     
     @DecimalSliderProperty({
         name: "Crypt Reminder Sound Volume",
-        description: "Volume of the crypt reminder sound \n(0 to turn it §cOFF§r)",
+        description: `Volume of the crypt reminder sound \n(0 to turn it ${RED}OFF${RESET}).`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         minF: 0,
@@ -142,7 +167,7 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Dungeon Chest Highlighting",
-        description: "Highlights loot in dungeon chests",
+        description: "Highlights loot in dungeon chests.",
         category: "Dungeons",
         subcategory: "Dungeon Loot Highlighting"
     })
@@ -150,7 +175,7 @@ class Config {
     
     @SwitchProperty({
         name: "Enable Dungeon Loot Chat Output",
-        description: "Displays dungeon loot in the chat",
+        description: "Displays dungeon loot in the chat.",
         category: "Dungeons",
         subcategory: "Dungeon Loot Highlighting"
     })
@@ -159,7 +184,7 @@ class Config {
     // Party Commands
     @SwitchProperty({
         name: "Enable Party Commands",
-        description: "Enable or disable all party commands",
+        description: "Enable or disable all party commands.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -167,7 +192,7 @@ class Config {
 
     @SwitchProperty({
         name: "RNG Command &3!rng&r",
-        description: "Enable the rng command in Party Chat",
+        description: "Enable the rng command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -175,7 +200,7 @@ class Config {
 
     @SwitchProperty({
         name: "Coinflip Command &3!cf&r",
-        description: "Enable the coinflip command in Party Chat",
+        description: "Enable the coinflip command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -183,7 +208,7 @@ class Config {
 
     @SwitchProperty({
         name: "8ball Command &3!8ball&r",
-        description: "Enable the 8ball command in Party Chat",
+        description: "Enable the 8ball command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -191,7 +216,7 @@ class Config {
 
     @SwitchProperty({
         name: "Throw Command &3!throw&r",
-        description: "Enable the throw command in Party Chat",
+        description: "Enable the throw command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -199,7 +224,7 @@ class Config {
 
     @SwitchProperty({
         name: "Dice Command &3!dice&r",
-        description: "Enable the dice command in Party Chat",
+        description: "Enable the dice command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -207,7 +232,7 @@ class Config {
 
     @SwitchProperty({
         name: "Help Command &3!commands help&r",
-        description: "Enable the help command in Party Chat",
+        description: "Enable the help command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -215,7 +240,7 @@ class Config {
 
     @SwitchProperty({
         name: "Simp Command &3!simp&r",
-        description: "Enable the simp command in Party Chat",
+        description: "Enable the simp command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -223,7 +248,7 @@ class Config {
 
     @SwitchProperty({
         name: "Sus Command &3!sus&r",
-        description: "Enable the sus command in Party Chat",
+        description: "Enable the sus command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -231,7 +256,7 @@ class Config {
 
     @SwitchProperty({
         name: "Kick Command (Party) &3!<kick, pk>&r",
-        description: "Enable the kick command in Party Chat",
+        description: "Enable the kick command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -239,7 +264,7 @@ class Config {
 
     @SwitchProperty({
         name: "Invite Command (Party) &3!p&r ",
-        description: "Enable the invite command in Party Chat",
+        description: "Enable the invite command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -247,7 +272,7 @@ class Config {
 
     @SwitchProperty({
         name: "Reminder Command &3!reminder&r",
-        description: "Enable the reminder command in Party Chat",
+        description: "Enable the reminder command in Party Chat.",
         category: "Party Commands",
         subcategory: "Party Commands"
     })
@@ -256,7 +281,7 @@ class Config {
     //DM Commands
     @SwitchProperty({
         name: "Enable DM Commands",
-        description: "Enable or disable all DM commands",
+        description: "Enable or disable all DM commands.",
         category: "DM Commands",
         subcategory: "DM Commands"
     })
@@ -264,7 +289,7 @@ class Config {
 
     @SwitchProperty({
         name: "Invite Command (DMs) &3!p&r",
-        description: "Enable the invite command in DMs",
+        description: "Enable the invite command in DMs.",
         category: "DM Commands",
         subcategory: "DM Commands"
     })
@@ -272,7 +297,7 @@ class Config {
 
     @SwitchProperty({
         name: "Kick Command (DMs) &3!kick&r",
-        description: "Enable the kick Command command in DMs",
+        description: "Enable the kick Command command in DMs.",
         category: "DM Commands",
         subcategory: "DM Commands"
     })
@@ -281,7 +306,7 @@ class Config {
     //Miscellaneous
     @SwitchProperty({
         name: "Enable Math Teacher Solver",
-        description: "Enable the solver for Math Teacher questions",
+        description: "Enable the solver for Math Teacher.",
         category: "Miscellaneous",
         subcategory: "Great Spook"
     })
@@ -289,7 +314,7 @@ class Config {
     
     @SwitchProperty({
         name: "Auto solve Math Teacher",
-        description: "Automatically send the answer to Math Teacher questions in chat \n§4Technically a chat macro [UAYOR]§r",
+        description: `Automatically send the answer to Math Teacher questions in chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
         category: "Miscellaneous",
         subcategory: "Great Spook"
     })
@@ -297,7 +322,7 @@ class Config {
     
     @SwitchProperty({
         name: "Enable Public Speaking Demon Solver",
-        description: "Enable the solver for Public Speaking Demon challenge",
+        description: "Enable the solver for Public Speaking Demon.",
         category: "Miscellaneous",
         subcategory: "Great Spook"
     })
@@ -305,7 +330,7 @@ class Config {
     
     @SwitchProperty({
         name: "Auto solve Public Speaking Demon",
-        description: "Automatically send a response to Public Speaking Demon in chat \n§4Technically a chat macro [UAYOR]§r",
+        description: `Automatically send a response to Public Speaking Demon in chat.\n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
         category: "Miscellaneous",
         subcategory: "Great Spook"
     })
@@ -313,7 +338,7 @@ class Config {
     
     @SwitchProperty({
         name: "Auto solve Commitment Phobia",
-        description: "Automatically executes the command to solve Commitment Phobia \n\n§c§lNote:§r This feature §cdoes not§r simulate clicking the sign button\nIt only executes the command sent by the game\n\n§4Technically a chat macro so [UAYOR]§r",
+        description: `Automatically executes the command to solve Commitment Phobia. \n\n${RED}${BOLD}Note:${RESET} This feature ${RED}does not${RESET} simulate clicking the sign button.\nIt only executes the command sent by the game.\n\n${DARK_RED}Technically a chat macro so [UAYOR]!${RESET}`,
         category: "Miscellaneous",
         subcategory: "Great Spook"
     })
@@ -322,24 +347,24 @@ class Config {
     //WIP Stuff
     @SwitchProperty({
         name: "Enable Chest Highlighting",
-        description: "Highlights loot in kuudra chests according to their value \n(§aGod Roll§r, §eGood Roll§r, §cBad Roll§r)",
+        description: `Highlights loot in kuudra chests according to their value \n(${GREEN}God Roll${RESET}, ${YELLOW}Good Roll${RESET}], ${RED}Bad Roll${RESET}).`,
         category: "WIP",
-        subcategory: "Kuudra Loot Highlight (§aSHOULD WORK§r)"
+        subcategory: `Kuudra Loot Highlight (${GREEN}SHOULD WORK${RESET}`
     })
     enableChestScanning = true;
 
     @SwitchProperty({
         name: "Enable Chat Output of Chest Content",
-        description: "Displays kuudra loot in Chat",
+        description: "Displays kuudra loot in Chat.",
         category: "WIP",
-        subcategory: "Kuudra Loot Highlight (§aSHOULD WORK§r)"
+        subcategory: `Kuudra Loot Highlight (${GREEN}SHOULD WORK${RESET})`
     })
     enableAttributeChatOutput = true;
     
     //Dev Stuff
     @SwitchProperty({
         name: "Debug Mode",
-        description: "Enable detailed debug messages for troubleshooting",
+        description: "Enable detailed debug messages for troubleshooting.",
         category: "Dev Stuff",
         subcategory: "Debug"
      })
@@ -349,13 +374,13 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${ConfigHeader}\n\n§7§oRelated Commands: /ja <emote, help>, /reminder§r\n§4§lCAUTION: Features marked with '[UAYOR]' are technically macros,\n§4§l so use at your own risk§r`);
-        this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n§7§oRelated Commands: /ja <crypts, puzzles>`);
-        this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n§4§lTechnically a chat macro [UAYOR]§r`);
-        this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n§4§lTechnically a chat macro [UAYOR]§r`);
+        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, help>, /reminder${RESET}\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
+        this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <crypts, puzzles>${RESET}`);
+        this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
+        this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("Miscellaneous", `${ConfigHeader}`);
-        this.setCategoryDescription("WIP", `${ConfigHeader}\n\n§fJust some Work In Progess Stuff.§r`)
-        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n§7§oRelated Commands: /ja <test>, /getdungeoninfo, /getcurrentarea, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n§fNo interesting Stuff for you :(§r`);
+        this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`)
+        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <test>, /getdungeoninfo, /getcurrentarea, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
 
         // Add dependencies for General
         this.addDependency("Reminder Popup Color", "Enable Reminders")
