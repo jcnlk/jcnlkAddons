@@ -313,7 +313,7 @@ class Config {
     
     @SwitchProperty({
         name: "Auto solve Commitment Phobia",
-        description: "Automatically executes the command to solve Commitment Phobia \n\n§c§lNote:§r This feature §cdoes not§r simulate clicking the sign button\n\nIt only executes the command sent by the game\n§4Technically a chat macro so [UAYOR]§r",
+        description: "Automatically executes the command to solve Commitment Phobia \n\n§c§lNote:§r This feature §cdoes not§r simulate clicking the sign button\nIt only executes the command sent by the game\n\n§4Technically a chat macro so [UAYOR]§r",
         category: "Miscellaneous",
         subcategory: "Great Spook"
     })
