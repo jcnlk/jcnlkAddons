@@ -1,10 +1,12 @@
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 import Config from "../../config";
+import ClickableMessageContent from "../../utils/ClickableMessageContent";
 
 let lastCalculatedResult = null;
 let mathSolved = false;
 let publicSpeakingActive = false;
 let lastPublicSpeakingTrigger = 0;
+let commitmentPhobiaActive = false;
 
 function evaluateExpression(expression) {
     try {
@@ -82,15 +84,60 @@ function handlePublicSpeaking(playerName) {
     
     const suggestion = new TextComponent(`§7[§3Click for a suggestion§7]`);
     suggestion.setClick("run_command", "/ac " + getRandomPublicSpeakingResponse());
-    suggestion.setHover("show_text", "§eClick to send suggetion in chat");
+    suggestion.setHover("show_text", "§eClick to send suggestion in chat");
     ChatLib.chat(suggestion);
 
     if (Config.autoSendPublicSpeakingResponse) {
-        ChatLib.say(`/ac getRandomPublicSpeakingResponse`);
+        ChatLib.say("/ac " + getRandomPublicSpeakingResponse());
         showDebugMessage('Auto-sent public speaking response', 'info');
     }
 }
 
+function handleCommitmentPhobia(message) {
+    if (!Config.enableCommitmentPhobiaSolver) {
+        showDebugMessage("Commitment Phobia solver is disabled", 'info');
+        return;
+    }
+
+    try {
+        if (!message) {
+            showDebugMessage("Received null message in handleCommitmentPhobia", 'warning');
+            return;
+        }
+
+        const messageContent = new ClickableMessageContent(message);
+        
+        if (messageContent.hasClickableCommand()) {
+            const command = messageContent.getCommand();
+            if (!command) {
+                showDebugMessage("No valid command found in clickable message", 'warning');
+                return;
+            }
+
+            showDebugMessage(`Detected Commitment Phobia command: ${command}`, 'info');
+            
+            if (Config.autoSendCommitmentPhobiaResponse) {
+                setTimeout(() => {
+                    ChatLib.say(command);
+                    showDebugMessage('Auto-executed commitment command', 'info');
+                }, 250);
+            } else {
+                const clickableMessage = ClickableMessageContent.createClickableMessage(
+                    "§7[§3Click to sign§7]",
+                    command,
+                    "§eClick to sign the document"
+                );
+                
+                showGeneralJAMessage("Commitment Phobia detected! ");
+                ChatLib.chat(clickableMessage);
+            }
+        }
+    } catch (error) {
+        showDebugMessage(`Error in handleCommitmentPhobia: ${error}`, 'error');
+    }
+}
+
+// Chat Triggers for Math Teacher
 register("chat", (equation) => {
     showDebugMessage("QUICK MATHS triggered with equation: " + equation, 'info');
     solveMath(equation);
@@ -103,6 +150,7 @@ register("chat", (player, time) => {
     }
 }).setChatCriteria("QUICK MATHS! ${player} answered correctly in ${time}!");
 
+// Chat Triggers for Public Speaking Demon
 register("chat", (playerName) => {
     if (playerName === Player.getName()) {
         handlePublicSpeaking(playerName);
@@ -122,6 +170,16 @@ register("chat", () => {
     }
 }).setChatCriteria("[FEAR] Public Speaking Demon: Too short! Say more!");
 
+// Chat Trigger for Commitment Phobia
+register("chat", (message, event) => {
+    const textContent = ChatLib.removeFormatting(message);
+    if (textContent.includes("Click HERE to sign")) {
+        showDebugMessage("Commitment Phobia message detected", 'info');
+        handleCommitmentPhobia(event.message);
+    }
+}).setChatCriteria("${message}");
+
+// Command for sending Great Spook answer
 register("command", () => {
     if (lastCalculatedResult !== null && !mathSolved) {
         ChatLib.say(lastCalculatedResult.toString());
@@ -133,5 +191,10 @@ register("command", () => {
     }
 }).setName("greatspookanswer");
 
+// Testing function for development
+function testGreatSpook() {
+    // Add test cases as needed
+    showDebugMessage("Running Great Spook tests...", 'info');
+}
 
-export { solveMath };
+export { solveMath, testGreatSpook, handleCommitmentPhobia };

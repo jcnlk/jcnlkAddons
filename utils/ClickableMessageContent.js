@@ -19,29 +19,37 @@ class ClickableMessageContent {
      */
     parseMessage() {
         try {
-            if (!this.messageStr || !this.messageStr.includes('clickEvent')) {
+            if (!this.messageStr) {
+                showDebugMessage("Empty message received", 'warning');
                 return;
             }
 
-            // Extract clickEvent information
-            const clickEventMatch = this.messageStr.match(/clickEvent=ClickEvent{action=([^,]+), value='([^']+)'}/);
-            if (!clickEventMatch || clickEventMatch[1] !== 'RUN_COMMAND') {
-                return;
+            // For Great Spook specific messages
+            if (this.messageStr.includes("Click HERE to sign")) {
+                const match = this.messageStr.match(/run_command:\/([^}]+)/);
+                if (match) {
+                    this.clickableContent = {
+                        text: "Click HERE to sign",
+                        command: `/${match[1].trim()}`,
+                        hover: "Click to sign"
+                    };
+                    return;
+                }
             }
 
-            // Extract main text
-            const textMatch = this.messageStr.match(/text='([^']+)'/);
-            const text = textMatch ? textMatch[1] : '';
+            // General clickable content parsing
+            const clickEventMatch = this.messageStr.match(/clickEvent=ClickEvent\{action=([^,]+),\s*value='([^']+)'\}/);
+            if (clickEventMatch && clickEventMatch[1] === 'RUN_COMMAND') {
+                const command = clickEventMatch[2];
+                const textMatch = this.messageStr.match(/text='([^']+)'/);
+                const hoverMatch = this.messageStr.match(/hoverEvent=HoverEvent\{[^}]*value='([^']+)'\}/);
 
-            // Extract hover text
-            const hoverMatch = this.messageStr.match(/hoverEvent=HoverEvent{[^}]*value='([^']+)'}/);
-            const hoverText = hoverMatch ? hoverMatch[1] : null;
-
-            this.clickableContent = {
-                text: text,
-                command: clickEventMatch[2],
-                hover: hoverText
-            };
+                this.clickableContent = {
+                    text: textMatch ? textMatch[1] : '',
+                    command: command,
+                    hover: hoverMatch ? hoverMatch[1] : null
+                };
+            }
         } catch (error) {
             showDebugMessage(`Error parsing clickable message: ${error}`, 'error');
         }
@@ -52,7 +60,7 @@ class ClickableMessageContent {
      * @returns {boolean}
      */
     hasClickableCommand() {
-        return this.clickableContent !== null;
+        return this.clickableContent !== null && this.clickableContent.command !== null;
     }
 
     /**
@@ -61,6 +69,14 @@ class ClickableMessageContent {
      */
     getCommand() {
         return this.clickableContent?.command || null;
+    }
+
+    /**
+     * Gets the hover text from the clickable content
+     * @returns {string|null}
+     */
+    getHoverText() {
+        return this.clickableContent?.hover || null;
     }
 
     /**
@@ -73,7 +89,9 @@ class ClickableMessageContent {
     static createClickableMessage(text, command, hoverText) {
         try {
             const message = new TextComponent(text);
-            message.setClick("run_command", command);
+            if (command) {
+                message.setClick("run_command", command);
+            }
             if (hoverText) {
                 message.setHover("show_text", hoverText);
             }
@@ -83,40 +101,6 @@ class ClickableMessageContent {
             return new TextComponent(text);
         }
     }
-
-    /**
-     * Static method to check if a message contains clickable content
-     * @param {Message} message - The message to check
-     * @returns {boolean}
-     */
-    static isClickable(message) {
-        if (!message) return false;
-        const messageStr = message.toString();
-        return messageStr.includes('clickEvent') && messageStr.includes('RUN_COMMAND');
-    }
 }
-
-// Debug chat trigger
-let isWaitingForMessage = false;
-
-register("chat", (event) => {
-    if (!config.debugMode && !isWaitingForMessage) return;
-
-    try {
-        const content = new ClickableMessageContent(event.message);
-        if (content.hasClickableCommand()) {
-            showDebugMessage(`Command: ${content.getCommand()}`, 'info');
-        }
-        isWaitingForMessage = false;
-    } catch (error) {
-        showDebugMessage(`Error processing clickable message: ${error}`, 'error');
-    }
-});
-
-// Command to check next message
-register("command", () => {
-    isWaitingForMessage = true;
-    showDebugMessage("Waiting for next chat message...", 'info');
-}).setName("checkclick");
 
 export default ClickableMessageContent;
