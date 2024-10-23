@@ -341,13 +341,13 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${ConfigHeader}\n\n§4§lCAUTION: Features marked with '[UAYOR]' are technically macros,\n§4§l so use at your own risk§r`);
-        this.setCategoryDescription("Dungeons", `${ConfigHeader}`);
+        this.setCategoryDescription("General", `${ConfigHeader}\n\n§7§oRelated Commands: /ja <emote, help>, /reminder§r\n§4§lCAUTION: Features marked with '[UAYOR]' are technically macros,\n§4§l so use at your own risk§r`);
+        this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n§7§oRelated Commands: /ja <crypts, puzzles>`);
         this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n§4§lTechnically a chat macro [UAYOR]§r`);
         this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n§4§lTechnically a chat macro [UAYOR]§r`);
         this.setCategoryDescription("Miscellaneous", `${ConfigHeader}`);
-        this.setCategoryDescription("WIP", `${ConfigHeader}\n\nJust some Work In Progess Stuff.`)
-        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\nNo interesting Stuff for you :( `);
+        this.setCategoryDescription("WIP", `${ConfigHeader}\n\n§fJust some Work In Progess Stuff.§r`)
+        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n§7§oRelated Commands: /ja <test>, /getdungeoninfo, /getcurrentarea, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n§fNo interesting Stuff for you :(§r`);
 
         // Add dependencies for General
         this.addDependency("Reminder Popup Color", "Enable Reminders")
