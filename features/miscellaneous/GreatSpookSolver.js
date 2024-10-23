@@ -8,6 +8,15 @@ let publicSpeakingActive = false;
 let lastPublicSpeakingTrigger = 0;
 let commitmentPhobiaActive = false;
 
+// Timing variables
+let mathStartTime = null;
+let publicSpeakingStartTime = null;
+let commitmentPhobiaStartTime = null;
+
+function formatTime(ms) {
+    return `${ms}ms`;
+}
+
 function evaluateExpression(expression) {
     try {
         expression = expression.replace(/x/g, '*');
@@ -30,6 +39,9 @@ function createClickableMessage(result) {
 
 function solveMath(equation) {
     if (!Config.enableMathTeacherSolver) return;
+    
+    mathStartTime = Date.now();
+    showDebugMessage(`Math Teacher started at: ${mathStartTime}`, 'info');
 
     showDebugMessage(`Solving equation: ${equation}`, 'info');
     
@@ -72,6 +84,9 @@ function getRandomPublicSpeakingResponse() {
 function handlePublicSpeaking(playerName) {
     if (!Config.enablePublicSpeakingDemonSolver) return;
 
+    publicSpeakingStartTime = Date.now();
+    showDebugMessage(`Public Speaking started at: ${publicSpeakingStartTime}`, 'info');
+
     const currentTime = Date.now();
     if (currentTime - lastPublicSpeakingTrigger < 5000) {
         showDebugMessage('Public Speaking Demon triggered too quickly. Ignoring.', 'info');
@@ -82,22 +97,21 @@ function handlePublicSpeaking(playerName) {
     publicSpeakingActive = true;
     showGeneralJAMessage(`Public Speaking Demon activated! Say something in chat (not too short)!`);
     
+    const response = getRandomPublicSpeakingResponse();
     const suggestion = new TextComponent(`§7[§3Click for a suggestion§7]`);
-    suggestion.setClick("run_command", "/ac " + getRandomPublicSpeakingResponse());
+    suggestion.setClick("run_command", "/ac " + response);
     suggestion.setHover("show_text", "§eClick to send suggestion in chat");
     ChatLib.chat(suggestion);
 
     if (Config.autoSendPublicSpeakingResponse) {
-        ChatLib.say("/ac " + getRandomPublicSpeakingResponse());
+        ChatLib.say(response);
         showDebugMessage('Auto-sent public speaking response', 'info');
     }
 }
 
 function handleCommitmentPhobia(message) {
-    if (!Config.enableCommitmentPhobiaSolver) {
-        showDebugMessage("Commitment Phobia solver is disabled", 'info');
-        return;
-    }
+    commitmentPhobiaStartTime = Date.now();
+    showDebugMessage(`Commitment Phobia started at: ${commitmentPhobiaStartTime}`, 'info');
 
     try {
         if (!message) {
@@ -115,6 +129,7 @@ function handleCommitmentPhobia(message) {
             }
 
             showDebugMessage(`Detected Commitment Phobia command: ${command}`, 'info');
+            commitmentPhobiaActive = true;
             
             if (Config.autoSendCommitmentPhobiaResponse) {
                 setTimeout(() => {
@@ -144,9 +159,11 @@ register("chat", (equation) => {
 }).setChatCriteria("QUICK MATHS! Solve: ${equation}");
 
 register("chat", (player, time) => {
-    if (player === Player.getName() && !mathSolved) {
-        showGeneralJAMessage(`Great job! You solved the equation in ${time}!`);
+    if (player === Player.getName() && !mathSolved && mathStartTime) {
+        const solveTime = Date.now() - mathStartTime;
+        showGeneralJAMessage(`Sucessfully solved Math Teacher in ${formatTime(solveTime)}!`);
         mathSolved = true;
+        mathStartTime = null;
     }
 }).setChatCriteria("QUICK MATHS! ${player} answered correctly in ${time}!");
 
@@ -158,9 +175,11 @@ register("chat", (playerName) => {
 }).setChatCriteria("[FEAR] Public Speaking Demon: Speak ${playerName}!");
 
 register("chat", () => {
-    if (publicSpeakingActive) {
-        showGeneralJAMessage("Great job! You've overcome the Public Speaking Demon!");
+    if (publicSpeakingActive && publicSpeakingStartTime) {
+        const solveTime = Date.now() - publicSpeakingStartTime;
+        showGeneralJAMessage(`Successfully solved Public Speaking Demon in ${formatTime(solveTime)}!`);
         publicSpeakingActive = false;
+        publicSpeakingStartTime = null;
     }
 }).setChatCriteria("[FEAR] Public Speaking Demon: Woohoo! Thank you for speaking out loud!");
 
@@ -179,6 +198,16 @@ register("chat", (message, event) => {
     }
 }).setChatCriteria("${message}");
 
+// Chat Trigger for Commitment Phobia completion
+register("chat", (message) => {
+    if (commitmentPhobiaActive && commitmentPhobiaStartTime) {
+        const solveTime = Date.now() - commitmentPhobiaStartTime;
+        showGeneralJAMessage(`Successfully solved Commitment Phobia in ${formatTime(solveTime)}!`);
+        commitmentPhobiaActive = false;
+        commitmentPhobiaStartTime = null;
+    }
+}).setChatCriteria("[FEAR] Commitment Phobia: ${message}");
+
 // Command for sending Great Spook answer
 register("command", () => {
     if (lastCalculatedResult !== null && !mathSolved) {
@@ -191,10 +220,4 @@ register("command", () => {
     }
 }).setName("greatspookanswer");
 
-// Testing function for development
-function testGreatSpook() {
-    // Add test cases as needed
-    showDebugMessage("Running Great Spook tests...", 'info');
-}
-
-export { solveMath, testGreatSpook, handleCommitmentPhobia };
+export { solveMath, handleCommitmentPhobia };

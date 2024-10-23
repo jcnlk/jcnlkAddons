@@ -312,14 +312,6 @@ class Config {
     autoSendPublicSpeakingResponse = false;
     
     @SwitchProperty({
-        name: "Enable Commitment Phobia Solver",
-        description: "Enable the solver for Commitment Phobia challenge",
-        category: "Miscellaneous",
-        subcategory: "Great Spook"
-    })
-    enableCommitmentPhobiaSolver = true;
-    
-    @SwitchProperty({
         name: "Auto solve Commitment Phobia",
         description: "Automatically click the sign button when prompted \n§4Technically a chat macro [UAYOR]§r",
         category: "Miscellaneous",
