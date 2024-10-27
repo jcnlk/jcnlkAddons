@@ -22,6 +22,7 @@ import "./utils/ClickableMessageContent"
 import "./utils/Constants"
 import "./utils/FormatCoords"
 import "./utils/Waypoints"
+import * as Todo from "./features/general/Todo";
 import * as CustomEmotes from "./features/general/CustomEmotes";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");
@@ -218,7 +219,7 @@ function initializeJAModule() {
     showDebugMessage("Starting jcnlkAddons initialization", 'warning');
     
     let successCount = 0;
-    const totalModules = 5;  // SlashCommands, Dungeons, PartyCommands, DmCommands, Custom Emotes
+    const totalModules = 6;  // SlashCommands, Dungeons, PartyCommands, DmCommands, Custom Emotes, TODO
 
     initializeSlashCommands();
     successCount++;
@@ -232,6 +233,7 @@ function initializeJAModule() {
     successCount += initializeModule("Party Commands", () => PartyCommands(showDebugMessage, showGeneralJAMessage));
     successCount += initializeModule("DM Commands", () => DmCommands(showDebugMessage, showGeneralJAMessage));
     successCount += initializeModule("Custom Emotes", () => CustomEmotes.initialize());
+    successCount += initializeModule("Todo module", () => Todo.initialize());
 
     showDebugMessage("jcnlkAddons initialization completed", 'success');
 

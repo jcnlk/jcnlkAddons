@@ -99,6 +99,38 @@ class Config {
     })
     reminderSoundVolume = 0.5;
 
+    @SwitchProperty({
+        name: "Enable Todos",
+        description: `Enable the todo feature. \nAdd Todos with ${AQUA}/todo${RESET}.`,
+        category: "General",
+        subcategory: "Todo"
+    })
+    enableTodos = true;
+
+    @SwitchProperty({
+        name: "Show Todos on Skyblock Join",
+        description: "Automatically shows your todo list when joining Skyblock.",
+        category: "General",
+        subcategory: "Todo"
+    })
+    showTodosOnJoin = true;
+
+    @SwitchProperty({
+        name: "Clear Completed Todos",
+        description: "Automatically remove todos when marked as completed.",
+        category: "General",
+        subcategory: "Todo"
+    })
+    clearCompletedTodos = true;
+
+    @SwitchProperty({
+        name: "Save Todos",
+        description: "Save todos between game sessions.",
+        category: "General",
+        subcategory: "Todo"
+    })
+    saveTodos = true;
+
     // Dungeons
     @SwitchProperty({
         name: "Enable Crypt Reminder",
@@ -374,7 +406,7 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, help>, /reminder${RESET}\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
+        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, help>, /reminder, /todo${RESET}\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <crypts, puzzles>${RESET}`);
         this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
@@ -386,6 +418,10 @@ class Config {
         this.addDependency("Reminder Popup Color", "Enable Reminders")
         this.addDependency("Reminder Sound", "Enable Reminders")
         this.addDependency("Reminder Sound Volume", "Enable Reminders")
+        this.addDependency("Show Todos on Skyblock Join","Enable Todos")
+        this.addDependency("Clear Completed Todos","Enable Todos")
+        this.addDependency("Save Todos","Enable Todos")
+
 
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");

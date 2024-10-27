@@ -103,25 +103,25 @@ function setDefaultY(y) {
 
 
 // Test command
-//register("command", (...args) => {
-//    if (args.length === 0) {
-//        ChatLib.chat("§cUsage: /testcoords <coordinate string>");
-//        return;
-//    }
-//
-//    const input = args.join(" ");
-//    const coords = parseCoordinates(input);
-//    
-//    if (coords) {
-//        const formatted = formatCoordinates(input);
-//        ChatLib.chat(`§aFormatted coordinates: ${formatted}`);
-//        if (!coords.hasY) {
-//            ChatLib.chat(`§eNote: Using default Y coordinate (${DEFAULT_Y})`);
-//        }
-//    } else {
-//        ChatLib.chat("§cCould not parse coordinates from input");
-//    }
-//}).setName("testcoords");
+register("command", (...args) => {
+    if (args.length === 0) {
+        ChatLib.chat("§cUsage: /testcoords <coordinate string>");
+        return;
+    }
+
+    const input = args.join(" ");
+    const coords = parseCoordinates(input);
+    
+    if (coords) {
+        const formatted = formatCoordinates(input);
+        ChatLib.chat(`§aFormatted coordinates: ${formatted}`);
+        if (!coords.hasY) {
+            ChatLib.chat(`§eNote: Using default Y coordinate (${DEFAULT_Y})`);
+        }
+    } else {
+        ChatLib.chat("§cCould not parse coordinates from input");
+    }
+}).setName("formatcoords");
 
 
 export {
