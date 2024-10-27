@@ -1,4 +1,4 @@
-import { showDebugMessage } from "../../utils/ChatUtils";
+import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 import { InSkyblock } from "../../utils/Constants";
 import Config from "../../config";
 
@@ -17,7 +17,7 @@ function loadTodos() {
         const storedTodos = FileLib.read("jcnlkAddons", "data/Todos.json");
         if (storedTodos) {
             todos = JSON.parse(storedTodos);
-            showDebugMessage(`Loaded ${todos.length} todos`);
+            showDebugMessage(`Loaded ${todos.length} todos`, 'info');
         }
     } catch (error) {
         showDebugMessage(`Error loading todos: ${error}`, 'error');
@@ -32,7 +32,7 @@ function saveTodos() {
 
     try {
         FileLib.write("jcnlkAddons", "data/Todos.json", JSON.stringify(todos));
-        showDebugMessage(`Saved ${todos.length} todos`);
+        showDebugMessage(`Saved ${todos.length} todos`, 'info');
     } catch (error) {
         showDebugMessage(`Error saving todos: ${error}`, 'error');
     }
@@ -45,7 +45,7 @@ function saveTodos() {
  */
 function addTodo(todoText) {
     if (!Config.enableTodos) {
-        ChatLib.chat("§cTodos are currently disabled in the config!");
+        showGeneralJAMessage("Todos are currently disabled in the config!", 'error');
         return false;
     }
 
@@ -54,7 +54,7 @@ function addTodo(todoText) {
         completed: false
     });
     saveTodos();
-    showDebugMessage(`Added new todo`);
+    showDebugMessage(`Added new todo`, 'info');
     return true;
 }
 
@@ -69,8 +69,7 @@ function removeTodo(index) {
     if (index > 0 && index <= todos.length) {
         todos.splice(index - 1, 1);
         saveTodos();
-        listTodos();
-        showDebugMessage(`Removed todo #${index}`);
+        showDebugMessage(`Removed todo #${index}`, 'info');
         return true;
     }
     return false;
@@ -93,8 +92,7 @@ function toggleTodo(index) {
         }
         
         saveTodos();
-        listTodos();
-        showDebugMessage(`Toggled todo #${index}`);
+        showDebugMessage(`Toggled todo #${index}`, 'info');
         return true;
     }
     return false;
@@ -105,14 +103,14 @@ function toggleTodo(index) {
  */
 function listTodos() {
     if (!Config.enableTodos) {
-        ChatLib.chat("§cTodos are currently disabled in the config!");
+        showGeneralJAMessage("Todos are currently disabled in the config!", 'error');
         return;
     }
 
     // Prevent duplicate displays within 500ms
     const now = Date.now();
     if (now - lastTodoDisplay < 500) {
-        showDebugMessage("Prevented duplicate todo list display");
+        showDebugMessage("Prevented duplicate todo list display", 'warning');
         return;
     }
     lastTodoDisplay = now;
@@ -146,11 +144,11 @@ register("serverConnect", () => {
 
     const serverIP = Server.getIP();
     if (serverIP && serverIP.includes('hypixel')) {
-        showDebugMessage("Connected to Hypixel");
+        showDebugMessage("Connected to Hypixel", 'info');
         isOnHypixel = true;
         justReloaded = false;
     } else {
-        showDebugMessage("Connected to non-Hypixel server");
+        showDebugMessage("Connected to non-Hypixel server", 'warning');
         isOnHypixel = false;
     }
 });
@@ -161,31 +159,30 @@ register("serverConnect", () => {
 register("worldLoad", () => {
     if (!Config.enableTodos || !Config.showTodosOnJoin) return;
 
-    // Check if we're on Hypixel when module starts
     if (justReloaded) {
         const serverIP = Server.getIP();
         if (serverIP && serverIP.includes('hypixel')) {
-            showDebugMessage("Module reloaded while on Hypixel");
+            showDebugMessage("Module reloaded while on Hypixel", 'warning');
             isOnHypixel = true;
         } else {
-            showDebugMessage("Module reloaded while not on Hypixel");
+            showDebugMessage("Module reloaded while not on Hypixel", 'warning');
             isOnHypixel = false;
         }
-        return;  // Don't process the world load event during reload
+        return; 
     }
 
     if (!isOnHypixel) {
-        showDebugMessage("World changed but not on Hypixel");
+        showDebugMessage("World changed but not on Hypixel", 'warning');
         return;
     }
 
     // Reduced delay to 100ms
     setTimeout(() => {
         if (InSkyblock()) {
-            showDebugMessage("Player joined Skyblock, showing todos");
+            showDebugMessage("Player joined Skyblock, showing todos", 'info');
             listTodos();
         } else {
-            showDebugMessage("World changed on Hypixel but not Skyblock");
+            showDebugMessage("World changed on Hypixel but not Skyblock", 'warning');
         }
     }, 100);
 });
@@ -196,7 +193,7 @@ register("worldLoad", () => {
 register("serverDisconnect", () => {
     if (!Config.enableTodos) return;
 
-    showDebugMessage("Disconnected from server");
+    showDebugMessage("Disconnected from server", 'warning');
     isOnHypixel = false;
     justReloaded = false;
 });
@@ -204,7 +201,7 @@ register("serverDisconnect", () => {
 // Register the /todo command
 register("command", (action, ...args) => {
     if (!Config.enableTodos) {
-        ChatLib.chat("§cTodos are currently disabled in the config!");
+        showGeneralJAMessage("Todos are currently disabled in the config!", 'error');
         return;
     }
 
@@ -216,7 +213,7 @@ register("command", (action, ...args) => {
     switch (action.toLowerCase()) {
         case "add":
             if (args.length === 0) {
-                ChatLib.chat("§cUsage: /todo add <text>");
+                showGeneralJAMessage("§cUsage: /todo add <text>", 'info');
                 return;
             }
             addTodo(args.join(" "));
@@ -225,7 +222,7 @@ register("command", (action, ...args) => {
 
         case "toggle":
             if (args.length !== 1 || isNaN(args[0])) {
-                ChatLib.chat("§cUsage: /todo toggle <index>");
+                showGeneralJAMessage("§cUsage: /todo toggle <index>", 'info');
                 return;
             }
             toggleTodo(parseInt(args[0]));
@@ -241,14 +238,13 @@ register("command", (action, ...args) => {
             break;
 
         default:
-            ChatLib.chat("§cUnknown action. Use /todo help for usage information.");
+            showGeneralJAMessage("Unknown action. Use /todo help for usage information.", 'error');
     }
 }).setName("todo");
 
 // Initialize the module
 function initialize() {
     loadTodos();
-    showDebugMessage("Todo module initialized");
     justReloaded = true;
 }
 
