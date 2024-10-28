@@ -47,7 +47,7 @@ const updateCurrentArea = () => {
                 retryCount++;
                 setTimeout(updateCurrentArea, 1000);
             } else {
-                showGeneralJAMessage("&c[ERROR] Failed to get current area :(");
+                showDebugMessage("&Failed to get current area :(", 'error');
             }
         }
     } catch (e) {

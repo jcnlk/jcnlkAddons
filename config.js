@@ -38,7 +38,7 @@ const ConfigHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YEL
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "WIP", "Dev Stuff"];
+        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous","HUD", "WIP", "Dev Stuff"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
@@ -376,6 +376,26 @@ class Config {
     })
     autoSendCommitmentPhobiaResponse = false;
 
+    //HUD
+    @SwitchProperty({
+        name: "Enable Test HUD",
+        description: "Shows a test HUD on your screen.",    
+        category: "HUD",
+        subcategory: "Test HUD"
+    })
+    enableTestHud = true;
+
+    @ButtonProperty({
+        name: "Edit HUD Positions",
+        description: "Click to open the HUD editor. Drag elements to move them and scroll to resize",
+        category: "HUD",
+        subcategory: "HUD Editor",
+        placeholder: "Edit"
+    })
+    openHudEditor() {
+        ChatLib.command("ja hud", true);
+    }
+
     //WIP Stuff
     @SwitchProperty({
         name: "Enable Chest Highlighting",
@@ -411,6 +431,7 @@ class Config {
         this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("Miscellaneous", `${ConfigHeader}`);
+        this.setCategoryDescription("HUD", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
         this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`)
         this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <test>, /getdungeoninfo, /getcurrentarea, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
 

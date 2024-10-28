@@ -1,11 +1,35 @@
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 import { InSkyblock } from "../../utils/Constants";
 import Config from "../../config";
+import { 
+    BLACK, 
+    DARK_BLUE, 
+    DARK_GREEN, 
+    DARK_AQUA, 
+    DARK_RED, 
+    DARK_PURPLE, 
+    GOLD, 
+    GRAY, 
+    DARK_GRAY, 
+    BLUE, 
+    GREEN, 
+    AQUA, 
+    RED, 
+    LIGHT_PURPLE, 
+    YELLOW, 
+    WHITE,
+    OBFUSCATED, 
+    BOLD, 
+    STRIKETHROUGH, 
+    UNDERLINE, 
+    ITALIC, 
+    RESET   } from "../../utils/Constants";
 
 let todos = [];
 let isOnHypixel = false;
 let justReloaded = true;
 let lastTodoDisplay = 0;
+let inSkyblock = false;
 
 /**
  * Loads todos from storage if enabled
@@ -115,25 +139,25 @@ function listTodos() {
     }
     lastTodoDisplay = now;
 
-    ChatLib.chat("§6§l═══════ Todos ═══════");
+    ChatLib.chat(`${GOLD}${BOLD}═══════ Todos ═══════`);
 
     if (todos.length === 0) {
-        ChatLib.chat(new TextComponent("§f[Click to create a todo]")
+        ChatLib.chat(new TextComponent(`${WHITE}[Click to create a todo]`)
             .setClick("suggest_command", "/todo add ")
             .setHover("show_text", "§eClick to add a new todo"));
-        ChatLib.chat("§6§l══════════════════");
+        ChatLib.chat(`${GOLD}${BOLD}══════════════════${RESET}`);
         return;
     }
 
     todos.forEach((todo, arrayIndex) => {
         const index = arrayIndex + 1;
-        const completionSymbol = todo.completed ? "§a[✔]" : "§c[✘]";
-        ChatLib.chat(new TextComponent(`§f[${index}] §6${todo.text} ${completionSymbol}`)
+        const completionSymbol = todo.completed ? `${GREEN}✔${RESET}` : `${RED}✘${RESET}`;
+        ChatLib.chat(new TextComponent(`${completionSymbol} ${WHITE}${todo.text} ${DARK_GRAY}[${index}]`)
             .setClick("run_command", `/todo toggle ${index}`)
-            .setHover("show_text", "§eClick to toggle completion"));
+            .setHover("show_text", `${YELLOW}Click to toggle completion`));
     });
 
-    ChatLib.chat(`§6§l══════ §r§7${todos.length} remaining §6§l══════`);
+    ChatLib.chat(`${GOLD}${BOLD}══════${RESET} ${GRAY}${todos.length} remaining ${GOLD}${BOLD}══════${RESET}`);
 }
 
 /**
@@ -168,7 +192,8 @@ register("worldLoad", () => {
             showDebugMessage("Module reloaded while not on Hypixel", 'warning');
             isOnHypixel = false;
         }
-        return; 
+        justReloaded = false;
+        return;
     }
 
     if (!isOnHypixel) {
@@ -176,14 +201,17 @@ register("worldLoad", () => {
         return;
     }
 
-    // Reduced delay to 100ms
+    // Check if player is entering Skyblock for the first time
     setTimeout(() => {
-        if (InSkyblock()) {
-            showDebugMessage("Player joined Skyblock, showing todos", 'info');
+        const nowInSkyblock = InSkyblock();
+        // Only show todos if we weren't in Skyblock before and are now
+        if (nowInSkyblock && !inSkyblock && !justReloaded) {
+            showDebugMessage("Player entered Skyblock for the first time, showing todos", 'info');
             listTodos();
-        } else {
-            showDebugMessage("World changed on Hypixel but not Skyblock", 'warning');
+        } else if (nowInSkyblock && inSkyblock) {
+            showDebugMessage("World change within Skyblock, not showing todos", 'info');
         }
+        inSkyblock = nowInSkyblock;
     }, 100);
 });
 
@@ -196,6 +224,7 @@ register("serverDisconnect", () => {
     showDebugMessage("Disconnected from server", 'warning');
     isOnHypixel = false;
     justReloaded = false;
+    inSkyblock = false;
 });
 
 // Register the /todo command
@@ -213,7 +242,7 @@ register("command", (action, ...args) => {
     switch (action.toLowerCase()) {
         case "add":
             if (args.length === 0) {
-                showGeneralJAMessage("§cUsage: /todo add <text>", 'info');
+                showGeneralJAMessage("Usage: /todo add <text>", 'info');
                 return;
             }
             addTodo(args.join(" "));
@@ -222,19 +251,20 @@ register("command", (action, ...args) => {
 
         case "toggle":
             if (args.length !== 1 || isNaN(args[0])) {
-                showGeneralJAMessage("§cUsage: /todo toggle <index>", 'info');
+                showGeneralJAMessage("Usage: /todo toggle <index>", 'info');
                 return;
             }
             toggleTodo(parseInt(args[0]));
+            listTodos();
             break;
 
         case "help":
-            ChatLib.chat("§6§l═══════ Todo Help ═══════");
-            ChatLib.chat("§6/todo §7- List all todos");
-            ChatLib.chat("§6/todo add <text> §7- Add a new todo");
-            ChatLib.chat("§6/todo toggle <index> §7- Complete a todo");
-            ChatLib.chat("§6/todo help §7- Show this help message");
-            ChatLib.chat("§6§l═════════════════════");
+            ChatLib.chat(`${GOLD}${BOLD}═══════ Todo Help ═══════${RESET}`);
+            ChatLib.chat(`${GOLD}/todo ${GRAY}- List all todos${RESET}`);
+            ChatLib.chat(`${GOLD}/todo add <text> ${GRAY}- Add a new todo${RESET}`);
+            ChatLib.chat(`${GOLD}/todo toggle <index> ${GRAY}- Complete a todo${RESET}`);
+            ChatLib.chat(`${GOLD}/todo help ${GRAY}- Show this help message${RESET}`);
+            ChatLib.chat(`${GOLD}§l═════════════════════${RESET}`);
             break;
 
         default:
@@ -242,10 +272,20 @@ register("command", (action, ...args) => {
     }
 }).setName("todo");
 
-// Initialize the module
+/**
+ * Initialize the module and set correct initial states
+ */
 function initialize() {
     loadTodos();
     justReloaded = true;
+    
+    // Check if we're already in Skyblock when module loads
+    if (Server.getIP()?.includes('hypixel')) {
+        isOnHypixel = true;
+        // Set initial Skyblock state
+        inSkyblock = InSkyblock();
+        showDebugMessage(`Module initialized while ${inSkyblock ? 'in' : 'not in'} Skyblock`, 'info');
+    }
 }
 
 // Export functions and initialize

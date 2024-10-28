@@ -1,5 +1,4 @@
 import { setRegisters } from "./Register";
-import { showDebugMessage } from "./ChatUtils";
 
 class HudManager {
     constructor() {
@@ -9,7 +8,6 @@ class HudManager {
         this.gui.registerClosed(() => {
             this.isEditing = false;
             setRegisters();
-            showDebugMessage("HUD edit mode closed");
         });
     }
 
@@ -19,7 +17,6 @@ class HudManager {
     openGui = () => {
         this.gui.open();
         this.isEditing = true;
-        showDebugMessage("HUD edit mode opened");
     }
 
     /**
@@ -28,7 +25,6 @@ class HudManager {
      */
     selectHud = (name) => {
         this.selectedHudName = name;
-        showDebugMessage(`Selected HUD: ${name}`);
     }
 
     /**
@@ -36,7 +32,6 @@ class HudManager {
      */
     unselectHud = () => {
         this.selectedHudName = '';
-        showDebugMessage("HUD selection released");
     }
 }
 

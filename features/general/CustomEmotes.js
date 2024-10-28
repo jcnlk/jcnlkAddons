@@ -90,7 +90,6 @@ register("messageSent", (message, event) => {
 // Initialize the module
 function initialize() {
     loadCustomEmotes();
-    showDebugMessage("CustomEmotes module initialized");
 }
 
 // Export functions and initialize

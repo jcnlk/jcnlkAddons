@@ -1,5 +1,3 @@
-import { showDebugMessage } from "./ChatUtils";
-
 export class Hud {
     /**
      * Class for text hud.
@@ -113,6 +111,7 @@ export class Hud {
         const height = Renderer.screen.getHeight();
         this.data.x = x / width;
         this.data.y = y / height;
+        // this.data.save();
         this.saveData();
         return;
     }
@@ -133,6 +132,7 @@ export class Hud {
      */
     setScale = (scale) => {
         this.data.scale = scale;
+        // this.data.save();
         this.saveData();
         return;
     }
@@ -154,32 +154,37 @@ export class Hud {
         if (!this.hudManager.isEditing) {
             if (skyblockOnly) {
                 if (Server.getIP().includes('hypixel') && ChatLib.removeFormatting(Scoreboard.getTitle()).includes('SKYBLOCK')) {
-                    this.renderHud(text);
+                    GlStateManager.func_179147_l();
+                    const [x, y] = this.getCoords();
+                    const scale = this.getScale();
+                    if (this.background) {
+                        Renderer.drawRect(
+                            this.color,
+                            x - 3,
+                            y - 3,
+                            this.currentText.getWidth() + 3,
+                            this.currentText.getHeight() + 3
+                        );
+                    }
+                    this.currentText.setString(text).setX(x).setY(y).setScale(scale).draw();
+                    GlStateManager.func_179084_k();
                 }
             } else {
-                this.renderHud(text);
+                GlStateManager.func_179147_l();
+                const [x, y] = this.getCoords();
+                const scale = this.getScale();
+                if (this.background) {
+                    Renderer.drawRect(
+                        this.color,
+                        x - 3,
+                        y - 3,
+                        this.currentText.getWidth() + 3,
+                        this.currentText.getHeight() + 3
+                    );
+                }
+                this.currentText.setString(text).setX(x).setY(y).setScale(scale).draw();
+                GlStateManager.func_179084_k();
             }
         }
-    }
-
-    /**
-     * Render the HUD
-     * @param {string} text 
-     */
-    renderHud = (text) => {
-        GlStateManager.func_179147_l();
-        const [x, y] = this.getCoords();
-        const scale = this.getScale();
-        if (this.background) {
-            Renderer.drawRect(
-                this.color,
-                x - 3,
-                y - 3,
-                this.currentText.getWidth() + 3,
-                this.currentText.getHeight() + 3
-            );
-        }
-        this.currentText.setString(text).setX(x).setY(y).setScale(scale).draw();
-        GlStateManager.func_179084_k();
     }
 }

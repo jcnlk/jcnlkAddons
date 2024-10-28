@@ -5,3 +5,4 @@ data/KuudraLoot.js
 data/Reminders.json
 features/kuudra/HighlightKuudraLoot.js
 data/Todos.json
+data/HudData.json

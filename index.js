@@ -12,7 +12,7 @@ import "./utils/ItemID"
 import "./utils/Dungeon"
 import "./utils/FormatCoins"
 import "./utils/Hud"
-import "./utils/HudManager"
+import HudManager from "./utils/HudManager"
 import "./utils/InventoryHud"
 import "./utils/EnchantedBookDetail"
 import "./features/dungeons/HighlightDungeonLoot"
@@ -22,6 +22,8 @@ import "./utils/ClickableMessageContent"
 import "./utils/Constants"
 import "./utils/FormatCoords"
 import "./utils/Waypoints"
+import "./utils/Data"
+import "./features/general/TestHud"
 import * as Todo from "./features/general/Todo";
 import * as CustomEmotes from "./features/general/CustomEmotes";
 const DmCommands = require("./features/commands/DmCommands.js");
@@ -128,6 +130,10 @@ function initializeSlashCommands() {
             case "test":
                     showGeneralJAMessage("The Module is actually running!");
                 break;
+            case "hud":
+                HudManager.openGui();
+                showDebugMessage("Opened HUD editor");
+                break;
             case "help":
                 showGeneralJAMessage("Available subcommands: crypts, help, puzzles, emote, test");
                 showDebugMessage("Displayed /ja help information");
@@ -136,7 +142,7 @@ function initializeSlashCommands() {
                 showGeneralJAMessage("Unknown subcommand. Use 'crypts' to see crypt count, 'puzzles' to see puzzle status, or 'help' for more info.");
                 showDebugMessage(`Unknown /ja subcommand: ${subCommand}`);
         }
-    }, ["crypts", "help", "puzzles","emote", "test"]);
+    }, ["crypts", "help", "puzzles", "emote", "test", "hud"]);
 
     // /testpopup command
     registerSlashCommand("testpopup", "Show a test popup", (message, ...args) => {
@@ -233,7 +239,7 @@ function initializeJAModule() {
     successCount += initializeModule("Party Commands", () => PartyCommands(showDebugMessage, showGeneralJAMessage));
     successCount += initializeModule("DM Commands", () => DmCommands(showDebugMessage, showGeneralJAMessage));
     successCount += initializeModule("Custom Emotes", () => CustomEmotes.initialize());
-    successCount += initializeModule("Todo module", () => Todo.initialize());
+    successCount += initializeModule("Todo", () => Todo.initialize());
 
     showDebugMessage("jcnlkAddons initialization completed", 'success');
 
