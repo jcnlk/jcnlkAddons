@@ -56,7 +56,7 @@ function solveMath(equation) {
         ChatLib.chat(createClickableMessage(result));
         
         if (Config.autoSendMathTeacherAnswer) {
-            ChatLib.say("/ac" + result.toString());
+            ChatLib.say("/ac " + result.toString());
             showDebugMessage('Auto-sent answer to chat', 'info');
         }
     } else {
