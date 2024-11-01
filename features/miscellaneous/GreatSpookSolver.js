@@ -56,7 +56,7 @@ function solveMath(equation) {
         ChatLib.chat(createClickableMessage(result));
         
         if (Config.autoSendMathTeacherAnswer) {
-            ChatLib.say(result.toString());
+            ChatLib.say("/ac" + result.toString());
             showDebugMessage('Auto-sent answer to chat', 'info');
         }
     } else {
@@ -104,7 +104,7 @@ function handlePublicSpeaking(playerName) {
     ChatLib.chat(suggestion);
 
     if (Config.autoSendPublicSpeakingResponse) {
-        ChatLib.say(response);
+        ChatLib.say("/ac " + response);
         showDebugMessage('Auto-sent public speaking response', 'info');
     }
 }
@@ -211,7 +211,7 @@ register("chat", (message) => {
 // Command for sending Great Spook answer
 register("command", () => {
     if (lastCalculatedResult !== null && !mathSolved) {
-        ChatLib.say(lastCalculatedResult.toString());
+        ChatLib.say("/ac " + lastCalculatedResult.toString());
         showDebugMessage(`Sent Great Spook answer: ${lastCalculatedResult}`, 'info');
     } else if (mathSolved) {
         showGeneralJAMessage("The Math question has already been solved.");
