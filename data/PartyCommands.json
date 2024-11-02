@@ -48,13 +48,11 @@
   },
   "throw": {
     "low": [
-      "${playerName} threw the run with a devastating ${throwIntensity}% intensity! That's like dying to a T1 Rev while wearing Necron armor.",
-      "DEFCON 1 ALERT: ${playerName} just threw harder than Hypixel's servers during update releases! Throw level: ${throwIntensity}%",
-      "${playerName} threw the run ${throwIntensity}%! That's more tragic than accidentally salvaging a Hyperion!",
-      "${playerName}'s throw was so bad (${throwIntensity}%), even Watchdog got confused and banned a cheater!",
-      "${playerName}'s ${throwIntensity}% throw was so bad, even Bonzo is facepalming!",
-      "With a ${throwIntensity}% throw, ${playerName} just redefined the term 'skill issue'.",
-      "${playerName}'s throw was ${throwIntensity}%! They're now the official mascot for 'How Not to Play Skyblock'."
+      "${playerName} threw the run ${throwIntensity}%! That's less tragic than losing 12 coin to a Gaia Construct.",
+      "${playerName}'s throw skills: ${throwIntensity}%. Barely noticeable, like using Juju Shortbow in Dragon fights... wait, that's actually okay!",
+      "${playerName}'s throw was only ${throwIntensity}%! They're more stable than Skyblock's economy!",
+      "A mere ${throwIntensity}% throw from ${playerName}! They're more reliable than finding good teammates in Party Finder.",
+      "${playerName} threw ${throwIntensity}%! That's less noticeable than the difference between Heroic AOTV and Warped AOTV!"
     ],
     "medium": [
       "${playerName} threw the run with ${throwIntensity}% intensity! That's like forgetting to equip the right power stone... again.",
@@ -66,11 +64,13 @@
       "Throw level for ${playerName}: ${throwIntensity}%. As average as the IQ of a Hub 1 Lowballer."
     ],
     "high": [
-      "${playerName} threw the run ${throwIntensity}%! That's less tragic than losing 12 coin to a Gaia Construct.",
-      "${playerName}'s throw skills: ${throwIntensity}%. Barely noticeable, like using Juju Shortbow in Dragon fights... wait, that's actually okay!",
-      "${playerName}'s throw was only ${throwIntensity}%! They're more stable than Skyblock's economy!",
-      "A mere ${throwIntensity}% throw from ${playerName}! They're more reliable than finding good teammates in Party Finder.",
-      "${playerName} threw ${throwIntensity}%! That's less noticeable than the difference between Heroic AOTV and Warped AOTV!"
+      "${playerName} threw the run with a devastating ${throwIntensity}% intensity! That's like dying to a T1 Rev while wearing Necron armor.",
+      "DEFCON 1 ALERT: ${playerName} just threw harder than Hypixel's servers during update releases! Throw level: ${throwIntensity}%",
+      "${playerName} threw the run ${throwIntensity}%! That's more tragic than accidentally salvaging a Hyperion!",
+      "${playerName}'s throw was so bad (${throwIntensity}%), even Watchdog got confused and banned a cheater!",
+      "${playerName}'s ${throwIntensity}% throw was so bad, even Bonzo is facepalming!",
+      "With a ${throwIntensity}% throw, ${playerName} just redefined the term 'skill issue'.",
+      "${playerName}'s throw was ${throwIntensity}%! They're now the official mascot for 'How Not to Play Skyblock'."
     ]
   },
   "dice": {
