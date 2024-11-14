@@ -1,3 +1,8 @@
+/**
+ * Let's don't talk about this code..
+ * Probably have to remake this one (but it works)
+ */
+
 import Config from "../config";
 import { showDebugMessage, showGeneralJAMessage } from "./ChatUtils";
 import { setItemsToHighlight } from "./HighlightSlots";

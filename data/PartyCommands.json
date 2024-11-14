@@ -159,7 +159,7 @@
     "Very likely (unlike finding a lobby without 'quitting' players)"
   ],
   "commands": {
-    "list": "Available commands: !rng, !cf, !8ball, !throw, !dice, !commands",
+    "list": "Available commands: !rng, !cf, !8ball, !throw, !dice, !simp, !sus, !kick, !p, !commands",
     "help": "Use !commands help [command] for detailed help on a specific command.",
     "specific": {
       "rng": "!rng [player] [item]: Generates a random RNG percentage for a player and optional item.",

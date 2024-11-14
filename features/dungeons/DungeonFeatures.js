@@ -148,7 +148,7 @@ function outputPuzzleChanges() {
 
     // Check for changes in total puzzles
     if (lastTotalPuzzles !== totalPuzzles) {
-        showGeneralJAMessage(`Total puzzles changed from ${lastTotalPuzzles} to ${totalPuzzles}`);
+        //showGeneralJAMessage(`Total puzzles changed from ${lastTotalPuzzles} to ${totalPuzzles}`);
         lastTotalPuzzles = totalPuzzles;
         changesDetected = true;
     }
@@ -157,7 +157,7 @@ function outputPuzzleChanges() {
     for (const [state, count] of Object.entries(counts)) {
         if (puzzleStates[state] !== count) {
             const stateCapitalized = state.charAt(0).toUpperCase() + state.slice(1);
-            showGeneralJAMessage(`${stateCapitalized} puzzles changed from ${puzzleStates[state] || 0} to ${count}`);
+            //showGeneralJAMessage(`${stateCapitalized} puzzles changed from ${puzzleStates[state] || 0} to ${count}`);
             puzzleStates[state] = count;
             changesDetected = true;
         }
@@ -165,7 +165,7 @@ function outputPuzzleChanges() {
 
     // Only output the current status if changes were detected
     if (changesDetected) {
-        showGeneralJAMessage(`Current puzzle status: ${counts.unexplored} unexplored, ${counts.explored} explored, ${counts.finished} finished, ${counts.failed} failed`);
+        //showGeneralJAMessage(`Current puzzle status: ${counts.unexplored} unexplored, ${counts.explored} explored, ${counts.finished} finished, ${counts.failed} failed`);
     }
 }
 
