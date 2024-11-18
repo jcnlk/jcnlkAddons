@@ -9,7 +9,7 @@
       "Aurora": [
           {
               "attributes": ["Mana Pool", "Mana Regeneration"],
-              "pieces": ["Boots", "Leggings", "Chestplate"]
+              "pieces": ["Boots", "Leggings", "Chestplate", "Helmet"]
           }
       ],
       "Molten": [

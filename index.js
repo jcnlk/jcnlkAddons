@@ -1,28 +1,29 @@
 import config from "./config";
 import * as Dungeons from "./features/dungeons/DungeonFeatures";
 import * as Reminders from "./features/general/Reminders";
-import { showSimplePopup } from "./utils/Popup";
+//import { showSimplePopup } from "./utils/Popup";
 import { scanItemAttributes } from "./utils/KuudraLootScanner.js";
 import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
-import "./features/dungeons/DungeonUtils"
-import "./utils/HighlightSlots"
-import "./utils/Area"
-import "./utils/ItemID"
-import "./utils/Dungeon"
-import "./utils/Hud"
-import HudManager from "./utils/HudManager"
-import "./utils/InventoryHud"
-import "./utils/EnchantedBookDetail"
-import "./features/dungeons/HighlightDungeonLoot"
-import "./utils/ItemAttribute"
-import "./features/miscellaneous/GreatSpookSolver"
-import "./utils/ClickableMessageContent"
-import "./utils/Constants"
-import "./utils/FormatCoords"
-import "./utils/Waypoints"
-import "./utils/Data"
-import "./features/general/TestHud"
+import "./features/dungeons/DungeonUtils";
+import "./utils/HighlightSlots";
+import "./utils/Area";
+import "./utils/ItemID";
+import "./utils/Dungeon";
+import "./utils/Hud";
+import HudManager from "./utils/HudManager";
+import "./utils/InventoryHud";
+import "./utils/EnchantedBookDetail";
+import "./features/dungeons/HighlightDungeonLoot";
+import "./utils/ItemAttribute";
+import "./features/miscellaneous/GreatSpookSolver";
+import "./utils/ClickableMessageContent";
+import "./utils/Constants";
+import "./utils/FormatCoords";
+import "./utils/Waypoints";
+import "./utils/Data";
+import "./features/general/TestHud";
+import "./features/miscellaneous/AutoPetruleAlert";
 import * as Todo from "./features/general/Todo";
 import * as CustomEmotes from "./features/general/CustomEmotes";
 const DmCommands = require("./features/commands/DmCommands.js");

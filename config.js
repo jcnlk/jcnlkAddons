@@ -376,6 +376,14 @@ class Config {
     })
     autoSendCommitmentPhobiaResponse = false;
 
+    @SwitchProperty({
+        name: "Show Autopet Rule Title",
+        description: "Show a Title when a Autopet Rule get triggered",
+        category: "Miscellaneous",
+        subcategory: "Autopet Rule Title"
+    })
+    autopetRuleTitle = true
+
     //HUD
     @SwitchProperty({
         name: "Enable Test HUD",

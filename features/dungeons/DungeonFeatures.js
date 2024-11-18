@@ -1,6 +1,6 @@
 import Config from "../../config";
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
-import { showSimplePopup } from "../../utils/Popup";
+import { showTitle } from "../../utils/Title";
 import {
     checkInDungeon,
     getCryptCountFromTablist,
@@ -88,7 +88,8 @@ function showCryptReminderPopup(cryptsNeeded) {
     
     const popupMessage = `Need ${cryptsNeeded} more crypts!`;
     
-    showSimplePopup(popupMessage, 5000, true, "Crypt Reminder", selectedColor);
+
+    showTitle(`${selectedColor} ${popupMessage}`, 5000, true, `${selectedColor}Crypt Reminder`);
     showDebugMessage(`Showing crypt reminder popup: ${popupMessage}`);
 }
 

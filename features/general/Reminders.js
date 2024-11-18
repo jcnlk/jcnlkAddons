@@ -1,5 +1,5 @@
 import Config from "../../config";
-import { showSimplePopup } from "../../utils/Popup";
+import { showTitle } from "../../utils/Title";
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 
 let reminders = new Map();
@@ -320,7 +320,7 @@ function showReminderPopup(name) {
         showDebugMessage(`Showing popup: "Reminder: ${name}" with duration 5000ms`, 'info');
     }
     
-    showSimplePopup(`Reminder: ${name}`, 5000, true, "JA Reminder", selectedColor);
+    showTitle(`${selectedColor}Reminder: ${name}`, 5000, true, `${selectedColor}JA Reminder`);
     showGeneralJAMessage(`Reminder: ${name}`);
     
     // Play the selected sound when the reminder pops up
