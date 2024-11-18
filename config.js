@@ -213,6 +213,14 @@ class Config {
     })
     enableDungeonLootChatOutput = true;
 
+    @SwitchProperty({
+        name: "Fire Freeze Notification",
+        description: "Tells you when to Fire Freeze in M3",
+        category: "Dungeons",
+        subcategory: "M3"
+    })
+    FireFreezeNotifier = true
+
     // Party Commands
     @SwitchProperty({
         name: "Enable Party Commands",

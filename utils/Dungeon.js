@@ -41,7 +41,7 @@ export function getCurrentFloor() {
     const match = area.match(/The Catacombs \((F|M)(\d+)\)/);
     if (match) {
         return {
-            type: match[1], // 'F' for Floor, 'M' for Master
+            type: match[1], // 'F' for Floor, 'M' for Master Mode
             number: parseInt(match[2])
         };
     }

@@ -6,17 +6,16 @@ import { getItemId } from "./ItemID";
  * @param {string} name
  */
 const formatEnchantmentName = (name) => {
-    // Konvertiere den Namen zu Kleinbuchstaben für konsistente Verarbeitung
     name = name.toLowerCase();
 
-    // Spezielle Behandlung für "ultimate wise" und "ultimate jerry"
+    // Don't remove "ultimate_" from "ultimate wise" and "ultimate jerry"
     if (name === 'ultimate_wise' || name === 'ultimate_jerry') {
         return name.split('_')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
     }
 
-    // Entferne "ultimate_" vom Anfang des Namens für alle anderen Verzauberungen
+    // Remove "ultimate_"
     name = name.replace(/^ultimate_/, '');
 
     return name.split('_')

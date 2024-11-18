@@ -1,7 +1,6 @@
 import config from "./config";
 import * as Dungeons from "./features/dungeons/DungeonFeatures";
 import * as Reminders from "./features/general/Reminders";
-//import { showSimplePopup } from "./utils/Popup";
 import { scanItemAttributes } from "./utils/KuudraLootScanner.js";
 import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
@@ -24,8 +23,10 @@ import "./utils/Waypoints";
 import "./utils/Data";
 import "./features/general/TestHud";
 import "./features/miscellaneous/AutoPetruleAlert";
+import "./features/dungeons/FireFreezeNotifier";
 import * as Todo from "./features/general/Todo";
 import * as CustomEmotes from "./features/general/CustomEmotes";
+import { showTitle } from "./utils/Title.js";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");
 
@@ -150,7 +151,7 @@ function initializeSlashCommands() {
             message = "This is a Test Popup!";
         }
         const fullMessage = [message, ...args].join(" ");
-        showSimplePopup(fullMessage, 3000, true, "JA Popup");
+        showTitle(fullMessage, 3000, true, "JA Popup");
         showDebugMessage(`Displayed test popup with message: ${fullMessage}`);
     });
 

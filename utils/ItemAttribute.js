@@ -1,5 +1,3 @@
-// utils/ItemAttributes.js
-
 import { showDebugMessage, showGeneralJAMessage } from "./ChatUtils";
 
 /**
