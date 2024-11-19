@@ -362,7 +362,7 @@ function isValidChest(container) {
     }
 
     // Include containers with " paid chest" in the name (for kuudra loot chest)
-    if (containerName.includes("chest")) {
+    if (containerName.includes("paid chest")) {
         return true;
     }
     return false;

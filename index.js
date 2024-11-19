@@ -24,13 +24,13 @@ import "./utils/Data";
 import "./features/general/TestHud";
 import "./features/miscellaneous/AutoPetruleAlert";
 import "./features/dungeons/FireFreezeNotifier";
+import "./features/dungeons/PreEnterPhase3";
 import * as Todo from "./features/general/Todo";
 import * as CustomEmotes from "./features/general/CustomEmotes";
 import { showTitle } from "./utils/Title.js";
 const DmCommands = require("./features/commands/DmCommands.js");
 const PartyCommands = require("./features/commands/PartyCommands.js");
 
-// Global variables
 let titles = [];
 let slashCommandsInitialized = false;
 
@@ -219,7 +219,7 @@ function initializeSlashCommands() {
 }
 
 /**
- * Initializes the JA Module
+ * Initializes the Module
  */
 function initializeJAModule() {
     showGeneralJAMessage("Loading jcnlkAddons...");

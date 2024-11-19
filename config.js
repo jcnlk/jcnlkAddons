@@ -215,11 +215,19 @@ class Config {
 
     @SwitchProperty({
         name: "Fire Freeze Notification",
-        description: "Tells you when to Fire Freeze in M3",
+        description: "Tells you when to Fire Freeze in M3.",
         category: "Dungeons",
         subcategory: "M3"
     })
     FireFreezeNotifier = true
+
+    @SwitchProperty({
+        name: "Announce Pre Enter Phase 3",
+        description: `Announce to Party Chat when you Pre Enter in Phase 3 (Terminal Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcePreEnterPhase3 = true
 
     // Party Commands
     @SwitchProperty({
@@ -432,7 +440,7 @@ class Config {
     //Dev Stuff
     @SwitchProperty({
         name: "Debug Mode",
-        description: "Enable detailed debug messages for troubleshooting.",
+        description: `Enable detailed debug messages for troubleshooting. \n${GRAY}(We don't talk about messed up debgging..)${RESET}`,
         category: "Dev Stuff",
         subcategory: "Debug"
      })
