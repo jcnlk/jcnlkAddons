@@ -1,7 +1,6 @@
-import PogObject from 'PogData';
+import PogObject from "PogData";
 
 const defaultData = {
-    version: '1.0.1'
     // More Data here
 }
 

@@ -1,6 +1,6 @@
 //Basic Stuff
 //TODO: Load the current verion (and Creator?) of out metadata.json 
-export const ModuleVersion = "v1.0.1" //IMPORTANT: Change this to the current version until TODO is not done
+export const ModuleVersion = "v1.1.0" //IMPORTANT: Change this to the current version until TODO is not done
 export const Creator = "jcnlk"
 
 // Constants for easier chat formating     

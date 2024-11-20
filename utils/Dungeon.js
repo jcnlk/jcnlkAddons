@@ -1,6 +1,5 @@
 import { getCurrentArea } from "./Area";
 import { showDebugMessage, showGeneralJAMessage } from "./ChatUtils";
-import Config from "../config";
 
 const BossStatus = Java.type('net.minecraft.entity.boss.BossStatus');
 
