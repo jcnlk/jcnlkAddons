@@ -24,7 +24,7 @@ import "./utils/Data";
 import "./features/general/TestHud";
 import "./features/miscellaneous/AutoPetruleAlert";
 import "./features/dungeons/FireFreezeNotifier";
-import "./features/dungeons/PreEnterPhase3";
+import "./features/dungeons/Floor7.js";
 import * as Todo from "./features/general/Todo";
 import * as CustomEmotes from "./features/general/CustomEmotes";
 import { showTitle } from "./utils/Title.js";

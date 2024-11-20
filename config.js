@@ -229,6 +229,14 @@ class Config {
     })
     announcePreEnterPhase3 = true
 
+    @SwitchProperty({
+        name: "Announce i4 Position",
+        description: `Announce your i4 position in Party Chat (i4 Entry, Moving to i4, At i4). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcei4Position = true
+
     // Party Commands
     @SwitchProperty({
         name: "Enable Party Commands",

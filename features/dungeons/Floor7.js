@@ -84,19 +84,20 @@ register("tick", () => {
 
 // This is used because some of the i4 position annoucements are overlapping with inGoldorPhase positions
 register("tick", () => {
-    //if (config. ) here
-    if (goldorPhase === 1) {
-        if (ati4() && !alreadySenti4) {
-            ChatLib.command(`pc At i4!`);
-            alreadySenti4 = true;
-        }
-        else if (ati4Entry() && !alreadySenti4Entry) {
-            ChatLib.command(`pc At i4 Entry (HEALER CAN LEAP)!`);
-            alreadySenti4Entry = true;
-        }
-        else if (Enteredi4() && !alreadySentEnteredi4) {
-            ChatLib.command(`pc Entered i4 (DON'T LEAP)!`);
-            alreadySentEnteredi4 = true;
+    if (config.announcei4Position) {
+        if (goldorPhase === 1) {
+            if (ati4() && !alreadySenti4) {
+                ChatLib.command(`pc At i4!`);
+                alreadySenti4 = true;
+            }
+            else if (ati4Entry() && !alreadySenti4Entry) {
+                ChatLib.command(`pc At i4 Entry (HEALER CAN LEAP)!`);
+                alreadySenti4Entry = true;
+            }
+            else if (Enteredi4() && !alreadySentEnteredi4) {
+                ChatLib.command(`pc Moving to i4 (DON'T LEAP)!`);
+                alreadySentEnteredi4 = true;
+            }
         }
     }
 });
