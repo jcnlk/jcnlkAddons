@@ -235,7 +235,47 @@ class Config {
         category: "Dungeons",
         subcategory: "F7/M7"
     })
-    announcei4Position = true
+    announcei4Position = true;
+    
+    @CheckboxProperty({
+        name: "Berserker Only",
+        description: `Only announce i4 positions as Berserker (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    i4PositionBerserkerOnly = false;
+    
+    @SwitchProperty({
+        name: "Announce Pre SS",
+        description: `Announce if you are at Pre SS (Simon Says aka 1st Dev). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcePreSS = true;
+    
+    @CheckboxProperty({
+        name: "Healer Only (Pre SS)",
+        description: `Only announce Pre SS position as Healer (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreSSHealerOnly = false;
+
+    @SwitchProperty({
+        name: "Announce Pre Dev Position",
+        description: `Announce your position during Pre Dev to Party Chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcePreDevPosition = true;
+    
+    @CheckboxProperty({
+        name: `Healer Only (Pre Dev)`,
+        description: `Only announce Pre Dev positions as Healer (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreDevPositionHealerOnly = false;
 
     // Party Commands
     @SwitchProperty({
@@ -431,7 +471,7 @@ class Config {
     //WIP Stuff
     @SwitchProperty({
         name: "Enable Chest Highlighting",
-        description: `Highlights loot in kuudra chests according to their value \n(${GREEN}God Roll${RESET}, ${YELLOW}Good Roll${RESET}], ${RED}Bad Roll${RESET}).`,
+        description: `Highlights loot in kuudra chests according to their value \n(${GREEN}God Roll${RESET}, ${YELLOW}Good Roll${RESET}, ${RED}Bad Roll${RESET}).`,
         category: "WIP",
         subcategory: `Kuudra Loot Highlight (${GREEN}SHOULD WORK${RESET}`
     })
@@ -458,22 +498,22 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, help>, /reminder, /todo${RESET}\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
-        this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <crypts, puzzles>${RESET}`);
+        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, help>, /reminder, /todo${RESET}`);
+        this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <crypts, puzzles>${RESET} \n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
-        this.setCategoryDescription("Miscellaneous", `${ConfigHeader}`);
+        this.setCategoryDescription("Miscellaneous", `${ConfigHeader} \n\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("HUD", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
-        this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`)
+        this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
         this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <test>, /getdungeoninfo, /getcurrentarea, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
 
         // Add dependencies for General
-        this.addDependency("Reminder Popup Color", "Enable Reminders")
-        this.addDependency("Reminder Sound", "Enable Reminders")
-        this.addDependency("Reminder Sound Volume", "Enable Reminders")
-        this.addDependency("Show Todos on Skyblock Join","Enable Todos")
-        this.addDependency("Clear Completed Todos","Enable Todos")
-        this.addDependency("Save Todos","Enable Todos")
+        this.addDependency("Reminder Popup Color", "Enable Reminders");
+        this.addDependency("Reminder Sound", "Enable Reminders");
+        this.addDependency("Reminder Sound Volume", "Enable Reminders");
+        this.addDependency("Show Todos on Skyblock Join","Enable Todos");
+        this.addDependency("Clear Completed Todos","Enable Todos");
+        this.addDependency("Save Todos","Enable Todos");
 
 
         // Add dependencies for Dungeons
@@ -483,7 +523,10 @@ class Config {
         this.addDependency("Crypt Reminder Popup Color", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder");
-        this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting")
+        this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting");
+        this.addDependency("Berserker Only", "Announce i4 Position");
+        this.addDependency("Healer Only (Pre SS)", "Announce Pre SS");
+        this.addDependency("Healer Only (Pre Dev)", "Announce Pre Dev Position");
 
         // Add dependencies for Party Commands
         const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Help Command &3!commands help&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
@@ -494,11 +537,11 @@ class Config {
         this.addDependency("Kick Command (DMs) &3!kick&r", "Enable DM Commands");
 
         // Add dependencies for Miscellaneous
-        this.addDependency("Auto solve Math Teacher", "Enable Math Teacher Solver")
-        this.addDependency("Auto solve Public Speaking Demon", "Enable Public Speaking Demon Solver")
+        this.addDependency("Auto solve Math Teacher", "Enable Math Teacher Solver");
+        this.addDependency("Auto solve Public Speaking Demon", "Enable Public Speaking Demon Solver");
 
         // Add dependencies for WIP
-        this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting")
+        this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting");
     }
 }
 

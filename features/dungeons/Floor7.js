@@ -10,11 +10,14 @@ import config from "../../config";
  *      - Don't show if Client sent it (no self title)
  */
 
+let inMaxor = false;
+let inStorm = false;
 let goldorPhase = 0;
 let lastSend = 0;
 let alreadySenti4 = false;
 let alreadySenti4Entry = false;
 let alreadySentEnteredi4 = false;
+let lastSendDev = 0;
 
 function inGoldorPhase() {
     if ((Player.getX() > 90 && Player.getX() < 110) && (Player.getY() > 107 && Player.getY() < 145) && (Player.getZ() > 52 && Player.getZ() < 123)) return 1;
@@ -40,21 +43,49 @@ function ati4Entry() {
 function Enteredi4() {
     //90 131 45
     //88 132 48 
-    if ((Player.getX() > 8 && Player.getX() < 91) && (Player.getY() > 129 && Player.getY() < 134 ) && (Player.getZ () > 46 && Player.getZ() < 50) ) return true
+    if ((Player.getX() > 8 && Player.getX() < 91) && (Player.getY() > 129 && Player.getY() < 134 ) && (Player.getZ () > 46 && Player.getZ() < 50)) return true
     else return false;
 }
 
+function atDev() {
+    if ((Player.getX() > 106 && Player.getX() < 111) && (Player.getY() > 119 && Player.getY() < 122) && (Player.getZ() > 92 && Player.getZ() < 95)) return 1;
+    // Party > [MVP+] jcnlk: x: 61, y: 131, z: 142
+    // Party > [MVP+] jcnlk: x: 59, y: 132, z: 138
+    else if ((Player.getX() > 58 && Player.getX() < 62) && (Player.getY() > 130 && Player.getY() < 135) && (Player.getZ() > 137 && Player.getZ() < 143)) return 2;
+    // Party > [MVP+] jcnlk: x: 3, y: 120, z: 76
+    // Party > [MVP+] jcnlk: x: -2, y: 120, z: 78
+    else if ((Player.getX() > -3 && Player.getX() < 4) && (Player.getY() > 119 && Player.getY() < 123) && (Player.getZ() > 75 && Player.getZ() < 79)) return 3;
+    //else if ((Player.getX() > 61 && Player.getX() < 65) && (Player.getY() > 126 && Player.getY() < 130) && (Player.getZ() > 33 && Player.getZ() < 37)) return 4; // not needed rn
+    else return 0;
+}
+
 register('worldLoad', () => {
+    inMaxor = false;
+    inStorm = false;
     goldorPhase = 0;
     lastSend = 0;
     alreadySenti4 = false;
     alreadySenti4Entry = false;
     alreadySentEnteredi4 = false;
+    lastSendDev = 0;
 })
 
 register("chat", (message) => {
-    if (message == '[BOSS] Storm: I should have known that I stood no chance.') goldorPhase = 1;
-    else if ((message.includes('(7/7)') || message.includes('(8/8)')) && !message.includes(':')) goldorPhase += 1;
+    if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
+        goldorPhase = 1;
+        inMaxor = false; // just incase as a backup
+        inStorm = false;
+    }
+    else if ((message.includes('(7/7)') || message.includes('(8/8)')) && !message.includes(':')) {
+        goldorPhase += 1;
+        inMaxor = false; // just as a backup
+        inStorm = false; // same here
+    }
+    else if (message == "[BOSS] Storm: Pathetic Maxor, just like expected.") {
+        inMaxor = false;
+        inStorm = true;
+    }
+    else if (message == "[BOSS] Maxor: WELL WELL WELL LOOK WHO'S HERE!") inMaxor = true;
 }).setCriteria("${message}")
 
 register("tick", () => {
@@ -84,19 +115,60 @@ register("tick", () => {
 
 // This is used because some of the i4 position annoucements are overlapping with inGoldorPhase positions
 register("tick", () => {
+    // Helper function to get player class
+    function getPlayerClass() {
+        const regex = new RegExp(`${Player.getName()} \\((\\w+)`);
+        const match = TabList.getNames()
+            .map(a => ChatLib.removeFormatting(a))
+            .join(", ")
+            .match(regex);
+        return match ? match[1] : null;
+    }
+
     if (config.announcei4Position) {
-        if (goldorPhase === 1) {
-            if (ati4() && !alreadySenti4) {
-                ChatLib.command(`pc At i4!`);
-                alreadySenti4 = true;
+        if (inStorm) {
+            const playerClass = getPlayerClass();
+            if (!config.i4PositionBerserkerOnly || playerClass === 'Berserk') {
+                if (ati4() && !alreadySenti4) {
+                    ChatLib.command(`pc At i4!`);
+                    alreadySenti4 = true;
+                }
+                else if (ati4Entry() && !alreadySenti4Entry) {
+                    ChatLib.command(`pc At i4 Entry (HEALER CAN LEAP)!`);
+                    alreadySenti4Entry = true;
+                }
+                else if (Enteredi4() && !alreadySentEnteredi4) {
+                    ChatLib.command(`pc Moving to i4 (DON'T LEAP)!`);
+                    alreadySentEnteredi4 = true;
+                }
             }
-            else if (ati4Entry() && !alreadySenti4Entry) {
-                ChatLib.command(`pc At i4 Entry (HEALER CAN LEAP)!`);
-                alreadySenti4Entry = true;
+        }
+    }
+
+    const playerClass = getPlayerClass();
+
+    if (config.announcePreSS) {
+        if (inStorm) {
+            if (!config.PreSSHealerOnly || playerClass === 'Healer') {
+                if (atDev() === 1 && !lastSendDev) {
+                    ChatLib.command(`pc At SS!`);
+                    lastSendDev = 1;
+                }
             }
-            else if (Enteredi4() && !alreadySentEnteredi4) {
-                ChatLib.command(`pc Moving to i4 (DON'T LEAP)!`);
-                alreadySentEnteredi4 = true;
+        }
+    }
+
+    if (config.announcePreDevPosition) {
+        if (inStorm) {
+            if (!config.PreDevPositionHealerOnly || playerClass === 'Healer') {
+                if (atDev() === 2 && lastSendDev !== 2) {
+                    ChatLib.command(`pc At Pre Dev 2!`);
+                    lastSendDev = 2;
+                }
+                if (atDev() === 3 && lastSendDev !== 3) {
+                    ChatLib.command(`pc At Pre Dev 3!`);
+                    lastSendDev = 3;
+                }
             }
         }
     }
