@@ -58,7 +58,8 @@ export const greenItems = [
     "WITHER_CLOAK",
     "WITHER_LEGGINGS",
     "WITHER_BLOOD",
-    "DARK_CLAYMORE"
+    "DARK_CLAYMORE",
+    "SOULWEAVER_GLOVES"
   ];
   
   export const redItems = [

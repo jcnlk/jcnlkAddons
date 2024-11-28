@@ -238,12 +238,12 @@ class Config {
     announcei4Position = true;
     
     @CheckboxProperty({
-        name: "Berserker Only",
+        name: "Berserk Only",
         description: `Only announce i4 positions as Berserker (${GREEN}Recommended${RESET}).`,
         category: "Dungeons",
         subcategory: "F7/M7"
     })
-    i4PositionBerserkerOnly = false;
+    i4PositionBerserkOnly = false;
     
     @SwitchProperty({
         name: "Announce Pre SS",
@@ -276,6 +276,54 @@ class Config {
         subcategory: "F7/M7"
     })
     PreDevPositionHealerOnly = false;
+
+    @SwitchProperty({
+        name: "Announce Pre Enter P2",
+        description: `Announce to Party Chat when you Pre Enter P2 (Storm Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcePreEnterP2 = true;
+
+    @CheckboxProperty({
+        name: "Berserk Only (Pre Enter P2)",
+        description: `Only announce Pre Enter P2 as Berserk (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreEnterP2BerserkOnly = true;
+
+    @CheckboxProperty({
+        name: "Mage Only (Pre Enter P2)",
+        description: `Only announce Pre Enter P2 as Mage (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreEnterP2MageOnly = true;
+
+    @SwitchProperty({
+        name: "Mask Reminder",
+        description: "Reminds you to equip a Bonzo/Spirit Mask before P3.",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    MaskReminder = true;
+
+    @SwitchProperty({
+        name: "i4 Position Titles",
+        description: "Show titles when players announce i4 positions in party chat.",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    i4PositionTitles = true;
+
+    @CheckboxProperty({
+        name: "Healer Only (i4 Titles)",
+        description: `Only show i4 position titles if you're the Healer (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    i4TitlesHealerOnly = false;
 
     // Party Commands
     @SwitchProperty({
@@ -473,7 +521,7 @@ class Config {
         name: "Enable Chest Highlighting",
         description: `Highlights loot in kuudra chests according to their value \n(${GREEN}God Roll${RESET}, ${YELLOW}Good Roll${RESET}, ${RED}Bad Roll${RESET}).`,
         category: "WIP",
-        subcategory: `Kuudra Loot Highlight (${GREEN}SHOULD WORK${RESET}`
+        subcategory: `Kuudra Loot Highlight (${GREEN}SHOULD WORK${RESET})`
     })
     enableChestScanning = true;
 
@@ -488,7 +536,7 @@ class Config {
     //Dev Stuff
     @SwitchProperty({
         name: "Debug Mode",
-        description: `Enable detailed debug messages for troubleshooting. \n${GRAY}(We don't talk about messed up debgging..)${RESET}`,
+        description: `Enable detailed debug messages for troubleshooting. \n${GRAY}(We don't talk about the messed up debgging..)${RESET}`,
         category: "Dev Stuff",
         subcategory: "Debug"
      })
@@ -502,7 +550,7 @@ class Config {
         this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <crypts, puzzles>${RESET} \n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
-        this.setCategoryDescription("Miscellaneous", `${ConfigHeader} \n\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
+        this.setCategoryDescription("Miscellaneous", `${ConfigHeader}\n\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("HUD", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
         this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
         this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <test>, /getdungeoninfo, /getcurrentarea, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
@@ -524,9 +572,12 @@ class Config {
         this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder");
         this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting");
-        this.addDependency("Berserker Only", "Announce i4 Position");
+        this.addDependency("Berserk Only", "Announce i4 Position");
         this.addDependency("Healer Only (Pre SS)", "Announce Pre SS");
         this.addDependency("Healer Only (Pre Dev)", "Announce Pre Dev Position");
+        this.addDependency("Berserk Only (Pre Enter P2)", "Announce Pre Enter P2");
+        this.addDependency("Mage Only (Pre Enter P2)", "Announce Pre Enter P2");
+        this.addDependency("Healer Only (i4 Titles)", "i4 Position Titles")
 
         // Add dependencies for Party Commands
         const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Help Command &3!commands help&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
