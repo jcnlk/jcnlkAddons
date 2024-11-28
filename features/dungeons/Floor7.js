@@ -12,9 +12,6 @@ import { showTitle } from "../../utils/Title";
  * - Make Pre Enter P5 announcement
  *      - Healer only option
  * - Making "ati4Entry" annoucement when waiting (means no announcement when insta enter)
- * - Create a Title if somebody is Pre Enter - Player.getX(${playerName}) && Player.getY(${playerName}) && Player.getZ(${playerName})
- *      - Only show the ati4Entry title to Healer
- *      - Don't show if Client sent it (no self title)
  */
 
 let inMaxor = false;
@@ -305,14 +302,21 @@ function checkPreEnterMessage(message) {
 }
 
 register("chat", (name, message) => {
+    if (!config.PreEnterTitles) return;
     if (name === Player.getName()) return;
     
     const phase = checkPreEnterMessage(message);
     if (phase) {
-        const titleText = phase === "5" ? 
-            `${GREEN} ${name} at Core!` : 
-            `${GREEN} ${name} at Pre Enter ${phase}!`;
-        showPartyTitle(titleText);
+        const currentTime = Date.now();
+        if (currentTime - lastTitleTime < TITLE_COOLDOWN) return;
+
+        const titleText = phase === "5" ?
+            `${GREEN}${name} at Core!` :
+            `${GREEN}${name} at Pre Enter ${phase}!`;
+            
+        showTitle(titleText, 3000, true);
+        meowSoundLoop(3000);
+        lastTitleTime = currentTime;
     }
 }).setCriteria("Party > ${name}: ${message}");
 
@@ -373,7 +377,7 @@ function meowSoundLoopMoving(duration) {
 }
 
 register("chat", (name, message) => {
-    if (!config.enablei4PositionTitles) return;
+    if (!config.i4PositionTitles) return;
     if (name === Player.getName()) return;
 
     if (config.i4TitlesHealerOnly) {

@@ -211,71 +211,15 @@ class Config {
         category: "Dungeons",
         subcategory: "Dungeon Loot Highlighting"
     })
-    enableDungeonLootChatOutput = true;
+    enableDungeonLootChatOutput = false;
 
     @SwitchProperty({
-        name: "Fire Freeze Notification",
-        description: "Tells you when to Fire Freeze in M3.",
-        category: "Dungeons",
-        subcategory: "M3"
-    })
-    FireFreezeNotifier = true
-
-    @SwitchProperty({
-        name: "Announce Pre Enter Phase 3",
-        description: `Announce to Party Chat when you Pre Enter in Phase 3 (Terminal Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        name: "Mask Reminder",
+        description: "Reminds you to equip a Bonzo/Spirit Mask before P3.",
         category: "Dungeons",
         subcategory: "F7/M7"
     })
-    announcePreEnterPhase3 = true
-
-    @SwitchProperty({
-        name: "Announce i4 Position",
-        description: `Announce your i4 position in Party Chat (i4 Entry, Moving to i4, At i4). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcei4Position = true;
-    
-    @CheckboxProperty({
-        name: "Berserk Only",
-        description: `Only announce i4 positions as Berserker (${GREEN}Recommended${RESET}).`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    i4PositionBerserkOnly = false;
-    
-    @SwitchProperty({
-        name: "Announce Pre SS",
-        description: `Announce if you are at Pre SS (Simon Says aka 1st Dev). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcePreSS = true;
-    
-    @CheckboxProperty({
-        name: "Healer Only (Pre SS)",
-        description: `Only announce Pre SS position as Healer (${GREEN}Recommended${RESET}).`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreSSHealerOnly = false;
-
-    @SwitchProperty({
-        name: "Announce Pre Dev Position",
-        description: `Announce your position during Pre Dev to Party Chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcePreDevPosition = true;
-    
-    @CheckboxProperty({
-        name: `Healer Only (Pre Dev)`,
-        description: `Only announce Pre Dev positions as Healer (${GREEN}Recommended${RESET}).`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreDevPositionHealerOnly = false;
+    MaskReminder = true;
 
     @SwitchProperty({
         name: "Announce Pre Enter P2",
@@ -302,12 +246,36 @@ class Config {
     PreEnterP2MageOnly = true;
 
     @SwitchProperty({
-        name: "Mask Reminder",
-        description: "Reminds you to equip a Bonzo/Spirit Mask before P3.",
+        name: "Announce Pre Enter Phase 3",
+        description: `Announce to Party Chat when you Pre Enter in Phase 3 (Terminal Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
         category: "Dungeons",
         subcategory: "F7/M7"
     })
-    MaskReminder = true;
+    announcePreEnterPhase3 = true
+
+    @SwitchProperty({
+        name: "Enable Pre Enter Titles",
+        description: "Show titles when players announce Pre Enter positions in party chat.",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreEnterTitles = true;
+
+    @SwitchProperty({
+        name: "Announce i4 Position",
+        description: `Announce your i4 position in Party Chat (i4 Entry, Moving to i4, At i4). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcei4Position = true;
+    
+    @CheckboxProperty({
+        name: "Berserk Only",
+        description: `Only announce i4 positions as Berserker (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    i4PositionBerserkOnly = true;
 
     @SwitchProperty({
         name: "i4 Position Titles",
@@ -323,7 +291,47 @@ class Config {
         category: "Dungeons",
         subcategory: "F7/M7"
     })
-    i4TitlesHealerOnly = false;
+    i4TitlesHealerOnly = true;
+    
+    @SwitchProperty({
+        name: "Announce Pre Dev Position",
+        description: `Announce your position during Pre Dev to Party Chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcePreDevPosition = true;
+    
+    @CheckboxProperty({
+        name: `Healer Only (Pre Dev)`,
+        description: `Only announce Pre Dev positions as Healer (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreDevPositionHealerOnly = true;
+
+    @SwitchProperty({
+        name: "Announce Pre SS",
+        description: `Announce if you are at Pre SS (Simon Says aka 1st Dev). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcePreSS = true;
+    
+    @CheckboxProperty({
+        name: "Healer Only (Pre SS)",
+        description: `Only announce Pre SS position as Healer (${GREEN}Recommended${RESET}).`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreSSHealerOnly = true;
+
+    @SwitchProperty({
+        name: "Fire Freeze Notification",
+        description: "Tells you when to Fire Freeze in M3.",
+        category: "Dungeons",
+        subcategory: "M3"
+    })
+    FireFreezeNotifier = true
 
     // Party Commands
     @SwitchProperty({
