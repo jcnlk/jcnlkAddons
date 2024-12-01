@@ -79,7 +79,8 @@ export const greenItems = [
     "NECROMANCER_SWORD",
     "GOLDOR_FISH",
     "MAXOR_THE_FISH",
-    "STORM_THE_FISH"
+    "STORM_THE_FISH",
+    "ADAPTIVE_BELT"
   ];
   
 export const greenEnchantments = [
