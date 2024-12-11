@@ -81,6 +81,12 @@ export function inMaxor() {
     return bossName.removeFormatting().includes('Maxor');
 }
 
+export function inStorm() {
+    const bossName = BossStatus.field_82827_c;
+    if (!bossName) return false;
+    return bossName.removeFormatting().includes('Storm');
+}
+
 export function inGoldor() {
     const bossName = BossStatus.field_82827_c;
     if (!bossName) return false;

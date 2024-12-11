@@ -214,6 +214,14 @@ class Config {
     enableDungeonLootChatOutput = false;
 
     @SwitchProperty({
+        name: "Announce Pre Enter P2",
+        description: `Announce to Party Chat when you Pre Enter P2 (Storm Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announcePreEnterP2 = true;
+
+    @SwitchProperty({
         name: "Mask Reminder",
         description: "Reminds you to equip a Bonzo/Spirit Mask before P3.",
         category: "Dungeons",
@@ -222,31 +230,7 @@ class Config {
     MaskReminder = true;
 
     @SwitchProperty({
-        name: "Announce Pre Enter P2",
-        description: `Announce to Party Chat when you Pre Enter P2 (Storm Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcePreEnterP2 = true;
-
-    @CheckboxProperty({
-        name: "Berserk Only (Pre Enter P2)",
-        description: `Only announce Pre Enter P2 as Berserk (${GREEN}Recommended${RESET}).`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreEnterP2BerserkOnly = true;
-
-    @CheckboxProperty({
-        name: "Mage Only (Pre Enter P2)",
-        description: `Only announce Pre Enter P2 as Mage (${GREEN}Recommended${RESET}).`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreEnterP2MageOnly = true;
-
-    @SwitchProperty({
-        name: "Announce Pre Enter Phase 3",
+        name: "Announce Pre Enter P3",
         description: `Announce to Party Chat when you Pre Enter in Phase 3 (Terminal Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
         category: "Dungeons",
         subcategory: "F7/M7"
@@ -268,14 +252,6 @@ class Config {
         subcategory: "F7/M7"
     })
     announcei4Position = true;
-    
-    @CheckboxProperty({
-        name: "Berserk Only",
-        description: `Only announce i4 positions as Berserker (${GREEN}Recommended${RESET}).`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    i4PositionBerserkOnly = true;
 
     @SwitchProperty({
         name: "i4 Position Titles",
@@ -284,14 +260,6 @@ class Config {
         subcategory: "F7/M7"
     })
     i4PositionTitles = true;
-
-    @CheckboxProperty({
-        name: "Healer Only (i4 Titles)",
-        description: `Only show i4 position titles if you're the Healer (${GREEN}Recommended${RESET}).`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    i4TitlesHealerOnly = true;
     
     @SwitchProperty({
         name: "Announce Pre Dev Position",
@@ -300,30 +268,54 @@ class Config {
         subcategory: "F7/M7"
     })
     announcePreDevPosition = true;
-    
-    @CheckboxProperty({
-        name: `Healer Only (Pre Dev)`,
-        description: `Only announce Pre Dev positions as Healer (${GREEN}Recommended${RESET}).`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreDevPositionHealerOnly = true;
 
     @SwitchProperty({
-        name: "Announce Pre SS",
-        description: `Announce if you are at Pre SS (Simon Says aka 1st Dev). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
+        name: "Announce Pre Enter P4",
+        description: `Announce your Pre Enter P4 position to Party Chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
         category: "Dungeons",
         subcategory: "F7/M7"
     })
-    announcePreSS = true;
-    
-    @CheckboxProperty({
-        name: "Healer Only (Pre SS)",
-        description: `Only announce Pre SS position as Healer (${GREEN}Recommended${RESET}).`,
+    announcePreP4 = true;
+
+    @SwitchProperty({
+        name: "Announce Pre Enter P5",
+        description: `Announce your Pre Enter P5 position to Party Chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
         category: "Dungeons",
         subcategory: "F7/M7"
     })
-    PreSSHealerOnly = true;
+    announcePreP5 = true;
+
+    @SwitchProperty({
+        name: "Pre Enter P2 Titles",
+        description: "Text",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreP2Titles = true;
+
+    @SwitchProperty({
+        name: "Pre Enter P4 Titles",
+        description: "Text",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreP4Titles = true;
+
+    @SwitchProperty({
+        name: "Pre Enter P5 Titles",
+        description: "Text",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreP5Titles = true;
+
+    @SwitchProperty({
+        name: "Pre Dev Titles",
+        description: "Text",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    PreDevTitles = true;
 
     @SwitchProperty({
         name: "Fire Freeze Notification",
@@ -580,12 +572,6 @@ class Config {
         this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder");
         this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting");
-        this.addDependency("Berserk Only", "Announce i4 Position");
-        this.addDependency("Healer Only (Pre SS)", "Announce Pre SS");
-        this.addDependency("Healer Only (Pre Dev)", "Announce Pre Dev Position");
-        this.addDependency("Berserk Only (Pre Enter P2)", "Announce Pre Enter P2");
-        this.addDependency("Mage Only (Pre Enter P2)", "Announce Pre Enter P2");
-        this.addDependency("Healer Only (i4 Titles)", "i4 Position Titles")
 
         // Add dependencies for Party Commands
         const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Help Command &3!commands help&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
