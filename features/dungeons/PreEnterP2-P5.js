@@ -35,7 +35,7 @@ function atPreP4() {
 }
 
 function atMid() {
-    if ((Player.getX() > 48 && Player.getX() < 60) && (Player.getY() < 63 && Player.getY() > 70) && (Player.getZ() > 70 && Player.getZ() > 82)) return true;
+    if ((Player.getX() > 48 && Player.getX() < 60) && (Player.getY() > 63 && Player.getY() < 70) && (Player.getZ() > 70 && Player.getZ() < 82)) return true;
     else return false;  
 }
 
@@ -96,16 +96,20 @@ register("tick", () => {
         }
     }
     if (config.announcePreP4) {
-        if (atMid() && inGoldor && !SendPreMid) {
-            ChatLib.command(`At Mid!`);
-            SendPreMid = true;
-            showGeneralJAMessage(`Annouced At Mid Position.`);
+        if (atMid() && !SendPreMid) {
+            if (inGoldor) {
+                ChatLib.command(`pc At Mid!`);
+                SendPreMid = true;
+                showGeneralJAMessage(`Annouced At Mid Position.`);
+            }
         }
-        if (atPreP4() && inGoldor && !SendPreP4) {
-            ChatLib.command(`pc At P4!`);
-            SendPreP4 = true;
-            showGeneralJAMessage(`Announced At P4 Position.`);
-        } 
+        else if (!atMid() && !SendPreP4) {
+            if (atPreP4() && inGoldor) {
+                ChatLib.command(`pc At P4!`);
+                SendPreP4 = true;
+                showGeneralJAMessage(`Announced At P4 Position.`);
+            } 
+        }
     }
     if (config.announcePreP5) {
         if (atPreP5() && inNecron && !SendPreP5) {

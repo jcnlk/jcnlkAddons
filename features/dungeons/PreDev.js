@@ -40,21 +40,23 @@ register("tick", () => {
     if (config.announcePreDevPosition) {
         const playerClass = getCurrentClass();
         if (playerClass === 'Healer') {
-            if (inMaxor || inStorm) {
-                if (atDev() === 1 && !SendDev1) {
-                    ChatLib.command(`pc At SS!`);
-                    SendDev1 = true;
-                    showGeneralJAMessage("Announced SS Position.");
+            if (inMaxor) {
+                if (atDev() === 3 && !SendDev3) {
+                    ChatLib.command(`pc At Pre Dev 3!`);
+                    SendDev3 = true;
+                    showGeneralJAMessage("Announced Pre Dev 3 Position.");
                 }
                 else if (atDev() === 2 && !SendDev2) {
                     ChatLib.command(`pc At Pre Dev 2!`);
                     SendDev2 = true;
                     showGeneralJAMessage("Announced Pre Dev 2 Position.");
                 }
-                else if (atDev() === 3 && !SendDev3) {
-                    ChatLib.command(`pc At Pre Dev 3!`);
-                    SendDev3 = true;
-                    showGeneralJAMessage("Announced Pre Dev 3 Position.");
+            }
+            if (inStorm) {
+                if (atDev() === 1 && !SendDev1) {
+                    ChatLib.command(`pc At SS!`);
+                    SendDev1 = true;
+                    showGeneralJAMessage("Announced SS Position.");
                 }
             }
         }
