@@ -1,5 +1,4 @@
 import config from "../../config";
-import { showTitle } from "../../utils/Title";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 import { getCurrentClass } from "../../utils/Dungeon";
 
@@ -31,7 +30,7 @@ function atPreP2() {
 }
 
 function atPreP4() {
-    if (Player.getY() < 111 && Player.getY() > 64) return true;
+    if (Player.getY() < 100 && Player.getY() > 64) return true;
     else return false;
 }
 
@@ -116,8 +115,6 @@ register("tick", () => {
         }
     }
 });
-
-// Titles for ee here
 
 register("gameUnload", () => {
     inGoldor = false;

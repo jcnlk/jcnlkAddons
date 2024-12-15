@@ -1,6 +1,5 @@
 
 import config from "../../config";
-import { showTitle } from "../../utils/Title";
 import { getCurrentClass } from "../../utils/Dungeon";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 
@@ -47,8 +46,6 @@ register("tick", () => {
         }
     }
 });
-
-//i4 tittles here (ig)
 
 register("worldUnload", () => {
     SendAti4 = false;

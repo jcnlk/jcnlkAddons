@@ -22,7 +22,7 @@ import {
     ITALIC, 
     RESET,
     ModuleVersion,   
-    Creator} from "./utils/Constants";
+    Creator         } from "./utils/Constants";
 import { 
     @Vigilant, 
     @SwitchProperty, 

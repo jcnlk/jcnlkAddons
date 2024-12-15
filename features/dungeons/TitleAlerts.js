@@ -35,7 +35,7 @@ function playMeowLoop(duration = 3000, pitch = 2) {
 }
 
 /**
- * Shows a dungeon alert title in a clean, non-intrusive way
+ * Shows a dungeon alert title in more cleaner
  * @param {string} mainText - The main title text
  * @param {string} subText - Optional subtitle text
  */
@@ -192,7 +192,7 @@ function checkPhaseMessage(message) {
     
     if (lowerMsg.includes("at ss") || 
         lowerMsg.includes("in ss") ||
-        lowerMsg.includes("at storm split")) {
+        lowerMsg.includes("at simon says")) {
         return "ss";
     }
     
@@ -223,8 +223,8 @@ register("chat", (name, message) => {
     if (phase) {
         const cleanName = removeRank(name);
         const mainText = phase === "5" ? 
-            `${GREEN}${cleanName} at Core!` : 
-            `${GREEN}${cleanName} at Pre Enter ${phase}!`;
+            `${YELLOW}${cleanName} at Core!` : 
+            `${YELLOW}${cleanName} at Pre Enter ${phase}!`;
             
         showDungeonAlert(mainText);
         lastTitleTime = currentTime;
@@ -247,12 +247,12 @@ register("chat", (name, message) => {
         if (i4Status === "entry") {
             showDungeonAlert(
                 `${GREEN}${cleanName} at i4 entry!`,
-                `${GREEN}You can leap!`
+                //`${GREEN}You can leap!`
             );
         } else if (i4Status === "moving") {
             showDungeonAlert(
                 `${RED}${cleanName} is moving to i4!`,
-                `${RED}Don't leap yet!`
+                //`${RED}Don't leap yet!`
             );
         }
         lastTitleTime = currentTime;
@@ -284,7 +284,7 @@ register("chat", (event) => {
     switch(phaseStatus) {
         case "p2":
             if (!config.PreP2Titles) return;
-            showDungeonAlert(`${GREEN}${cleanName} at P2!`);
+            showDungeonAlert(`${YELLOW}${cleanName} at P2!`);
             break;
         case "mid":
             if (!config.PreP4Titles) return;
@@ -292,15 +292,15 @@ register("chat", (event) => {
             break;
         case "p4":
             if (!config.PreP4Titles) return;
-            showDungeonAlert(`${GREEN}${cleanName} at P4!`);
+            showDungeonAlert(`${YELLOW}${cleanName} at P4!`);
             break;
         case "p5":
             if (!config.PreP5Titles) return;
-            showDungeonAlert(`${GREEN}${cleanName} at P5!`);
+            showDungeonAlert(`${YELLOW}${cleanName} at P5!`);
             break;
         case "ss":
             if (!config.PreDevTitles) return;
-            showDungeonAlert(`${GREEN}${cleanName} at SS!`);
+            showDungeonAlert(`${YELLOW}${cleanName} at SS!`);
             break;
     }
     lastTitleTime = currentTime;
