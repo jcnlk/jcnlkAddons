@@ -101,6 +101,16 @@ function setDefaultY(y) {
     }
 }
 
+/**
+ * Formats time in seconds to a string
+ * @param {number} seconds - Time in seconds
+ * @returns {string} Formatted time string
+ */
+export function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}m ${remainingSeconds}s`;
+}
 
 // Test command
 register("command", (...args) => {
@@ -122,7 +132,6 @@ register("command", (...args) => {
         ChatLib.chat("§cCould not parse coordinates from input");
     }
 }).setName("formatcoords");
-
 
 export {
     formatCoordinates,

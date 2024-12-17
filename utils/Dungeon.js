@@ -1,5 +1,6 @@
 import { getCurrentArea } from "./Area";
 import { showDebugMessage, showGeneralJAMessage } from "./ChatUtils";
+import { formatTime } from "./Formatting";
 
 const BossStatus = Java.type('net.minecraft.entity.boss.BossStatus');
 
@@ -109,11 +110,69 @@ export function getBossHealthPercent() {
     return BossStatus.field_82828_a;
 }
 
+export function getCrypts() {
+    try {
+        const tabList = TabList.getNames();
+        if (!tabList) {
+            //showDebugMessage("TabList is null in getCryptCountFromTablist", 'error');
+            return 0;
+        }
+        for (let line of tabList) {
+            line = ChatLib.removeFormatting(line);
+            if (line.includes("Crypts: ")) {
+                const count = parseInt(line.split("Crypts: ")[1]);
+                return isNaN(count) ? 0 : count;
+            }
+        }
+    } catch (error) {
+        //showDebugMessage(`Error in getCryptCountFromTablist: ${error}`, 'error');
+    }
+    return 0;
+}
+
+/**
+ * Gets the current dungeon time from the tablist
+ * @returns {number|null} Time in seconds or null if not found
+ */
+export function getDungeonTime() {
+    try {
+        const tabList = TabList.getNames();
+        if (!tabList || tabList.length < 46) {
+            //showDebugMessage("Tablist is not long enough to read time information", 'warning');
+            return null;
+        }
+
+        const timeLine = ChatLib.removeFormatting(tabList[45]).trim();
+        
+        if (!timeLine.startsWith("Time: ")) {
+            //showDebugMessage(`Unexpected time line format: "${timeLine}"`, 'warning');
+            return null;
+        }
+
+        // Match either "XXm XXs" or just "XXs"
+        const timeMatch = timeLine.match(/Time: (?:(\d+)m )?(\d+)s/);
+        
+        if (timeMatch) {
+            const minutes = timeMatch[1] ? parseInt(timeMatch[1]) : 0;
+            const seconds = parseInt(timeMatch[2]);
+            return minutes * 60 + seconds;
+        } else {
+            //showDebugMessage(`Failed to parse time from tablist: "${timeLine}"`, 'warning');
+            return null;
+        }
+    } catch (error) {
+        //showDebugMessage(`Error in getTimeFromTablist: ${error}`, 'error');
+        return null;
+    }
+}
+
 register("command", function() {
     const floor = getCurrentFloor();
     const currentClass = getCurrentClass();
     showGeneralJAMessage("Current Floor: " + (floor ? (floor.type + floor.number) : 'Not in dungeon'));
+    showGeneralJAMessage("Current Dungeon Time: " + (formatTime(getDungeonTime())));
     showGeneralJAMessage("Current Class: " + (currentClass || 'Unknown'));
+    showGeneralJAMessage("Crypt Count: "+ (getCrypts()));
     showGeneralJAMessage("In Dungeon: " + inDungeon());
     showGeneralJAMessage("Boss Health: " + (getBossHealthPercent() * 100) + "%");
     showGeneralJAMessage(`InMaxor: ` + (inMaxor()));

@@ -287,7 +287,7 @@ class Config {
 
     @SwitchProperty({
         name: "Pre Enter P2 Titles",
-        description: "Text",
+        description: "Gives you a title when someone Pre Enter P2.",
         category: "Dungeons",
         subcategory: "F7/M7"
     })
@@ -295,7 +295,7 @@ class Config {
 
     @SwitchProperty({
         name: "Pre Enter P4 Titles",
-        description: "Text",
+        description: "Gives you a title when someone Pre Enter P4.",
         category: "Dungeons",
         subcategory: "F7/M7"
     })
@@ -303,15 +303,15 @@ class Config {
 
     @SwitchProperty({
         name: "Pre Enter P5 Titles",
-        description: "Text",
+        description: "Gives you a title when Healer Pre Enter P5.",
         category: "Dungeons",
         subcategory: "F7/M7"
     })
     PreP5Titles = true;
 
     @SwitchProperty({
-        name: "Pre Dev Titles",
-        description: "Text",
+        name: "Pre Dev Title",
+        description: "Gives you a title when someone is at SS (Simon Says).",
         category: "Dungeons",
         subcategory: "F7/M7"
     })
@@ -499,7 +499,7 @@ class Config {
     //HUD
     @SwitchProperty({
         name: "Enable Test HUD",
-        description: "Shows a test HUD on your screen.",    
+        description: "Shows a test HUD on your screen (Currently not cuz i disabled it).",    
         category: "HUD",
         subcategory: "Test HUD"
     })
@@ -547,13 +547,13 @@ class Config {
 
         // Set category descriptions
         this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, help>, /reminder, /todo${RESET}`);
-        this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <crypts, puzzles>${RESET} \n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
+        this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("Miscellaneous", `${ConfigHeader}\n\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("HUD", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
         this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
-        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <test>, /getdungeoninfo, /getcurrentarea, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
+        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <test>, /getcurrentarea, /getdungeoninfo, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
 
         // Add dependencies for General
         this.addDependency("Reminder Popup Color", "Enable Reminders");

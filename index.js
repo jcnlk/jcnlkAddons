@@ -4,7 +4,6 @@ import * as Reminders from "./features/general/Reminders";
 import { scanItemAttributes } from "./utils/KuudraLootScanner.js";
 import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
-import "./features/dungeons/DungeonUtils";
 import "./utils/HighlightSlots";
 import "./utils/Area";
 import "./utils/ItemID";
@@ -18,7 +17,7 @@ import "./utils/ItemAttribute";
 import "./features/miscellaneous/GreatSpookSolver";
 import "./utils/ClickableMessageContent";
 import "./utils/Constants";
-import "./utils/FormatCoords";
+import "./utils/Formatting";
 import "./utils/Waypoints";
 import "./utils/Data";
 import "./features/general/TestHud";
@@ -91,17 +90,6 @@ function initializeSlashCommands() {
         subCommand = subCommand.toLowerCase();
 
         switch (subCommand) {
-            case "crypts":
-                if (config.enableCryptReminder) {
-                    showGeneralJAMessage(`Current Crypt Count: ${Dungeons.killedCrypts}`);
-                } else {
-                    showGeneralJAMessage("Crypt Reminder is currently disabled.");
-                }
-                break;
-            case "puzzles":
-                displayPuzzleStatus();
-                showDebugMessage("Displayed puzzle status");
-                break;
             case "emote":
             if (args.length < 1) {
                 showGeneralJAMessage("Usage: /ja emote [add|remove|list] [emotename] [emote]");

@@ -1,24 +1,16 @@
 import Config from "../../config";
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 import { showTitle } from "../../utils/Title";
-import {
-    checkInDungeon,
-    getCryptCountFromTablist,
-    getTimeFromTablist,
-    analyzePuzzleInfo,
-    formatTime,
-    formatCryptCount,
-    getDungeonFloor
-} from "./DungeonUtils";
+import { 
+    inDungeon,
+    getCrypts,
+    getCurrentFloor,
+    getDungeonTime } from "../../utils/Dungeon";
 
-// Global variables
 let killedCrypts = 0;
-let inDungeon = false;
 let reminderSent = false;
 let reminderEligibleTime = 0;
 let checkDungeonTimeout = null;
-let puzzleStates = {};
-let lastTotalPuzzles = 0;
 
 /**
  * Initializes the Dungeon module
@@ -33,13 +25,22 @@ function initialize() {
 }
 
 /**
+ * Formats crypt count for display
+ * @param {number} count - Crypt count
+ * @returns {string} Formatted crypt count
+ */
+function formatCryptCount(count) {
+    return count > 5 ? "5+" : count.toString();
+}
+
+/**
  * Updates the crypt count
  * @returns {boolean} True if count was updated, false otherwise
  */
 function updateCryptCount() {
-    if (!inDungeon || !Config.enableCryptReminder) return false;
+    if (!inDungeon() || !Config.enableCryptReminder) return false;
 
-    const newCount = getCryptCountFromTablist();
+    const newCount = getCrypts();
     if (newCount !== killedCrypts) {
         killedCrypts = newCount;
         showGeneralJAMessage(`Updated Killed Crypts: ${formatCryptCount(killedCrypts)}`);
@@ -85,12 +86,9 @@ function showCryptReminderPopup(cryptsNeeded) {
 
     const colorCodes = ["§c", "§a", "§b", "§e", "§f", "§d"];
     const selectedColor = colorCodes[Config.cryptReminderPopupColor];
-    
-    const popupMessage = `Need ${cryptsNeeded} more crypts!`;
-    
 
-    showTitle(`${selectedColor} ${popupMessage}`, 5000, true, `${selectedColor}Crypt Reminder`);
-    showDebugMessage(`Showing crypt reminder popup: ${popupMessage}`);
+    showTitle(`${selectedColor} Need ${cryptsNeeded} more crypts!`, 5000, true); //, `${selectedColor}Crypt Reminder`
+    showDebugMessage(`Showing crypt reminder popup.`);
 }
 
 /**
@@ -122,7 +120,7 @@ export function searchForTimeLine() {
             }
             return;
         }
-        const time = getTimeFromScoreboard(currentLine);
+        const time = getDungeonTime(currentLine);
         if (time !== null) {
             timeScoreboardLine = currentLine;
             if (Config.debugMode) {
@@ -138,67 +136,6 @@ export function searchForTimeLine() {
 }
 
 /**
- * Outputs changes in puzzle states
- */
-function outputPuzzleChanges() {
-    const analysis = analyzePuzzleInfo();
-    if (!analysis) return;
-
-    const { counts, totalPuzzles } = analysis;
-    let changesDetected = false;
-
-    // Check for changes in total puzzles
-    if (lastTotalPuzzles !== totalPuzzles) {
-        //showGeneralJAMessage(`Total puzzles changed from ${lastTotalPuzzles} to ${totalPuzzles}`);
-        lastTotalPuzzles = totalPuzzles;
-        changesDetected = true;
-    }
-
-    // Compare new counts with previous states to detect changes
-    for (const [state, count] of Object.entries(counts)) {
-        if (puzzleStates[state] !== count) {
-            const stateCapitalized = state.charAt(0).toUpperCase() + state.slice(1);
-            //showGeneralJAMessage(`${stateCapitalized} puzzles changed from ${puzzleStates[state] || 0} to ${count}`);
-            puzzleStates[state] = count;
-            changesDetected = true;
-        }
-    }
-
-    // Only output the current status if changes were detected
-    if (changesDetected) {
-        //showGeneralJAMessage(`Current puzzle status: ${counts.unexplored} unexplored, ${counts.explored} explored, ${counts.finished} finished, ${counts.failed} failed`);
-    }
-}
-
-/**
- * Displays current puzzle status
- */
-export function displayPuzzleStatus() {
-    const analysis = analyzePuzzleInfo();
-    if (!analysis) {
-        showGeneralJAMessage("Not in a dungeon or no puzzle information available.");
-        return;
-    }
-
-    const { counts, totalPuzzles } = analysis;
-    showGeneralJAMessage("Current Puzzle Status:");
-    showGeneralJAMessage(`Total Puzzles: ${totalPuzzles}`);
-    showGeneralJAMessage(`Unexplored: ${counts.unexplored}`);
-    showGeneralJAMessage(`Explored: ${counts.explored}`);
-    showGeneralJAMessage(`Finished: ${counts.finished}`);
-    showGeneralJAMessage(`Failed: ${counts.failed}`);
-}
-
-/**
- * Resets the puzzle state
- */
-function resetPuzzleState() {
-    puzzleStates = {};
-    lastTotalPuzzles = 0;
-    showDebugMessage("Puzzle state reset");
-}
-
-/**
  * Starts the main loop for dungeon tracking
  */
 function startMainLoop() {
@@ -207,36 +144,27 @@ function startMainLoop() {
 
         if (checkDungeonTimeout === null) {
             checkDungeonTimeout = setTimeout(function() {
-                const wasInDungeon = inDungeon;
-                inDungeon = checkInDungeon();
+                const wasInDungeon = inDungeon();
 
-                if (inDungeon !== wasInDungeon) {
-                    if (inDungeon) {
-                        const currentFloor = getDungeonFloor();
-                        showGeneralJAMessage("Entered Dungeon" + (currentFloor ? " (" + currentFloor + ")" : '') + ". Starting Crypt Reminder and Puzzle Tracking.");
+                if (inDungeon() !== wasInDungeon) {
+                    if (inDungeon()) {
+                        const currentFloor = getCurrentFloor();
+                        showGeneralJAMessage("Entered Dungeon" + (currentFloor ? " (" + currentFloor + ")" : ''));
                         killedCrypts = 0;
                         reminderSent = false;
                         reminderEligibleTime = 0;
-                        resetPuzzleState();
                     } else {
                         showGeneralJAMessage("Dungeon Left!");
                         reminderSent = false;
                         reminderEligibleTime = 0;
-                        resetPuzzleState();
                     }
                 }
 
-                if (inDungeon) {
-                    const currentDungeonTime = getTimeFromTablist();
+                if (inDungeon()) {
+                    const currentDungeonTime = getDungeonTime();
                     if (currentDungeonTime !== null) {
                         updateCryptCount();
                         sendCryptReminder(currentDungeonTime);
-                        outputPuzzleChanges();
-                        
-                        if (Config.debugMode && currentDungeonTime % 30 === 0) {
-                            const currentFloor = getDungeonFloor();
-                            showDebugMessage("Status: Floor: " + (currentFloor || 'Unknown') + ", Crypts: " + formatCryptCount(killedCrypts) + ", Time: " + formatTime(currentDungeonTime));
-                        }
                     }
                 }
 
