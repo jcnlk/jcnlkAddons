@@ -109,7 +109,6 @@ export function getBossHealthPercent() {
     return BossStatus.field_82828_a;
 }
 
-// Add a new command for testing
 register("command", function() {
     const floor = getCurrentFloor();
     const currentClass = getCurrentClass();
@@ -117,5 +116,10 @@ register("command", function() {
     showGeneralJAMessage("Current Class: " + (currentClass || 'Unknown'));
     showGeneralJAMessage("In Dungeon: " + inDungeon());
     showGeneralJAMessage("Boss Health: " + (getBossHealthPercent() * 100) + "%");
+    showGeneralJAMessage(`InMaxor: ` + (inMaxor()));
+    showGeneralJAMessage(`InStorm: ` + (inStorm()));
+    showGeneralJAMessage(`InGoldor: ` + (inGoldor()));
+    showGeneralJAMessage(`InNecron: ` + (inNecron()));
+    showGeneralJAMessage(`InWitherKing: ` + (inWitherKing()));
     showDebugMessage("getDungeonInfo command executed");
 }).setName("getDungeonInfo");

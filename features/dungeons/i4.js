@@ -1,12 +1,12 @@
 
 import config from "../../config";
-import { getCurrentClass } from "../../utils/Dungeon";
+import { getCurrentClass, inStorm } from "../../utils/Dungeon";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 
 let SendAti4 = false;
 let SendAti4Entry = false;
 let SendEnteredi4 = false;
-let inStorm = false;
+//let inStorm = false;
 
 function i4() {
     if ((Player.getX() > 91 && Player.getX() < 93) && (Player.getY() > 129 && Player.getY() < 133) && (Player.getZ() > 44 && Player.getZ() < 46)) return 1;
@@ -15,6 +15,7 @@ function i4() {
     else return 0;
 }
 
+/**
 register("chat", (message) => {
     if (message == "[BOSS] Storm: Pathetic Maxor, just like expected.") {
         inStorm = true;
@@ -23,11 +24,12 @@ register("chat", (message) => {
         inStorm = false;
     }
 }).setCriteria("${message}")
+*/
 
 register("tick", () => {
     if (config.announcei4Position) {
         const playerClass = getCurrentClass();
-        if (inStorm && playerClass != 'Healer') {
+        if (inStorm() && playerClass != 'Healer') {
             if (i4() === 1 && !SendAti4Entry) {
                 ChatLib.command(`pc At i4 Entry (HEALER CAN LEAP)!`);
                 SendAti4Entry  = true;
@@ -51,6 +53,6 @@ register("worldUnload", () => {
     SendAti4 = false;
     SendAti4Entry = false;
     SendEnteredi4 = false;
-    inStorm = false;
+    //inStorm = false;
     playerClass = null;
 });

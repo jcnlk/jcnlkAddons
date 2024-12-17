@@ -1,11 +1,11 @@
 
 import config from "../../config";
-import { getCurrentClass } from "../../utils/Dungeon";
+import { getCurrentClass, inMaxor, inStorm } from "../../utils/Dungeon";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 
-let inMaxor = false;
-let inStorm = false;
-let inGoldor = false;
+//let inMaxor = false;
+//let inStorm = false;
+//let inGoldor = false;
 let SendDev1 = false;
 let SendDev2 = false;
 let SendDev3 = false;
@@ -17,7 +17,7 @@ function atDev() {
     //else if ((Player.getX() > 61 && Player.getX() < 65) && (Player.getY() > 126 && Player.getY() < 130) && (Player.getZ() > 33 && Player.getZ() < 37)) return 4; // not needed cuz ati4 is the same
     else return 0;
 }
-
+/**
 register("chat", (message) => {
     if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
         inMaxor = false;
@@ -35,12 +35,13 @@ register("chat", (message) => {
         inGoldor = false;
     }
 }).setCriteria("${message}");
+*/
 
 register("tick", () => {
     if (config.announcePreDevPosition) {
         const playerClass = getCurrentClass();
         if (playerClass === 'Healer') {
-            if (inMaxor) {
+            if (inMaxor() || inStorm()) {
                 if (atDev() === 3 && !SendDev3) {
                     ChatLib.command(`pc At Pre Dev 3!`);
                     SendDev3 = true;
@@ -52,7 +53,7 @@ register("tick", () => {
                     showGeneralJAMessage("Announced Pre Dev 2 Position.");
                 }
             }
-            if (inStorm) {
+            if (inStorm()) {
                 if (atDev() === 1 && !SendDev1) {
                     ChatLib.command(`pc At SS!`);
                     SendDev1 = true;
@@ -64,9 +65,9 @@ register("tick", () => {
 })
 
 register("worldUnload", () => {
-    inMaxor = false;
-    inStorm = false;
-    inGoldor = false;
+    //inMaxor = false;
+    //inStorm = false;
+    //inGoldor = false;
     SendDev1 = false
     SendDev2 = false;
     SendDev3 = false;
