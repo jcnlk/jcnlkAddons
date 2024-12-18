@@ -3,7 +3,6 @@ import { getItemId } from "../../utils/ItemID";
 import { getEnchantBookDetail } from "../../utils/EnchantedBookDetail";
 import { setItemsToHighlight } from "../../utils/HighlightSlots";
 import Config from "../../config";
-import Config from "../../config";
 import { greenItems, yellowItems, redItems, greenEnchantments, yellowEnchantments, redEnchantments } from "../../data/DungeonLoot";
 
 let isProcessingChestOpen = false;
