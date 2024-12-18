@@ -41,7 +41,7 @@ register("tick", () => {
                 showGeneralJAMessage("Announced Moving to i4.");
             }
             else if (i4() === 3 && !SendAti4) {
-                ChatLib.command(`pc At i4!`);
+                ChatLib.command(`pc At i4 (DON'T LEAP)!`);
                 SendAti4 = true;
                 showGeneralJAMessage("Announced At i4 Position.");
             }
@@ -49,7 +49,7 @@ register("tick", () => {
     }
 });
 
-register("worldUnload", () => {
+register("worldLoad", () => {
     SendAti4 = false;
     SendAti4Entry = false;
     SendEnteredi4 = false;

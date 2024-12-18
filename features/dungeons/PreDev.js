@@ -17,6 +17,7 @@ function atDev() {
     //else if ((Player.getX() > 61 && Player.getX() < 65) && (Player.getY() > 126 && Player.getY() < 130) && (Player.getZ() > 33 && Player.getZ() < 37)) return 4; // not needed cuz ati4 is the same
     else return 0;
 }
+
 /**
 register("chat", (message) => {
     if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
@@ -64,7 +65,7 @@ register("tick", () => {
     }
 })
 
-register("worldUnload", () => {
+register("worldLoad", () => {
     //inMaxor = false;
     //inStorm = false;
     //inGoldor = false;

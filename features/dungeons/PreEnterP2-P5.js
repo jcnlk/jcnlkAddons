@@ -136,7 +136,7 @@ register("tick", () => {
     }
 });
 
-register("gameUnload", () => {
+register("worldLoad", () => {
     //inGoldor = false;
     goldorPhase = 0;
     SendPre2 = false;
