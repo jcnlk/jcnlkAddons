@@ -40,7 +40,7 @@ function atMid() {
 }
 
 function atPreP5() {
-    if (Player.getY() < 61 && Player.getY() > 4) return true;
+    if (Player.getY() < 50 && Player.getY() > 4) return true;
     else return false;
 }
 
@@ -54,14 +54,14 @@ register("chat", (message) => {
         goldorPhase = 0;
         inNecron = false;
     }
-    else if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
-        inMaxor = false;
-        inStorm = false;
-        goldorPhase = 1;
-        inGoldor = true;
-    }
     */
-    if ((message.includes('(7/7)') || message.includes('(8/8)')) && !message.includes(':')) {
+    if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
+        //inMaxor = false;
+        //inStorm = false;
+        goldorPhase = 1;
+        //inGoldor = true;
+    }
+    else if ((message.includes('(7/7)') || message.includes('(8/8)')) && !message.includes(':')) {
         //inMaxor = false;
         //inStorm = false;
         //inGoldor = true;

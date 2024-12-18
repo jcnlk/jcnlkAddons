@@ -77,33 +77,43 @@ export const inM6 = createFloorFunction('M', 6);
 export const inM7 = createFloorFunction('M', 7);
 
 export function inMaxor() {
+    if (!inF7() || !inM7()) return;
     const bossName = BossStatus.field_82827_c;
-    if (!bossName) return false;
-    return bossName.removeFormatting().includes('Maxor');
+    //if (!bossName) return false;
+    if (bossName.removeFormatting().includes('Maxor')) return true;
+    else return false;
 }
 
 export function inStorm() {
+    if (!inF7() || !inM7()) return;
     const bossName = BossStatus.field_82827_c;
-    if (!bossName) return false;
-    return bossName.removeFormatting().includes('Storm');
+    //if (!bossName) return false;
+    if (bossName.removeFormatting().includes('Storm')) return true;
+    else return false;
 }
 
 export function inGoldor() {
+    if (!inF7() || !inM7()) return;
     const bossName = BossStatus.field_82827_c;
-    if (!bossName) return false;
-    return bossName.removeFormatting().includes('Goldor');
+    //if (!bossName) return false;
+    if (bossName.removeFormatting().includes('Goldor')) return true;
+    else return false;
 }
 
 export function inNecron() {
+    if (!inF7() || !inM7()) return;
     const bossName = BossStatus.field_82827_c;
-    if (!bossName) return false;
-    return bossName.removeFormatting().includes('Necron');
+    //if (!bossName) return false;
+    if (bossName.removeFormatting().includes('Necron')) return true;
+    else return false;
 }
 
 export function inWitherKing() {
+    if (!inM7()) return;
     const bossName = BossStatus.field_82827_c;
-    if (!bossName) return false;
-    return bossName.removeFormatting().includes('Wither King');
+    //if (!bossName) return false;
+    if (bossName.removeFormatting().includes('Wither King')) return true;
+    else return false;
 }
 
 export function getBossHealthPercent() {
