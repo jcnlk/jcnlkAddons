@@ -36,6 +36,7 @@ import "./features/dungeons/PreDev";
 import "./features/dungeons/i4";
 
 // Miscellaneous
+import "./features/miscellaneous/MacroCheckNotifier";
 import "./features/miscellaneous/AutoPetruleAlert";
 import "./features/miscellaneous/GreatSpookSolver";
 

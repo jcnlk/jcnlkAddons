@@ -496,6 +496,45 @@ class Config {
     })
     autopetRuleTitle = true
 
+    @SwitchProperty({
+        name: "Enable MacroCheck Notifier",
+        description: "Enable notifications for possible macro checks",
+        category: "Miscellaneous",
+        subcategory: "MacroCheck Notifier"
+    })
+    enableMacroCheckNotifier = true;
+
+    @DecimalSliderProperty({
+        name: "Position Tolerance",
+        description: "How much position change (in blocks) is allowed before triggering notification",
+        category: "Miscellaneous",
+        subcategory: "MacroCheck Notifier",
+        minF: 0.1,
+        maxF: 1.0,
+        decimalPlaces: 2
+    })
+    macroCheckPositionTolerance = 0.1;
+
+    @DecimalSliderProperty({
+        name: "Angle Tolerance",
+        description: "How much angle change (in degrees) is allowed before triggering notification",
+        category: "Miscellaneous",
+        subcategory: "MacroCheck Notifier",
+        minF: 0.1,
+        maxF: 2.0,
+        decimalPlaces: 2
+    })
+    macroCheckAngleTolerance = 0.5;
+
+    @SelectorProperty({
+        name: "Notification Sound",
+        description: "Choose the sound for macro check notifications",
+        category: "Miscellaneous",
+        subcategory: "MacroCheck Notifier",
+        options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
+    })
+    macroCheckNotificationSound = 0;
+
     //HUD
     @SwitchProperty({
         name: "Enable Test HUD",
