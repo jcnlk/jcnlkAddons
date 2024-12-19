@@ -1,6 +1,6 @@
 import config from "../../config";
 import { RED } from "../../utils/Constants";
-import { getItemId } from "../../utils/ItemID";
+import { getItemId } from "../../utils/Items";
 import { showTitle } from "../../utils/Title";
 
 let isGoldorStarted = false;

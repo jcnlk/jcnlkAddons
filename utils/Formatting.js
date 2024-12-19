@@ -112,6 +112,29 @@ export function formatTime(seconds) {
     return `${minutes}m ${remainingSeconds}s`;
 }
 
+/**
+ * @param {number} number 
+ * @returns 
+ */
+export function formatNumber(number) {
+    let formattedNumber;
+    number = parseFloat(number.toString().replace(/,/g, ''));
+
+    if (number >= 1000000000) {
+        formattedNumber = (number / 1000000000).toFixed(0) + "B";
+    } else if (number >= 10000000) {
+        formattedNumber = (number / 1000000).toFixed(0) + "M";
+    } else if (number >= 1000000) {
+        formattedNumber = (number / 1000000).toFixed(1) + "M";
+    } else if (number >= 100000) {
+        formattedNumber = (number / 1000).toFixed(0) + "K";
+    } else if (number >= 1000) {
+        formattedNumber = (number / 1000).toFixed(1) + "K";
+    }
+
+    return formattedNumber;
+}
+
 // Test command
 register("command", (...args) => {
     if (args.length === 0) {

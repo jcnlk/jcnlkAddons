@@ -135,6 +135,18 @@ export function getCrypts() {
     return 0;
 }
 
+export function getPuzzleCount() {
+    const tabList = TabList.getNames();
+    if (!tabList) return 0;       
+    for (let line of tabList) {
+        line = ChatLib.removeFormatting(line);
+        if (line.includes("Puzzles: (")) {
+            const number = parseInt(line.split("Puzzles: (")[1]);
+            return isNaN(number) ? 0 : number;
+        }
+    }
+}
+
 /**
  * Gets the current dungeon time from the tablist
  * @returns {number|null} Time in seconds or null if not found

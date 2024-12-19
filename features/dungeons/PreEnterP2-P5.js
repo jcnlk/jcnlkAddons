@@ -2,17 +2,14 @@ import config from "../../config";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 import { getCurrentClass, inMaxor, inGoldor, inNecron } from "../../utils/Dungeon";
 
-//let inGoldor = false;
 let goldorPhase = 0;
 let SendPre2 = false;
 let SendPre3 = false;
 let SendPre4 = false;
 let SendPre5 = false;
 let SendPreP2 = false;
-//let inMaxor = false;
 let SendPreP4 = false;
 let SendPreMid = false;
-//let inNecron = false;
 let SendPreP5 = false;
 
 function inGoldorPhase() {
@@ -25,7 +22,7 @@ function inGoldorPhase() {
 }
 
 function atPreP2() {
-    if (Player.getY() < 205 && Player.getY() > 168) return true;
+    if (Player.getY() < 205 && Player.getY() > 164) return true;
     else return false;
 }
 
@@ -46,37 +43,12 @@ function atPreP5() {
 
 
 register("chat", (message) => {
-    /**
-    if (message == "[BOSS] Maxor: WELL! WELL! WELL! LOOK WHO'S HERE!") {
-        inMaxor = true;
-        inStorm = false;
-        inGoldor = false;
-        goldorPhase = 0;
-        inNecron = false;
-    }
-    */
     if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
-        //inMaxor = false;
-        //inStorm = false;
         goldorPhase = 1;
-        //inGoldor = true;
     }
     else if ((message.includes('(7/7)') || message.includes('(8/8)')) && !message.includes(':')) {
-        //inMaxor = false;
-        //inStorm = false;
-        //inGoldor = true;
         goldorPhase += 1;
-        //inNecron = false;
     }
-    /**
-    else if (message == "[BOSS] Necron: Finally, I heard so much about you. The Eye likes you very much.") {
-        inMaxor = false;
-        inStorm = false;
-        goldorPhase = 0;
-        inGoldor = false;
-        inNecron = true;
-    }
-    */
 }).setCriteria("${message}");
 
 register("tick", () => {
@@ -112,12 +84,12 @@ register("tick", () => {
         }
     }
     if (config.announcePreP4) {
-        if (atMid() && !SendPreMid) {
-            if (inGoldor()) {
+        if (atMid() && !SendPreMid && inGoldor()) {
+            //if (inGoldor()) {
                 ChatLib.command(`pc At Mid!`);
                 SendPreMid = true;
                 showGeneralJAMessage(`Announced At Mid Position.`);
-            }
+            //}
         }
         else if (!atMid() && !SendPreP4) {
             if (atPreP4() && inGoldor()) {
@@ -137,15 +109,12 @@ register("tick", () => {
 });
 
 register("worldLoad", () => {
-    //inGoldor = false;
     goldorPhase = 0;
     SendPre2 = false;
     SendPre3 = false;
     SendPre4 = false;
     SendPre5 = false;
     SendPreP2 = false;
-    //inMaxor = false;
     SendPreP4 = false;
-    //inNecron = false;
     SendPreP5 = false;
 });

@@ -6,7 +6,6 @@ import { showGeneralJAMessage } from "../../utils/ChatUtils";
 let SendAti4 = false;
 let SendAti4Entry = false;
 let SendEnteredi4 = false;
-//let inStorm = false;
 
 function i4() {
     if ((Player.getX() > 91 && Player.getX() < 93) && (Player.getY() > 129 && Player.getY() < 133) && (Player.getZ() > 44 && Player.getZ() < 46)) return 1;
@@ -14,17 +13,6 @@ function i4() {
     else if ((Player.getX() > 61 && Player.getX() < 65) && (Player.getY() > 126 && Player.getY() < 130) && (Player.getZ() > 33 && Player.getZ() < 37)) return 3;
     else return 0;
 }
-
-/**
-register("chat", (message) => {
-    if (message == "[BOSS] Storm: Pathetic Maxor, just like expected.") {
-        inStorm = true;
-    }
-    else if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
-        inStorm = false;
-    }
-}).setCriteria("${message}")
-*/
 
 register("tick", () => {
     if (config.announcei4Position) {
@@ -53,6 +41,5 @@ register("worldLoad", () => {
     SendAti4 = false;
     SendAti4Entry = false;
     SendEnteredi4 = false;
-    //inStorm = false;
     playerClass = null;
 });

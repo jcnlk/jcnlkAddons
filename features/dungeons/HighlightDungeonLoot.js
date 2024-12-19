@@ -1,6 +1,6 @@
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
-import { getItemId } from "../../utils/ItemID";
-import { getEnchantBookDetail } from "../../utils/EnchantedBookDetail";
+import { getItemId } from "../../utils/Items";
+import { getEnchantBookDetail } from "../../utils/Items";
 import { setItemsToHighlight } from "../../utils/HighlightSlots";
 import Config from "../../config";
 import { greenItems, yellowItems, redItems, greenEnchantments, yellowEnchantments, redEnchantments } from "../../data/DungeonLoot";

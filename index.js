@@ -1,40 +1,48 @@
+// Config
 import config from "./config";
-import * as Dungeons from "./features/dungeons/DungeonFeatures";
+
+// General
+import * as CustomEmotes from "./features/general/CustomEmotes";
 import * as Reminders from "./features/general/Reminders";
-import { scanItemAttributes } from "./utils/KuudraLootScanner.js";
-import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
-import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
-import "./utils/HighlightSlots";
-import "./utils/Area";
-import "./utils/ItemID";
-import "./utils/Dungeon";
-import "./utils/Hud";
-import HudManager from "./utils/HudManager";
-import "./utils/InventoryHud";
-import "./utils/EnchantedBookDetail";
-import "./features/dungeons/HighlightDungeonLoot";
-import "./utils/ItemAttribute";
-import "./features/miscellaneous/GreatSpookSolver";
-import "./utils/ClickableMessageContent";
-import "./utils/Constants";
-import "./utils/Formatting";
-import "./utils/Waypoints";
-import "./utils/Data";
+import * as Todo from "./features/general/Todo";
 import "./features/general/TestHud";
-import "./features/miscellaneous/AutoPetruleAlert";
+
+// Utils
+import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
+import { renderAttributeAbbreviations } from "./utils/AttributeAbbrev";
+import { scanItemAttributes } from "./utils/KuudraLootScanner.js";
+import HudManager from "./utils/HudManager";
+import { showTitle } from "./utils/Title";
+import "./utils/ClickableMessageContent";
+import "./utils/HighlightSlots";
+import "./utils/InventoryHud";
+import "./utils/Formatting";
+import "./utils/Constants";
+import "./utils/Waypoints";
+import "./utils/Dungeon";
+import "./utils/Items";
+import "./utils/Area";
+import "./utils/Data";
+import "./utils/Hud";
+
+// Dungeons
+import "./features/dungeons/HighlightDungeonLoot";
 import "./features/dungeons/FireFreezeNotifier";
-import "./features/dungeons/TitleAlerts";
-import "./features/dungeons/i4";
-import "./features/dungeons/PreDev";
+import "./features/dungeons/DungeonFeatures";
 import "./features/dungeons/PreEnterP2-P5";
 import "./features/dungeons/MaskReminder";
-import * as Todo from "./features/general/Todo";
-import * as CustomEmotes from "./features/general/CustomEmotes";
-import { showTitle } from "./utils/Title.js";
-const DmCommands = require("./features/commands/DmCommands.js");
-const PartyCommands = require("./features/commands/PartyCommands.js");
+import "./features/dungeons/TitleAlerts";
+import "./features/dungeons/PreDev";
+import "./features/dungeons/i4";
 
-let titles = [];
+// Miscellaneous
+import "./features/miscellaneous/AutoPetruleAlert";
+import "./features/miscellaneous/GreatSpookSolver";
+
+// Commands
+const PartyCommands = require("./features/commands/PartyCommands.js");
+const DmCommands = require("./features/commands/DmCommands.js");
+
 let slashCommandsInitialized = false;
 
 /**
@@ -128,24 +136,14 @@ function initializeSlashCommands() {
                 showDebugMessage("Opened HUD editor");
                 break;
             case "help":
-                showGeneralJAMessage("Available subcommands: crypts, help, puzzles, emote, test");
+                showGeneralJAMessage("Available subcommands: crypts, help, emote, test");
                 showDebugMessage("Displayed /ja help information");
                 break;
             default:
-                showGeneralJAMessage("Unknown subcommand. Use 'crypts' to see crypt count, 'puzzles' to see puzzle status, or 'help' for more info.");
+                showGeneralJAMessage("Unknown subcommand. Use 'crypts' to see crypt count, or 'help' for more info.");
                 showDebugMessage(`Unknown /ja subcommand: ${subCommand}`);
         }
-    }, ["crypts", "help", "puzzles", "emote", "test", "hud"]);
-
-    // /testpopup command
-    registerSlashCommand("testpopup", "Show a test popup", (message, ...args) => {
-        if (!message) {
-            message = "This is a Test Popup!";
-        }
-        const fullMessage = [message, ...args].join(" ");
-        showTitle(fullMessage, 3000, true, "JA Popup");
-        showDebugMessage(`Displayed test popup with message: ${fullMessage}`);
-    });
+    }, ["crypts", "help", "emote", "test", "hud"]);
 
     // /reminder command
     registerSlashCommand("reminder", "Set a reminder", (...args) => {
@@ -218,16 +216,10 @@ function initializeJAModule() {
     showDebugMessage("Starting jcnlkAddons initialization", 'warning');
     
     let successCount = 0;
-    const totalModules = 6;  // SlashCommands, Dungeons, PartyCommands, DmCommands, Custom Emotes, TODO
+    const totalModules = 5;  // SlashCommands, PartyCommands, DmCommands, Custom Emotes, TODO
 
     initializeSlashCommands();
     successCount++;
-    
-    if (config.enableCryptReminder) {
-        successCount += initializeModule("Dungeons module", () => Dungeons.updateCryptCount());
-    } else {
-        showDebugMessage("Dungeons module skipped (not enabled in config)", 'info');
-    }
     
     successCount += initializeModule("Party Commands", () => PartyCommands(showDebugMessage, showGeneralJAMessage));
     successCount += initializeModule("DM Commands", () => DmCommands(showDebugMessage, showGeneralJAMessage));

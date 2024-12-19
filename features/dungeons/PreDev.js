@@ -3,9 +3,6 @@ import config from "../../config";
 import { getCurrentClass, inMaxor, inStorm } from "../../utils/Dungeon";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 
-//let inMaxor = false;
-//let inStorm = false;
-//let inGoldor = false;
 let SendDev1 = false;
 let SendDev2 = false;
 let SendDev3 = false;
@@ -17,26 +14,6 @@ function atDev() {
     //else if ((Player.getX() > 61 && Player.getX() < 65) && (Player.getY() > 126 && Player.getY() < 130) && (Player.getZ() > 33 && Player.getZ() < 37)) return 4; // not needed cuz ati4 is the same
     else return 0;
 }
-
-/**
-register("chat", (message) => {
-    if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
-        inMaxor = false;
-        inStorm = false;
-        inGoldor = true;
-    }
-    else if (message == "[BOSS] Storm: Pathetic Maxor, just like expected.") {
-        inMaxor = false;
-        inStorm = true;
-        inGoldor = false;
-    }
-    else if (message == "[BOSS] Maxor: WELL! WELL! WELL! LOOK WHO'S HERE!") {
-        inMaxor = true;
-        inStorm = false;
-        inGoldor = false;
-    }
-}).setCriteria("${message}");
-*/
 
 register("tick", () => {
     if (config.announcePreDevPosition) {
@@ -66,9 +43,6 @@ register("tick", () => {
 })
 
 register("worldLoad", () => {
-    //inMaxor = false;
-    //inStorm = false;
-    //inGoldor = false;
     SendDev1 = false
     SendDev2 = false;
     SendDev3 = false;
