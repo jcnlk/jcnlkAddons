@@ -38,6 +38,7 @@ register("tick", () => {
 });
 
 register("worldLoad", () => {
+    playerClass = null;
     SendAti4 = false;
     SendAti4Entry = false;
     SendEnteredi4 = false;

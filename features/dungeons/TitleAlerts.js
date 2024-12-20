@@ -1,5 +1,6 @@
 import config from "../../config";
 import { GREEN, RED, YELLOW } from "../../utils/Constants";
+import { inDungeon } from "../../utils/Dungeon";
 
 // Cooldown tracking
 let lastTitleTime = 0;
@@ -214,6 +215,7 @@ function getPlayerClass() {
 
 // Handle pre-enter phase announcements
 register("chat", (name, message) => {
+    if (!inDungeon) return;
     if (!config.PreEnterTitles || isOwnMessage(name)) return;
     
     const currentTime = Date.now();
@@ -233,6 +235,7 @@ register("chat", (name, message) => {
 
 // Handle i4 position announcements - Healer only
 register("chat", (name, message) => {
+    if (!inDungeon) return;
     if (!config.i4PositionTitles || isOwnMessage(name)) return;
     
     const playerClass = getPlayerClass();
@@ -261,6 +264,7 @@ register("chat", (name, message) => {
 
 // Handle phase announcements (P2/P4/Mid/P5/SS)
 register("chat", (event) => {
+    if (inDungeon) return;
     const message = ChatLib.removeFormatting(event);
     if (!message.startsWith('Party >')) return;
     

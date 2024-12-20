@@ -43,6 +43,7 @@ register("tick", () => {
 })
 
 register("worldLoad", () => {
+    playerClass = null;
     SendDev1 = false
     SendDev2 = false;
     SendDev3 = false;
