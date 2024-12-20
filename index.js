@@ -26,6 +26,7 @@ import "./utils/Data";
 import "./utils/Hud";
 
 // Dungeons
+import "./features/dungeons/SimonSaysPhaseTracker";
 import "./features/dungeons/HighlightDungeonLoot";
 import "./features/dungeons/FireFreezeNotifier";
 import "./features/dungeons/DungeonFeatures";

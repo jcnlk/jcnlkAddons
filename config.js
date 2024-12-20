@@ -318,6 +318,22 @@ class Config {
     PreDevTitles = true;
 
     @SwitchProperty({
+        name: "EE2 Helper",
+        description: "Gives you a title when SS (Simon Says) is 4/5. This is Archer only!",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    EE2Helper = true;
+
+    @SwitchProperty({
+        name: "Announce SS Progression",
+        description: "Announces your SS (Simon Says) Progression to Party Chat. Only Announces if you are at SS.",
+        category: "Dungeons",
+        subcategory: "F7/M7"
+    })
+    announceSSProgression = true;
+
+    @SwitchProperty({
         name: "Fire Freeze Notification",
         description: "Tells you when to Fire Freeze in M3.",
         category: "Dungeons",
