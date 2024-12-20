@@ -1,78 +1,22 @@
 import Config from "../../config";
 import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 import { showTitle } from "../../utils/Title";
+import { 
+    MacroCheckData, 
+    addPosition, 
+    addAngle, 
+    isPositionWhitelisted, 
+    isAngleWhitelisted, 
+    clearAll, 
+    getStats 
+} from "../../utils/Data";
 
-// Default values for coordinates and camera angles
-let whitelistedPositions = [];
-let whitelistedAngles = [];
-let isNotifierActive = false;
+// Variables
+let isRecording = false;
+let recordedAngles = new Set();
 let lastPosition = null;
 let lastAngle = null;
-
-// Recording mode variables
-let isRecording = false;
-let recordedPositions = [];
-let recordedAngles = [];
-let lastRecordedPosition = null;
-let lastRecordedAngle = null;
-
-// Tolerance and rounding values
-const POSITION_TOLERANCE = 0.05;  // Small tolerance for floating point comparison
-const ANGLE_TOLERANCE = 0.5;     // degrees
-
-/**
- * Rounds a coordinate value to one decimal place (0.1 blocks)
- * @param {number} value - The coordinate value to round
- * @returns {number} - The rounded coordinate value
- */
-function roundCoordinate(value) {
-    return Math.round(value * 10) / 10;
-}
-
-/**
- * Creates a rounded position object from current player position
- * @returns {Object} - The rounded position object
- */
-function getRoundedPosition() {
-    return {
-        x: roundCoordinate(Player.getX()),
-        y: roundCoordinate(Player.getY()),
-        z: roundCoordinate(Player.getZ())
-    };
-}
-
-/**
- * Checks if two positions are equal (within tolerance)
- * @param {Object} pos1 - First position
- * @param {Object} pos2 - Second position
- * @returns {boolean} - Whether the positions are equal
- */
-function arePositionsEqual(pos1, pos2) {
-    return Math.abs(pos1.x - pos2.x) < POSITION_TOLERANCE &&
-           Math.abs(pos1.y - pos2.y) < POSITION_TOLERANCE &&
-           Math.abs(pos1.z - pos2.z) < POSITION_TOLERANCE;
-}
-
-/**
- * Check if a position is already whitelisted
- * @param {Object} position - The position to check
- * @returns {boolean} - Whether the position is whitelisted
- */
-function isPositionWhitelisted(position) {
-    return whitelistedPositions.some(wp => arePositionsEqual(wp, position));
-}
-
-/**
- * Check if an angle is whitelisted
- * @param {Object} angle - The angle to check
- * @returns {boolean} - Whether the angle is whitelisted
- */
-function isAngleWhitelisted(angle) {
-    return whitelistedAngles.some(wa => (
-        Math.abs(wa.yaw - angle.yaw) <= ANGLE_TOLERANCE &&
-        Math.abs(wa.pitch - angle.pitch) <= ANGLE_TOLERANCE
-    ));
-}
+let isNotificationActive = false;
 
 /**
  * Start recording mode
@@ -84,10 +28,8 @@ function startRecording() {
     }
     
     isRecording = true;
-    recordedPositions = [];
-    recordedAngles = [];
-    lastRecordedPosition = null;
-    lastRecordedAngle = null;
+    recordedAngles.clear();
+    lastPosition = null;
     
     showGeneralJAMessage("§aStarted recording path! Move along your desired path...");
     showGeneralJAMessage("§7Use /macrocheck record stop when finished.");
@@ -103,110 +45,46 @@ function stopRecording() {
     }
     
     isRecording = false;
-    
-    // Filter out duplicates and add to whitelist
-    let addedPositions = 0;
-    recordedPositions.forEach(pos => {
-        if (!isPositionWhitelisted(pos)) {
-            whitelistedPositions.push(pos);
-            addedPositions++;
-        }
-    });
-    
+
+    // Save angles
     let addedAngles = 0;
     recordedAngles.forEach(angle => {
-        if (!isAngleWhitelisted(angle)) {
-            whitelistedAngles.push(angle);
+        if (addAngle(angle)) {
             addedAngles++;
         }
     });
+
+    const stats = getStats();
+    showGeneralJAMessage(`§aRecording stopped!`);
+    showGeneralJAMessage(`§aMovement ranges: §6${stats.ranges}§a with total length of §6${stats.totalLength}§a blocks`);
+    showGeneralJAMessage(`§aAdded §6${addedAngles}§a new angles to whitelist.`);
     
-    showGeneralJAMessage(`§aRecording stopped! Added §6${addedPositions}§a new positions and §6${addedAngles}§a new angles to whitelist.`);
-    saveWhitelist();
-    
-    recordedPositions = [];
-    recordedAngles = [];
+    recordedAngles.clear();
+    lastPosition = null;
 }
 
 /**
- * Record current position and angle if they're different
+ * Record current position and angle
  */
 function recordCurrentPosition() {
     if (!isRecording) return;
     
-    const currentPosition = getRoundedPosition();
+    const currentPosition = {
+        x: Player.getX(),
+        y: Player.getY(),
+        z: Player.getZ()
+    };
+    
     const currentAngle = {
         yaw: Player.getYaw(),
         pitch: Player.getPitch()
     };
     
-    // Only record if position is new
-    if (!lastRecordedPosition || !arePositionsEqual(currentPosition, lastRecordedPosition)) {
-        // Check if this position is already in recordedPositions
-        if (!recordedPositions.some(pos => arePositionsEqual(pos, currentPosition))) {
-            recordedPositions.push(currentPosition);
-            lastRecordedPosition = currentPosition;
-            showDebugMessage(`Recorded new position: (${currentPosition.x}, ${currentPosition.y}, ${currentPosition.z})`);
-        }
+    if (addPosition(currentPosition)) {
+        showDebugMessage(`Recorded position: (${Math.round(currentPosition.x * 10) / 10}, ${Math.round(currentPosition.y * 10) / 10}, ${Math.round(currentPosition.z * 10) / 10})`);
     }
     
-    // Only record if angle has changed significantly
-    if (!lastRecordedAngle ||
-        Math.abs(currentAngle.yaw - lastRecordedAngle.yaw) > ANGLE_TOLERANCE ||
-        Math.abs(currentAngle.pitch - lastRecordedAngle.pitch) > ANGLE_TOLERANCE) {
-        
-        recordedAngles.push(currentAngle);
-        lastRecordedAngle = currentAngle;
-    }
-}
-
-/**
- * Save whitelist to file
- */
-function saveWhitelist() {
-    const data = {
-        positions: whitelistedPositions,
-        angles: whitelistedAngles
-    };
-    
-    try {
-        FileLib.write("jcnlkAddons", "data/MacroCheckWhitelist.json", JSON.stringify(data, null, 2));
-        showDebugMessage("Saved whitelist to file", 'success');
-    } catch (error) {
-        showDebugMessage(`Error saving whitelist: ${error}`, 'error');
-    }
-}
-
-/**
- * Load whitelist from file
- */
-function loadWhitelist() {
-    try {
-        const content = FileLib.read("jcnlkAddons", "data/MacroCheckWhitelist.json");
-        if (content) {
-            const data = JSON.parse(content);
-            // Convert positions to rounded values on load
-            whitelistedPositions = (data.positions || []).map(pos => ({
-                x: roundCoordinate(pos.x),
-                y: roundCoordinate(pos.y),
-                z: roundCoordinate(pos.z)
-            }));
-            whitelistedAngles = data.angles || [];
-            showDebugMessage(`Loaded ${whitelistedPositions.length} positions and ${whitelistedAngles.length} angles`, 'success');
-        }
-    } catch (error) {
-        showDebugMessage(`Error loading whitelist: ${error}`, 'error');
-    }
-}
-
-/**
- * Clear all whitelisted positions and angles
- */
-function clearWhitelist() {
-    whitelistedPositions = [];
-    whitelistedAngles = [];
-    saveWhitelist();
-    showGeneralJAMessage("Cleared all whitelisted positions and angles");
+    recordedAngles.add(currentAngle);
 }
 
 // Main monitoring logic
@@ -214,33 +92,42 @@ register("tick", () => {
     // Record position if in recording mode
     recordCurrentPosition();
     
-    if (!isNotifierActive) return;
+    if (!MacroCheckData.isNotifierActive) return;
     
-    const currentPosition = getRoundedPosition();
+    const currentPosition = {
+        x: Player.getX(),
+        y: Player.getY(),
+        z: Player.getZ()
+    };
+    
     const currentAngle = {
         yaw: Player.getYaw(),
         pitch: Player.getPitch()
     };
     
     if (lastPosition && lastAngle) {
-        // Check for significant changes
-        const positionChanged = !arePositionsEqual(currentPosition, lastPosition);
-        const angleChanged = (
-            Math.abs(currentAngle.yaw - lastAngle.yaw) > ANGLE_TOLERANCE ||
-            Math.abs(currentAngle.pitch - lastAngle.pitch) > ANGLE_TOLERANCE
-        );
+        const positionChanged = !isPositionWhitelisted(currentPosition);
+        const angleChanged = !isAngleWhitelisted(currentAngle);
         
-        if ((positionChanged && !isPositionWhitelisted(currentPosition)) ||
-            (angleChanged && !isAngleWhitelisted(currentAngle))) {
+        if ((positionChanged || angleChanged) && !isNotificationActive) {
+            // Set notification as active
+            isNotificationActive = true;
+            
             // Trigger notification
-            showTitle("§c⚠ Possible Macro Check! ⚠", 3000, true, "§eUnexpected Movement Detected!");
+            showTitle("§c⚠ Possible Macro Check! ⚠", 5000, true, "§eUnexpected Movement Detected!");
             showGeneralJAMessage("§c⚠ Warning: §eUnexpected movement or rotation detected - possible macro check!");
-            // Play warning sound every second for 3 seconds
-            for (let i = 0; i < 3; i++) {
+            
+            // Play warning sound every second for 5 seconds
+            for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
                     World.playSound("random.orb", 1, 1);
                 }, i * 1000);
             }
+
+            // Reset notification after 5 seconds
+            setTimeout(() => {
+                isNotificationActive = false;
+            }, 5000);
         }
     }
     
@@ -252,12 +139,14 @@ register("tick", () => {
 register("command", (action, ...args) => {
     switch (action?.toLowerCase()) {
         case "start":
-            isNotifierActive = true;
+            MacroCheckData.isNotifierActive = true;
+            MacroCheckData.save();
             showGeneralJAMessage("§aMacroCheck Notifier started");
             break;
             
         case "stop":
-            isNotifierActive = false;
+            MacroCheckData.isNotifierActive = false;
+            MacroCheckData.save();
             showGeneralJAMessage("§cMacroCheck Notifier stopped");
             break;
             
@@ -273,23 +162,23 @@ register("command", (action, ...args) => {
             break;
             
         case "clear":
-            clearWhitelist();
+            clearAll();
+            showGeneralJAMessage("Cleared all whitelisted movement ranges and angles");
             break;
             
         case "list":
-            showGeneralJAMessage("§6=== Whitelisted Positions ===");
-            whitelistedPositions.forEach((pos, index) => {
-                showGeneralJAMessage(`${index + 1}. (${pos.x.toFixed(1)}, ${pos.y.toFixed(1)}, ${pos.z.toFixed(1)})`);
-            });
-            showGeneralJAMessage("§6=== Whitelisted Angles ===");
-            whitelistedAngles.forEach((angle, index) => {
-                showGeneralJAMessage(`${index + 1}. Yaw: ${angle.yaw.toFixed(1)}, Pitch: ${angle.pitch.toFixed(1)}`);
-            });
+            const stats = getStats();
+            showGeneralJAMessage("§6=== MacroCheck Statistics ===");
+            showGeneralJAMessage(`§7Movement Ranges: §f${stats.ranges}`);
+            showGeneralJAMessage(`§7Total Range Length: §f${stats.totalLength} blocks`);
+            showGeneralJAMessage(`§7Whitelisted Angles: §f${stats.angles}`);
+            showGeneralJAMessage("§6===========================");
             break;
             
         case "toggle":
-            isNotifierActive = !isNotifierActive;
-            showGeneralJAMessage(isNotifierActive ? 
+            MacroCheckData.isNotifierActive = !MacroCheckData.isNotifierActive;
+            MacroCheckData.save();
+            showGeneralJAMessage(MacroCheckData.isNotifierActive ? 
                 "§aMacroCheck Notifier started" : 
                 "§cMacroCheck Notifier stopped");
             break;
@@ -301,17 +190,15 @@ register("command", (action, ...args) => {
             showGeneralJAMessage("§7/macrocheck toggle §f- Toggle the notifier");
             showGeneralJAMessage("§7/macrocheck record start §f- Start recording a path");
             showGeneralJAMessage("§7/macrocheck record stop §f- Stop recording and add to whitelist");
-            showGeneralJAMessage("§7/macrocheck clear §f- Clear all whitelisted positions and angles");
-            showGeneralJAMessage("§7/macrocheck list §f- List all whitelisted positions and angles");
+            showGeneralJAMessage("§7/macrocheck clear §f- Clear all data");
+            showGeneralJAMessage("§7/macrocheck list §f- Show statistics");
     }
 }).setName("macrocheck");
-
-// Load whitelist on world load
-register("worldLoad", loadWhitelist);
 
 // Stop recording if world unloads
 register("worldUnload", () => {
     if (isRecording) {
         stopRecording();
     }
+    isNotificationActive = false;
 });
