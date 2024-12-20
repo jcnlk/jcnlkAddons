@@ -42,7 +42,7 @@ export let MacroCheckData = new PogObject("jcnlkAddons", defaultMacroCheckData, 
  * Rounds a value to one decimal place
  */
 function roundToDecimal(value) {
-    return Math.round(value * 10) / 10;
+    return Math.round(value * 10) / 2;
 }
 
 /**
