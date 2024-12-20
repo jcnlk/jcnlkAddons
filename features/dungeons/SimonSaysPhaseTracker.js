@@ -122,7 +122,7 @@ register("tick", () => {
         const PhaseSS = getCurrentPhase();
         if (currentClass === 'Archer' && PhaseSS >= 4 && !sendTitle) {
             showTitle(" ", 3000, true, `${GREEN}Early enter now!`);
-            sendTitle = 1
+            sendTitle = true
             World.playSound("note.harp", 2, 1);
         }
         if (PhaseSS < 4) sendTitle = false;
