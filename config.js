@@ -341,6 +341,14 @@ class Config {
     })
     FireFreezeNotifier = true
 
+    @SwitchProperty({
+        name: "Hide Players After Leap",
+        description: "Hide nearby players on after leaping to them.",
+        category: "Dungeons",
+        subcategory: "Miscellaneous"
+    })
+    enablePlayerHiding = true;
+
     // Party Commands
     @SwitchProperty({
         name: "Enable Party Commands",
