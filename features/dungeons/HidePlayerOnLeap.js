@@ -20,6 +20,17 @@ function hidePlayer(playerName) {
 }
 
 /**
+ * Returns True if entity is player otherwise False.
+ * 
+ * @param {Entity} entity - OtherPlayerMP Minecraft Entity.
+ * @returns {Boolean} - Whether or not player is human.
+ */
+export function isPlayer(entity) {
+    const player = World.getPlayerByName(entity.getName());
+    return player?.getPing() === 1;
+}
+
+/**
  * Check if a player should be hidden
  * @param {Entity} entity - The entity to check
  * @returns {boolean} - Whether the entity should be hidden
@@ -50,7 +61,7 @@ function shouldHidePlayer(entity) {
 // Handle hiding players within range when teleporting
 register("chat", (location) => {
     if (!Config.enablePlayerHiding) return;
-    if (!inDungeon()) return; // inDungeon only
+    //if (!inDungeon()) return; // inDungeon only
     
     const playerX = Player.getX();
     const playerY = Player.getY();
@@ -75,16 +86,18 @@ register("chat", (location) => {
             showingMessage = false;
         }
     });
-}).setCriteria("You have teleported to ${location}");
+}).setCriteria("You have teleported to ${location}!");
+//You have teleported to JOE123546!
 
 // Register entity renderer to handle hiding players
 registerWhen(
     register("renderEntity", (entity, pos, partialTicks, event) => {
         if (!Config.enablePlayerHiding) return;
-        
-        // Only handle player entities
-        if (entity.getClassName() !== "EntityOtherPlayerMP") return;
-        
+
+        // Check if the entity is a player
+        if (!isPlayer(entity)) return;
+
+        // Determine if the player should be hidden
         if (shouldHidePlayer(entity)) {
             cancel(event);
         }
