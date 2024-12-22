@@ -13,27 +13,11 @@ export function setSpray(iceSprayHit) { icespray = iceSprayHit; }
 export function getSpray() { return icespray; }
 
 export function getCurrentClass() {
-    const tabNames = TabList.getNames();
-    const partyNumLine = tabNames.find(function(name) {
-        return name.includes('§r§b§lParty §r§f(');
-    });
-    let currentClass = '';
-    try {
-        if (partyNumLine) {
-            const partyNum = parseInt(partyNumLine.match(/\d+/g)[0]);
-            for (let i = 0; i < partyNum; i++) {
-                if (tabNames[i * 4 + 1].removeFormatting().includes(Player.getName())) {
-                    const match = tabNames[i * 4 + 1].removeFormatting().match(/\((\S+)\s+(\S+)\)/);
-                    if (match) {
-                        currentClass = match[1];
-                    }
-                }
-            }
-        }
-    } catch (e) {
-        showDebugMessage("Error getting current class: " + e.message, 'error');
-    }
-    return currentClass;
+    let index = TabList?.getNames()?.findIndex(line => line?.includes(Player.getName()))
+    if (index == -1) return
+    let match = TabList?.getNames()[index]?.removeFormatting().match(/.+ \((.+) .+\)/)
+    if (!match) return "EMPTY"
+    return match[1];
 }
 
 export function getCurrentFloor() {

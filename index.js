@@ -29,6 +29,7 @@ import "./utils/Hud";
 import "./features/dungeons/SimonSaysPhaseTracker";
 import "./features/dungeons/HighlightDungeonLoot";
 import "./features/dungeons/FireFreezeNotifier";
+import "./features/dungeons/HidePlayerOnLeap";
 import "./features/dungeons/DungeonFeatures";
 import "./features/dungeons/PreEnterP2-P5";
 import "./features/dungeons/MaskReminder";

@@ -118,9 +118,9 @@ register("playerInteract", (action, pos) => {
 
 register("tick", () => {
     if (config.EE2Helper) {
-        const currentClass = getCurrentClass();
+        const playerClass = getCurrentClass();
         const PhaseSS = getCurrentPhase();
-        if (currentClass === 'Archer' && PhaseSS >= 4 && !sendTitle) {
+        if (playerClass === 'Archer' && PhaseSS >= 4 && !sendTitle) {
             showTitle(" ", 3000, true, `${GREEN}Early enter now!`);
             sendTitle = true
             World.playSound("note.harp", 2, 1);
@@ -131,6 +131,7 @@ register("tick", () => {
 
 // Reset buttons when the world unloads
 register("worldUnload", () => {
+    playerClass = null;
     currentPhase = 0;
     blocks.clear();
     lastAnnouncedPhase = 0;

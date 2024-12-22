@@ -24,6 +24,7 @@ export const greenItems = [
   ];
   
   export const yellowItems = [
+    "SHADOW_ASSASSIN_CLOAK",
     "HOT_POTATO_BOOK",
     "STONE_BLADE",
     "ADAPTIVE_BOOTS",

@@ -85,11 +85,9 @@ register("tick", () => {
     }
     if (config.announcePreP4) {
         if (atMid() && !SendPreMid && inGoldor()) {
-            //if (inGoldor()) {
-                ChatLib.command(`pc At Mid!`);
-                SendPreMid = true;
-                showGeneralJAMessage(`Announced At Mid Position.`);
-            //}
+            ChatLib.command(`pc At Mid!`);
+            SendPreMid = true;
+            showGeneralJAMessage(`Announced At Mid Position.`);
         }
         else if (!atMid() && !SendPreP4) {
             if (atPreP4() && inGoldor()) {
