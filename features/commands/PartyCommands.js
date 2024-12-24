@@ -207,7 +207,7 @@ module.exports = () => {
                 let playerToInvite = commandParts[1];
                 if (playerToInvite) {
                     ChatLib.say(`/p ${playerToInvite}`);
-                    generatedMessage = `Sent party invite to ${playerToInvite}`;
+                    //generatedMessage = `Sent party invite to ${playerToInvite}`;
                 } else {
                     generatedMessage = "Please specify a player to invite";
                 }
