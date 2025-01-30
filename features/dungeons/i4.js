@@ -1,46 +1,77 @@
-
 import config from "../../config";
-import { getCurrentClass, inStorm } from "../../utils/Dungeon";
+import { getCurrentClass, getIsInStorm } from "../../utils/Dungeon";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 
-let SendAti4 = false;
-let SendAti4Entry = false;
-let SendEnteredi4 = false;
+let hasAnnouncedAtI4 = false;
+let hasAnnouncedI4Entry = false;
+let hasAnnouncedMovingToI4 = false;
+let playerClass = getCurrentClass();
 
-function i4() {
-    if ((Player.getX() > 91 && Player.getX() < 93) && (Player.getY() > 129 && Player.getY() < 133) && (Player.getZ() > 44 && Player.getZ() < 46)) return 1;
-    else if ((Player.getX() > 87 && Player.getX() < 91) && (Player.getY() > 129 && Player.getY() < 134) && (Player.getZ() > 46 && Player.getZ() < 50)) return 2;
-    else if ((Player.getX() > 61 && Player.getX() < 65) && (Player.getY() > 126 && Player.getY() < 130) && (Player.getZ() > 33 && Player.getZ() < 37)) return 3;
-    else return 0;
+function getI4Position() {
+  if (
+    Player.getX() > 91 &&
+    Player.getX() < 93 &&
+    Player.getY() > 129 &&
+    Player.getY() < 133 &&
+    Player.getZ() > 44 &&
+    Player.getZ() < 46
+  )
+    return 1; // i4 entry
+  if (
+    Player.getX() > 87 &&
+    Player.getX() < 91 &&
+    Player.getY() > 129 &&
+    Player.getY() < 134 &&
+    Player.getZ() > 46 &&
+    Player.getZ() < 50
+  )
+    return 2; // moving to i4
+  if (
+    Player.getX() > 61 &&
+    Player.getX() < 65 &&
+    Player.getY() > 126 &&
+    Player.getY() < 130 &&
+    Player.getZ() > 33 &&
+    Player.getZ() < 37
+  )
+    return 3; // at i4
+  else return 0;
 }
 
-register("tick", () => {
-    if (config.announcei4Position) {
-        const playerClass = getCurrentClass();
-        if (inStorm() && playerClass != 'Healer') {
-            if (i4() === 1 && !SendAti4Entry) {
-                ChatLib.command(`pc At i4 Entry (HEALER CAN LEAP)!`);
-                SendAti4Entry  = true;
-                showGeneralJAMessage("Announced i4 Entry Position.");
-            }
-            else if (i4() === 2 && !SendEnteredi4) {
-                ChatLib.command(`pc Moving to i4 (DON'T LEAP)!`);
-                SendEnteredi4 = true;
-                showGeneralJAMessage("Announced Moving to i4.");
-            }
-            else if (i4() === 3 && !SendAti4) {
-                ChatLib.command(`pc At i4 (DON'T LEAP)!`);
-                SendAti4 = true;
-                showGeneralJAMessage("Announced At i4 Position.");
-            }
-        }
-    }
-});
+function announceI4Position() {
+  if (!World.isLoaded()) return;
+  if (!config.announcei4Position) return;
+  if (playerClass === "Healer") return;
+  if (!getIsInStorm()) return;
 
-register("worldLoad", () => {
-    playerClass = null;
-    SendAti4 = false;
-    SendAti4Entry = false;
-    SendEnteredi4 = false;
-    playerClass = null;
+  const i4Position = getI4Position();
+
+  if (i4Position === 1 && !hasAnnouncedI4Entry) {
+    setTimeout(
+      () => ChatLib.command(`party chat At i4 Entry (HEALER CAN LEAP)!`),
+      300
+    );
+    hasAnnouncedI4Entry = true;
+    showGeneralJAMessage("Announced i4 Entry Position.");
+  } else if (i4Position === 2 && !hasAnnouncedMovingToI4) {
+    setTimeout(
+      () => ChatLib.command(`party chat Moving to i4 (DON'T LEAP)!`),
+      300
+    );
+    hasAnnouncedMovingToI4 = true;
+    showGeneralJAMessage("Announced Moving to i4.");
+  } else if (i4Position === 3 && !hasAnnouncedAtI4) {
+    setTimeout(() => ChatLib.command(`party chat At i4 (DON'T LEAP)!`), 300);
+    hasAnnouncedAtI4 = true;
+    showGeneralJAMessage("Announced At i4 Position.");
+  }
+}
+
+register("tick", announceI4Position);
+
+register("worldUnload", () => {
+  playerClass = null;
+  hasAnnouncedAtI4 = false;
+  hasAnnouncedI4Entry = false;
+  hasAnnouncedMovingToI4 = false;
 });

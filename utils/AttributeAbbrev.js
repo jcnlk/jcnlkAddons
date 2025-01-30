@@ -1,6 +1,5 @@
-import Config from "../config"
-
-const AQUA = "§b";
+import Config from "../config";
+import { AQUA } from "./Constants";
 
 /**
  * Renders attribute abbreviations on an item
@@ -40,5 +39,3 @@ function renderAttributeAbbreviations(item, x, y) {
 register("renderItemIntoGui", (item, x, y) => {
     renderAttributeAbbreviations(item, x, y);
 });
-
-export { renderAttributeAbbreviations };

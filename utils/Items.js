@@ -202,7 +202,7 @@ const formatEnchantmentName = (name) => {
  * Get enchant of the enchanted book.
  * @param {Item} ebook
  */
-export const getEnchantBookDetail = (ebook) => {
+export const getEnchantedBookDetail = (ebook) => {
     try {
         if (!ebook) {
             throw new Error("Item is null or undefined");
@@ -239,7 +239,7 @@ export const getEnchantBookDetail = (ebook) => {
             level: enchantLevel
         };
     } catch (e) {
-        showDebugMessage(`Error in getEnchantBookDetail: ${e.message}`, 'error');
+        showDebugMessage(`Error in getEnchantedBookDetail: ${e.message}`, 'error');
         return null;
     }
 }
@@ -251,7 +251,7 @@ register("command", () => {
         showGeneralJAMessage("You must be holding an enchanted book!");
         return;
     }
-    const enchantDetails = getEnchantBookDetail(heldItem);
+    const enchantDetails = getEnchantedBookDetail(heldItem);
     if (enchantDetails) {
         showGeneralJAMessage(`Enchantment: ${enchantDetails.name} ${enchantDetails.level}`);
         showDebugMessage(`Raw enchantment name: ${Object.keys(heldItem.getNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes').getCompoundTag('enchantments').toObject())[0]}`);

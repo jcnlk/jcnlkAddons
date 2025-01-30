@@ -1,12 +1,5 @@
-import { showDebugMessage } from "./ChatUtils";
-
 let itemsToHighlight = [];
 
-/**
- * Gets the coordinates of a slot in the GUI
- * @param {number} i - The slot index
- * @returns {number[]} - The x and y coordinates of the slot
- */
 function getSlotCoords(i) {
     if (i >= Player.getContainer().getSize()) return [0, 0];
     const gui = Client.currentGui.get();
@@ -16,9 +9,6 @@ function getSlotCoords(i) {
     return [x, y];
 }
 
-/**
- * Renders highlights for items
- */
 const renderHighlight = register("guiRender", function() {
     itemsToHighlight.forEach(function(item) {
         const [x, y] = getSlotCoords(item.slot);
@@ -27,20 +17,13 @@ const renderHighlight = register("guiRender", function() {
     });
 }).unregister();
 
-/**
- * Clears highlights when GUI is closed
- */
 const clearHighlight = register("guiClosed", function() {
     itemsToHighlight = [];
     renderHighlight.unregister();
     clearHighlight.unregister();
 }).unregister();
 
-/**
- * Sets the items to highlight
- * @param {Array} items - The items to highlight
- */
-function setItemsToHighlight(items) {
+export function setItemsToHighlight(items) {
     itemsToHighlight = items;
     if (items.length > 0) {
         renderHighlight.register();
@@ -50,7 +33,3 @@ function setItemsToHighlight(items) {
         clearHighlight.unregister();
     }
 }
-
-export {
-    setItemsToHighlight
-};

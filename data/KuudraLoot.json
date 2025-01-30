@@ -30,10 +30,6 @@
           {
               "attributes": ["Lifeline", "Mana Pool"],
               "pieces": ["Boots", "Leggings", "Chestplate"]
-          },
-          {
-              "attributes": ["Dominance", "Speed"],
-              "pieces": ["Boots", "Leggings", "Chestplate"]
           }
       ]
   },

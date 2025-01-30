@@ -2,27 +2,14 @@ import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 import { InSkyblock } from "../../utils/Constants";
 import Config from "../../config";
 import { 
-    BLACK, 
-    DARK_BLUE, 
-    DARK_GREEN, 
-    DARK_AQUA, 
-    DARK_RED, 
-    DARK_PURPLE, 
     GOLD, 
     GRAY, 
     DARK_GRAY, 
-    BLUE, 
-    GREEN, 
-    AQUA, 
+    GREEN,  
     RED, 
-    LIGHT_PURPLE, 
     YELLOW, 
     WHITE,
-    OBFUSCATED, 
     BOLD, 
-    STRIKETHROUGH, 
-    UNDERLINE, 
-    ITALIC, 
     RESET   } from "../../utils/Constants";
 
 let todos = [];
@@ -67,7 +54,7 @@ function saveTodos() {
  * @param {string} todoText - The todo text to add
  * @returns {boolean} - Whether the todo was successfully added
  */
-function addTodo(todoText) {
+export function addTodo(todoText) {
     if (!Config.enableTodos) {
         showGeneralJAMessage("Todos are currently disabled in the config!", 'error');
         return false;
@@ -87,7 +74,7 @@ function addTodo(todoText) {
  * @param {number} index - The index of the todo to remove (1-based)
  * @returns {boolean} - Whether the todo was successfully removed
  */
-function removeTodo(index) {
+export function removeTodo(index) {
     if (!Config.enableTodos) return false;
 
     if (index > 0 && index <= todos.length) {
@@ -104,7 +91,7 @@ function removeTodo(index) {
  * @param {number} index - The index of the todo to toggle (1-based)
  * @returns {boolean} - Whether the todo was successfully toggled
  */
-function toggleTodo(index) {
+export function toggleTodo(index) {
     if (!Config.enableTodos) return false;
 
     if (index > 0 && index <= todos.length) {
@@ -125,7 +112,7 @@ function toggleTodo(index) {
 /**
  * Lists all todos
  */
-function listTodos() {
+export function listTodos() {
     if (!Config.enableTodos) {
         showGeneralJAMessage("Todos are currently disabled in the config!", 'error');
         return;
@@ -275,7 +262,7 @@ register("command", (action, ...args) => {
 /**
  * Initialize the module and set correct initial states
  */
-function initialize() {
+register("gameLoad", () => {
     loadTodos();
     justReloaded = true;
     
@@ -286,12 +273,4 @@ function initialize() {
         inSkyblock = InSkyblock();
         showDebugMessage(`Module initialized while ${inSkyblock ? 'in' : 'not in'} Skyblock`, 'info');
     }
-}
-
-// Export functions and initialize
-export {
-    initialize,
-    addTodo,
-    toggleTodo,
-    listTodos
-};
+});
