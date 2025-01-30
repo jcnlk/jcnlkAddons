@@ -1,7 +1,6 @@
 //Basic Stuff
-//TODO: Load the current verion (and Creator?) of out metadata.json 
-export const ModuleVersion = "v1.1.0" //IMPORTANT: Change this to the current version until TODO is not done
-export const Creator = "jcnlk"
+export const ModuleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
+export const Creator = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
 
 // Constants for easier chat formating     
 export const BLACK = "§0";
@@ -32,12 +31,4 @@ export const InSkyblock = () => {
     if (Server.getIP().includes('hypixel') && ChatLib.removeFormatting(Scoreboard.getTitle()).includes('SKYBLOCK'))
         return true;
     return false;
-}
-// Checks if current area is the garden (maybe not needed if Area.js works fine)
-export const InGarden = () => {
-    let inGarden = false;
-    Scoreboard.getLines().forEach((line) => {
-        if (ChatLib.removeFormatting(line).includes('The Garden')) InGarden = true;
-    });
-    return inGarden;
 }

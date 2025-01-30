@@ -81,7 +81,8 @@ export const greenItems = [
     "GOLDOR_THE_FISH",
     "MAXOR_THE_FISH",
     "STORM_THE_FISH",
-    "ADAPTIVE_BELT"
+    "ADAPTIVE_BELT",
+    "BALLOON_SNAKE"
   ];
   
 export const greenEnchantments = [

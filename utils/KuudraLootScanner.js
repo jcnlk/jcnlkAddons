@@ -1,26 +1,32 @@
-/**
- * Let's don't talk about this code..
- * Probably have to remake this one (but it works)
- */
-
 import Config from "../config";
 import { showDebugMessage, showGeneralJAMessage } from "./ChatUtils";
 import { setItemsToHighlight } from "./HighlightSlots";
+import {
+    getItemId,
+    getItemAttributes,
+    getEnchantedBookDetail
+} from "./Items";
 
-// Load Kuudra loot data
+// ============================================================================
+// 1) Load Kuudra loot data
+// ============================================================================
 let kuudraLoot;
 try {
     const jsonPath = "./data/KuudraLoot.json";
     const jsonContent = FileLib.read("jcnlkAddons", jsonPath);
+
     if (!jsonContent) {
-        throw new Error("KuudraLoot.json is empty or not found at path: " + jsonPath);
+        throw new Error(`KuudraLoot.json is empty or not found at path: ${jsonPath}`);
     }
+
     kuudraLoot = JSON.parse(jsonContent);
-    if (!kuudraLoot || typeof kuudraLoot !== 'object') {
+
+    if (!kuudraLoot || typeof kuudraLoot !== "object") {
         throw new Error("Invalid JSON format in KuudraLoot.json");
     }
 } catch (error) {
-    showDebugMessage(`Error loading KuudraLoot.json: ${error}`, 'error');
+    showDebugMessage(`Error loading KuudraLoot.json: ${error}`, "error");
+    // Fallback structure to prevent crashes
     kuudraLoot = {
         godRolls: {},
         goodRolls: {},
@@ -36,61 +42,18 @@ try {
     };
 }
 
-// Regular expressions for parsing item data
-const attributePattern = new RegExp("(" + kuudraLoot.attributes.join('|') + ")\\s+(\\d+|[IVX]+)(?:\\s+.*)?$", 'i');
-const baseItemPattern = new RegExp("(" + kuudraLoot.baseItems.join('|') + ") (" + [...kuudraLoot.armorPieces, ...kuudraLoot.moltenPieces].join('|') + ")", 'i');
-const enchantmentPattern = new RegExp("(" + [...kuudraLoot.enchantedBooks.green, ...kuudraLoot.enchantedBooks.red].join('|') + ")\\s+(\\d+|[IVX]+)", 'i');
+// ============================================================================
+// 2) Helper Functions
+// ============================================================================
 
 /**
- * Checks if an item has a god roll
- * @param {string} baseItem - The base item name
- * @param {Object} attributes - The item's attributes
- * @returns {boolean} - Whether the item is a god roll
+ * Determines if the given item name is a "special drop" from Kuudra.
+ * @param {string} displayName - The unformatted name of the item.
+ * @returns {string|null} - "red", "green", or "yellow" if special, otherwise null.
  */
-function isGodRoll(baseItem, attributes) {
-    if (!baseItem) return false;
-    const [itemType, piece] = baseItem.split(' ');
-    const godRolls = kuudraLoot.godRolls[itemType];
-    if (!godRolls) return false;
-
-    return godRolls.some(function(roll) {
-        if (!roll.pieces.includes(piece)) return false;
-        return roll.attributes.every(function(attr) {
-            const abbreviation = kuudraLoot.attributeAbbreviations[attr] || attr;
-            return Object.keys(attributes).includes(abbreviation);
-        });
-    });
-}
-
-/**
- * Checks if an item has a good roll
- * @param {string} baseItem - The base item name
- * @param {Object} attributes - The item's attributes
- * @returns {boolean} - Whether the item is a good roll
- */
-function isGoodRoll(baseItem, attributes) {
-    if (!baseItem) return false;
-    const [itemType, piece] = baseItem.split(' ');
-    const goodRolls = kuudraLoot.goodRolls[itemType];
-    if (!goodRolls) return false;
-
-    return goodRolls.some(function(roll) {
-        if (!roll.pieces.includes(piece)) return false;
-        return roll.attributes.every(function(attr) {
-            const abbreviation = kuudraLoot.attributeAbbreviations[attr] || attr;
-            return Object.keys(attributes).includes(abbreviation);
-        });
-    });
-}
-
-/**
- * Checks if an item is a special drop
- * @param {string} itemName - The item name
- * @returns {string|null} - The color of the special drop or null if not special
- */
-function isSpecialDrop(itemName) {
+function isSpecialDrop(displayName) {
     for (const [color, items] of Object.entries(kuudraLoot.specialDrops)) {
-        if (items.includes(itemName)) {
+        if (items.includes(displayName)) {
             return color;
         }
     }
@@ -98,246 +61,296 @@ function isSpecialDrop(itemName) {
 }
 
 /**
- * Checks if an item is an attribute shard
- * @param {string} itemName - The item name
- * @param {string} attribute - The attribute name
- * @returns {string|null} - The color of the attribute shard or null if not a shard
+ * Determines if a given itemId + attributes combo qualifies as a "God Roll."
+ * @param {string} itemId - e.g. "crimson_chestplate"
+ * @param {Object} attributes - e.g. { Dominance: 5, ManaPool: 4 }
+ * @returns {boolean}
  */
-function isAttributeShard(itemName, attribute) {
-    if (itemName.includes("Attribute Shard")) {
-        if (kuudraLoot.attributeShards.yellow.includes(attribute)) {
+function isGodRoll(itemId, attributes) {
+    if (!itemId) return false;
+
+    // Example logic: split at underscore => [ "crimson", "chestplate" ]
+    const [itemType, piece] = itemId.split("_");
+    const godRollsForType = kuudraLoot.godRolls[itemType.charAt(0).toUpperCase() + itemType.slice(1)];
+    if (!godRollsForType) return false;
+
+    return godRollsForType.some((roll) => {
+        if (!roll.pieces.includes(capitalizeFirst(piece))) return false;
+        return roll.attributes.every((attr) => {
+            const abbreviation = kuudraLoot.attributeAbbreviations[attr] || attr;
+            return Object.keys(attributes).includes(abbreviation);
+        });
+    });
+}
+
+/**
+ * Determines if a given itemId + attributes combo qualifies as a "Good Roll."
+ * @param {string} itemId
+ * @param {Object} attributes
+ * @returns {boolean}
+ */
+function isGoodRoll(itemId, attributes) {
+    if (!itemId) return false;
+
+    const [itemType, piece] = itemId.split("_");
+    const goodRollsForType = kuudraLoot.goodRolls[itemType.charAt(0).toUpperCase() + itemType.slice(1)];
+    if (!goodRollsForType) return false;
+
+    return goodRollsForType.some((roll) => {
+        if (!roll.pieces.includes(capitalizeFirst(piece))) return false;
+        return roll.attributes.every((attr) => {
+            const abbreviation = kuudraLoot.attributeAbbreviations[attr] || attr;
+            return Object.keys(attributes).includes(abbreviation);
+        });
+    });
+}
+
+/**
+ * Determines if an item is an attribute shard and if so, what color it should be.
+ * @param {string} itemId
+ * @param {Object} attributes
+ * @returns {string|null} - "yellow" or "red" if it's a shard, otherwise null.
+ */
+function getAttributeShardColor(itemId, attributes) {
+    // If itemId doesn't indicate a shard, skip
+    if (!itemId.toLowerCase().includes("shard")) return null;
+
+    // If there's exactly one attribute or multiple, check if any appear in "yellow" set
+    for (const attr in attributes) {
+        if (kuudraLoot.attributeShards.yellow.includes(attr)) {
             return "yellow";
         }
-        return "red";
     }
-    return null;
+    return "red";
 }
 
 /**
- * Checks if an item is an enchanted book
- * @param {string} itemName - The item name
- * @param {string} enchantment - The enchantment name
- * @returns {string|null} - The color of the enchanted book or null if not a book
+ * Returns an RGBA color (Renderer.color) based on the item's properties.
  */
-function isEnchantedBook(itemName, enchantment) {
-    if (itemName === "Enchanted Book") {
-        if (kuudraLoot.enchantedBooks.green.some(function(e) { return enchantment.startsWith(e); })) {
-            return "green";
-        } else if (kuudraLoot.enchantedBooks.red.some(function(e) { return enchantment.startsWith(e); })) {
-            return "red";
+function getItemColor({
+    isSpecialDrop,
+    attributeShardColor,
+    isEnchantedBook,
+    isGodRoll,
+    isGoodRoll
+}) {
+    if (isSpecialDrop) {
+        switch (isSpecialDrop) {
+            case "red":    return Renderer.color(255, 0, 0, 128);
+            case "green":  return Renderer.color(0, 255, 0, 128);
+            case "yellow": return Renderer.color(255, 255, 0, 128);
         }
     }
-    return null;
+    if (attributeShardColor) {
+        return attributeShardColor === "yellow"
+            ? Renderer.color(255, 255, 0, 128)
+            : Renderer.color(255, 0, 0, 128);
+    }
+    if (isEnchantedBook) {
+        return isEnchantedBook === "green"
+            ? Renderer.color(0, 255, 0, 128)
+            : Renderer.color(255, 0, 0, 128);
+    }
+    if (isGodRoll)  return Renderer.color(0, 255, 0, 128);
+    if (isGoodRoll) return Renderer.color(255, 255, 0, 128);
+
+    // Default: red
+    return Renderer.color(255, 0, 0, 128);
 }
 
 /**
- * Scans an item for attributes and other properties
- * @param {Object} item - The item to scan
- * @returns {Object|null} - The scan result or null if invalid
+ * Returns a short chat prefix based on the item’s properties.
  */
-function scanItemAttributes(item) {
+function getRollTypePrefix({
+    isSpecialDrop,
+    attributeShardColor,
+    isEnchantedBook,
+    isGodRoll,
+    isGoodRoll
+}) {
+    if (isSpecialDrop) {
+        switch (isSpecialDrop) {
+            case "red":    return "&c-";
+            case "green":  return "&a++";
+            case "yellow": return "&e+";
+        }
+    }
+    if (attributeShardColor) {
+        return attributeShardColor === "yellow" ? "&e+" : "&c-";
+    }
+    if (isEnchantedBook) {
+        return isEnchantedBook === "green" ? "&a++" : "&c-";
+    }
+    if (isGodRoll)  return "&6++";
+    if (isGoodRoll) return "&e+";
+    return "&7-";
+}
+
+/**
+ * Capitalizes the first letter of a string (e.g. "crimson" => "Crimson").
+ * @param {string} str
+ * @returns {string}
+ */
+function capitalizeFirst(str) {
+    if (!str || typeof str !== "string") return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// ============================================================================
+// 3) Main scanning function for a single item
+// ============================================================================
+/**
+ * Scans a single item using your new helper functions.
+ *
+ * @param {Object} item - The in-game item object from ChatTriggers (or similar).
+ * @returns {Object|null}
+ */
+function scanItem(item) {
     if (!item) return null;
 
-    const foundAttributes = {};
-    let baseItem = null;
-    let isSpecial = null;
-    let isAttributeShardItem = null;
-    let isEnchantedBookItem = null;
-    let enchantment = null;
+    const displayName = ChatLib.removeFormatting(item.getName());
+    showDebugMessage(`Scanning item: ${displayName}`);
 
-    try {
-        const name = ChatLib.removeFormatting(item.getName());
-        showDebugMessage(`Scanning item: ${name}`);
+    // 1) Get a short ID for the item (e.g. "crimson_chestplate", "enchanted_book")
+    const itemId = getItemId(item)?.toLowerCase() || "";
 
-        isSpecial = isSpecialDrop(name);
-        if (isSpecial) {
-            showDebugMessage("Found special drop: " + name + ", color: " + isSpecial);
-            return { attributes: {}, baseItem: null, isSpecialDrop: isSpecial };
+    // 2) Check if it's a special drop by display name
+    const specialDropColor = isSpecialDrop(displayName);
+
+    // 3) If it’s an enchanted book, see what enchant it has
+    const bookDetail = getEnchantedBookDetail(item); 
+    // e.g. { enchantName: "Protection", enchantLevel: 5 } or null
+
+    // 4) Fetch item attributes from your helper
+    const attributes = getItemAttributes(item) || {};
+
+    // 5) Determine if it's an attribute shard
+    const attributeShardColor = getAttributeShardColor(itemId, attributes);
+
+    // 6) Check God Roll / Good Roll
+    const isGodRollItem  = isGodRoll(itemId, attributes);
+    const isGoodRollItem = !isGodRollItem && isGoodRoll(itemId, attributes);
+
+    // 7) Identify if it’s an enchanted book from your Kuudra config (green or red)
+    let isEnchantedBookColor = null;
+    // Guard: Only do .startsWith if we actually have a string in bookDetail.enchantName
+    if (bookDetail?.enchantName && typeof bookDetail.enchantName === "string") {
+        const { enchantName } = bookDetail;
+        const { green, red } = kuudraLoot.enchantedBooks;
+
+        // Check if it starts with any from the 'green' list
+        if (green.some(e => enchantName.startsWith(e))) {
+            isEnchantedBookColor = "green";
+        } 
+        // Or check if it starts with any from the 'red' list
+        else if (red.some(e => enchantName.startsWith(e))) {
+            isEnchantedBookColor = "red";
         }
-
-        const baseItemMatch = name.match(baseItemPattern);
-        if (baseItemMatch) {
-            baseItem = baseItemMatch[0];
-            showDebugMessage("Found base item: " + baseItem);
-        }
-
-        const lore = item.getLore();
-        showDebugMessage("Item lore: " + JSON.stringify(lore));
-
-        if (name === "Enchanted Book" && lore.length > 1) {
-            const enchantmentLine = ChatLib.removeFormatting(lore[1]);
-            showDebugMessage("Enchantment line: " + enchantmentLine);
-            const enchantmentMatch = enchantmentLine.match(/^(.+?)\s+(\d+|[IVX]+)$/);
-            if (enchantmentMatch) {
-                enchantment = enchantmentMatch[1];
-                showDebugMessage("Found Enchantment: " + enchantment);
-                isEnchantedBookItem = isEnchantedBook(name, enchantment);
-                showDebugMessage("Is Enchanted Book: " + isEnchantedBookItem + ", color: " + (isEnchantedBookItem || "none"));
-                return { 
-                    attributes: {}, 
-                    baseItem: null, 
-                    isEnchantedBook: isEnchantedBookItem, 
-                    enchantment: enchantment 
-                };
-            }
-        }
-
-        for (const line of lore) {
-            const match = line.match(attributePattern);
-            if (match) {
-                const attribute = match[1];
-                const level = match[2];
-                let numericLevel = parseInt(level);
-                if (isNaN(numericLevel)) {
-                    numericLevel = kuudraLoot.romanNumerals[level] || 0;
-                }
-                const abbreviation = kuudraLoot.attributeAbbreviations[attribute] || attribute;
-                foundAttributes[abbreviation] = numericLevel;
-                showDebugMessage(`Found attribute: ${attribute} (${abbreviation}) = ${numericLevel}`);
-
-                if (name.includes("Attribute Shard")) {
-                    isAttributeShardItem = isAttributeShard(name, attribute);
-                    showDebugMessage("Found Attribute Shard: " + attribute + ", color: " + isAttributeShardItem);
-                    break;
-                }
-            }
-        }
-    } catch (error) {
-        showDebugMessage(`Error scanning item attributes: ${error.message}`, 'error');
-        showDebugMessage(`Error stack: ${error.stack}`, 'error');
     }
 
-    const isGodRollItem = isGodRoll(baseItem, foundAttributes);
-    const isGoodRollItem = !isGodRollItem && isGoodRoll(baseItem, foundAttributes);
-
-    showDebugMessage(`Base Item: ${baseItem}`);
-    showDebugMessage(`Found Attributes: ${JSON.stringify(foundAttributes)}`);
-    showDebugMessage(`Is GodRoll: ${isGodRollItem}, Is GoodRoll: ${isGoodRollItem}`);
-    showDebugMessage(`Is Attribute Shard: ${isAttributeShardItem}`);
-    showDebugMessage(`Is Enchanted Book: ${isEnchantedBookItem}, Enchantment: ${enchantment}`);
-
-    return { 
-        attributes: foundAttributes, 
-        baseItem: baseItem, 
-        isGodRoll: isGodRollItem, 
-        isGoodRoll: isGoodRollItem, 
-        isSpecialDrop: isSpecial,
-        isAttributeShard: isAttributeShardItem,
-        isEnchantedBook: isEnchantedBookItem,
-        enchantment: enchantment
+    // 8) Build the scan result
+    const scanResult = {
+        itemId,
+        displayName,
+        attributes,
+        isSpecialDrop: specialDropColor,
+        isGodRoll: isGodRollItem,
+        isGoodRoll: isGoodRollItem,
+        attributeShardColor,
+        isEnchantedBook: isEnchantedBookColor,
+        enchantName: bookDetail?.enchantName || null,
+        enchantLevel: bookDetail?.enchantLevel || null
     };
+
+    showDebugMessage(`Scan result: ${JSON.stringify(scanResult)}`);
+    return scanResult;
 }
 
+// ============================================================================
+// 4) Scan the contents of a container
+// ============================================================================
 /**
- * Scans the contents of a container
- * @param {Object} container - The container to scan
+ * Scans the container for notable Kuudra loot using the above logic.
+ *
+ * @param {Object} container
  */
-function scanContents(container) {
+function scanContainerContents(container) {
     if (!Config.enableChestScanning) {
-        showDebugMessage("Chest scanning is disabled in config.");
+        showDebugMessage("Chest scanning is disabled in the config.");
         return;
     }
 
     if (!isValidChest(container)) {
-        showDebugMessage(`Not a valid chest to scan: ${container.getName()}`);
+        showDebugMessage(`Not a valid chest to scan: ${container?.getName()}`);
         return;
     }
 
     showDebugMessage(`Starting scan of ${container.getName()}...`);
     showDebugMessage(`Container size: ${container.getSize()}`);
 
-    let itemsWithAttributes = [];
-    let foundBaseItems = new Set();
-
+    const itemsToHighlight = [];
     const containerSize = container.getSize();
     const playerInventorySize = 36;
     const slotsToScan = containerSize - playerInventorySize;
 
-    showDebugMessage("Scanning " + slotsToScan + " slots (excluding player inventory)");
+    for (let slotIndex = 0; slotIndex < slotsToScan; slotIndex++) {
+        const item = container.getStackInSlot(slotIndex);
+        if (!item) continue;
 
-    for (let i = 0; i < slotsToScan; i++) {
-        const item = container.getStackInSlot(i);
-        if (item) {
-            showDebugMessage("Scanning item in slot " + i + ": " + item.getName());
-            const scanResult = scanItemAttributes(item);
-            showDebugMessage("Item attributes: " + JSON.stringify(scanResult.attributes));
-            showDebugMessage("Base item: " + scanResult.baseItem + ", Is GodRoll: " + scanResult.isGodRoll + 
-                             ", Is GoodRoll: " + scanResult.isGoodRoll + ", Is Special Drop: " + scanResult.isSpecialDrop + 
-                             ", Is Attribute Shard: " + scanResult.isAttributeShard + ", Is Enchanted Book: " + scanResult.isEnchantedBook);
+        const scanResult = scanItem(item);
+        if (!scanResult) continue;
 
-            if (Object.keys(scanResult.attributes).length > 0 || scanResult.isSpecialDrop || scanResult.isAttributeShard || scanResult.isEnchantedBook) {
-                let color;
-                if (scanResult.isSpecialDrop) {
-                    switch (scanResult.isSpecialDrop) {
-                        case 'red': color = Renderer.color(255, 0, 0, 128); break;
-                        case 'green': color = Renderer.color(0, 255, 0, 128); break;
-                        case 'yellow': color = Renderer.color(255, 255, 0, 128); break;
-                    }
-                } else if (scanResult.isAttributeShard) {
-                    color = scanResult.isAttributeShard === 'yellow' ? Renderer.color(255, 255, 0, 128) : Renderer.color(255, 0, 0, 128);
-                } else if (scanResult.isEnchantedBook) {
-                    color = scanResult.isEnchantedBook === 'green' ? Renderer.color(0, 255, 0, 128) : Renderer.color(255, 0, 0, 128);
-                } else if (scanResult.isGodRoll) {
-                    color = Renderer.color(0, 255, 0, 128);
-                } else if (scanResult.isGoodRoll) {
-                    color = Renderer.color(255, 255, 0, 128);
-                } else {
-                    color = Renderer.color(255, 0, 0, 128);
-                }
+        // Decide if we highlight this item
+        const { attributes, isSpecialDrop, attributeShardColor, isEnchantedBook } = scanResult;
+        const hasAttributes = Object.keys(attributes).length > 0;
+        const highlightCandidate = (
+            hasAttributes ||
+            isSpecialDrop ||
+            attributeShardColor ||
+            isEnchantedBook
+        );
 
-                itemsWithAttributes.push(Object.assign({
-                    name: item.getName(),
-                    slot: i,
-                    color: color
-                }, scanResult));
-            }
-            if (scanResult.baseItem) {
-                foundBaseItems.add(scanResult.baseItem);
-            }
+        if (highlightCandidate) {
+            itemsToHighlight.push({
+                slot: slotIndex,
+                color: getItemColor(scanResult),
+                ...scanResult
+            });
         }
     }
 
-    if (Config.debugMode && foundBaseItems.size > 0) {
-        showDebugMessage("Found base items: " + Array.from(foundBaseItems).join(', '));
-    }
-
-    if (itemsWithAttributes.length > 0) {
+    if (itemsToHighlight.length > 0) {
         if (Config.enableAttributeChatOutput) {
             ChatLib.chat("&6&l========= Kuudra Loot =========");
-            itemsWithAttributes.forEach(function(item) {
-                let rollType;
-                if (item.isSpecialDrop) {
-                    rollType = item.isSpecialDrop === 'red' ? '&c-' : item.isSpecialDrop === 'green' ? '§a++' : '§e+';
-                } else if (item.isAttributeShard) {
-                    rollType = item.isAttributeShard === 'yellow' ? '&e+' : '&c-';
-                } else if (item.isEnchantedBook) {
-                    rollType = item.isEnchantedBook === 'green' ? '&a++' : '&c-';
-                } else if (item.isGodRoll) {
-                    rollType = '&6++';
-                } else if (item.isGoodRoll) {
-                    rollType = '&e+';
-                } else {
-                    rollType = '&7-';
+            for (const itemInfo of itemsToHighlight) {
+                const prefix = getRollTypePrefix(itemInfo);
+                const cleanName = itemInfo.displayName;
+                let line = `${prefix} &f${cleanName}`;
+
+                // If it's an enchanted book, append the enchant info
+                if (itemInfo.isEnchantedBook) {
+                    const { enchantName, enchantLevel } = itemInfo;
+                    if (enchantName) {
+                        line += ` &7(${enchantName} ${enchantLevel || ""})`;
+                    }
                 }
-    
-                let itemName = item.name.replace(/§./g, '');
-                let enchantmentInfo = item.enchantment ? ` (${item.enchantment})` : '';
-                
-                let outputString = `${rollType} &f${itemName}${enchantmentInfo}`;
-    
-                if (Object.keys(item.attributes).length > 0) {
-                    let attributeString = Object.entries(item.attributes)
-                        .map(([attr, level]) => `${attr}&f:&b${level}`)
-                        .join('&f & &a');
-                    outputString += ` &r&8> &f(&a${attributeString}&f)&r`;
+
+                // If it has attributes, show them
+                const attrKeys = Object.keys(itemInfo.attributes);
+                if (attrKeys.length > 0) {
+                    const attrString = attrKeys
+                        .map(attr => `${attr}&f:&b${itemInfo.attributes[attr]}`)
+                        .join("&f & &a");
+                    line += ` &r&8> &f(&a${attrString}&f)`;
                 }
-                
-                ChatLib.chat(outputString);
-            });
+
+                ChatLib.chat(line);
+            }
             ChatLib.chat("&6&l=============================");
         }
 
-        setItemsToHighlight(itemsWithAttributes);
+        // Highlight items in the GUI
+        setItemsToHighlight(itemsToHighlight);
     } else {
         if (Config.enableAttributeChatOutput) {
             showGeneralJAMessage("&cNo notable Kuudra loot found.");
@@ -346,59 +359,42 @@ function scanContents(container) {
     }
 }
 
+// ============================================================================
+// 5) Validate if container is a chest we want to scan
+// ============================================================================
 /**
- * Checks if a container is a valid chest to scan
- * @param {Object} container - The container to check
- * @returns {boolean} - Whether the container is a valid chest
+ * Determines if the given container is a valid chest (Kuudra or otherwise).
+ *
+ * @param {Object} container
+ * @returns {boolean}
  */
 function isValidChest(container) {
     if (!container) return false;
 
-    const containerName = container.getName().toLowerCase();
-
-    // Exclude player inventory and ender chest
-    if (containerName.includes("inventory") || containerName.includes("ender chest")) {
+    const name = container.getName().toLowerCase();
+    if (name.includes("inventory") || name.includes("ender chest")) {
         return false;
     }
-
-    // Include containers with " paid chest" in the name (for kuudra loot chest)
-    if (containerName.includes("paid chest")) {
-        return true;
-    }
-    return false;
+    return name.includes("paid chest");
 }
 
+// ============================================================================
+// 6) Event handler for when a GUI is opened
+// ============================================================================
 let isProcessingGuiOpen = false;
 
-/**
- * Event handler for when a GUI is opened
- */
-register("guiOpened", function(event) {
+register("guiOpened", (event) => {
     if (!Config.enableChestScanning || isProcessingGuiOpen) return;
 
     isProcessingGuiOpen = true;
-
-    setTimeout(function() {
+    setTimeout(() => {
         const screen = Client.currentGui.get();
-
         if (screen && screen.toString().includes("GuiChest")) {
-            showDebugMessage("Container GUI opened event triggered");
             const container = Player.getContainer();
             if (container && isValidChest(container)) {
-                showDebugMessage("Valid chest detected: " + container.getName());
-                scanContents(container);
-            } else {
-                showDebugMessage("No valid chest detected");
+                scanContainerContents(container);
             }
-        } else {
-            //showDebugMessage("Opened GUI is not a container");
         }
-
         isProcessingGuiOpen = false;
     }, 50);
 });
-
-export {
-    scanItemAttributes,
-    scanContents
-};

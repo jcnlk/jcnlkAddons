@@ -1,24 +1,14 @@
-import { 
-    BLACK, 
-    DARK_BLUE, 
-    DARK_GREEN, 
-    DARK_AQUA, 
+import {   
     DARK_RED, 
-    DARK_PURPLE, 
     GOLD, 
     GRAY, 
     DARK_GRAY, 
-    BLUE, 
     GREEN, 
     AQUA, 
-    RED, 
-    LIGHT_PURPLE, 
+    RED,  
     YELLOW, 
-    WHITE,
-    OBFUSCATED, 
+    WHITE, 
     BOLD, 
-    STRIKETHROUGH, 
-    UNDERLINE, 
     ITALIC, 
     RESET,
     ModuleVersion,   
@@ -34,11 +24,11 @@ import {
     @ButtonProperty,    
     @CheckboxProperty   } from 'Vigilance';
 
-const ConfigHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YELLOW}${ModuleVersion} \nMade by ${Creator}${RESET}`
+const ConfigHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YELLOW}v${ModuleVersion} \nMade by ${Creator}${RESET}`
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous","HUD", "WIP", "Dev Stuff"];
+        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "HUD", "WIP", "Dev Stuff"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
@@ -399,14 +389,6 @@ class Config {
     diceCommand = true;
 
     @SwitchProperty({
-        name: "Help Command &3!commands help&r",
-        description: "Enable the help command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    commandsHelpCommand = true;
-
-    @SwitchProperty({
         name: "Simp Command &3!simp&r",
         description: "Enable the simp command in Party Chat.",
         category: "Party Commands",
@@ -520,45 +502,6 @@ class Config {
     })
     autopetRuleTitle = true
 
-    @SwitchProperty({
-        name: "Enable MacroCheck Notifier",
-        description: "Enable notifications for possible macro checks",
-        category: "Miscellaneous",
-        subcategory: "MacroCheck Notifier"
-    })
-    enableMacroCheckNotifier = true;
-
-    @DecimalSliderProperty({
-        name: "Position Tolerance",
-        description: "How much position change (in blocks) is allowed before triggering notification",
-        category: "Miscellaneous",
-        subcategory: "MacroCheck Notifier",
-        minF: 0.1,
-        maxF: 1.0,
-        decimalPlaces: 2
-    })
-    macroCheckPositionTolerance = 0.1;
-
-    @DecimalSliderProperty({
-        name: "Angle Tolerance",
-        description: "How much angle change (in degrees) is allowed before triggering notification",
-        category: "Miscellaneous",
-        subcategory: "MacroCheck Notifier",
-        minF: 0.1,
-        maxF: 2.0,
-        decimalPlaces: 2
-    })
-    macroCheckAngleTolerance = 0.5;
-
-    @SelectorProperty({
-        name: "Notification Sound",
-        description: "Choose the sound for macro check notifications",
-        category: "Miscellaneous",
-        subcategory: "MacroCheck Notifier",
-        options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
-    })
-    macroCheckNotificationSound = 0;
-
     //HUD
     @SwitchProperty({
         name: "Enable Test HUD",
@@ -637,7 +580,7 @@ class Config {
         this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting");
 
         // Add dependencies for Party Commands
-        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Help Command &3!commands help&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
+        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
         partyCommands.forEach(command => this.addDependency(command, "Enable Party Commands"));
 
         // Add dependencies for DM Commands
