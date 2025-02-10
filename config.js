@@ -28,7 +28,7 @@ const ConfigHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YEL
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "HUD", "WIP", "Dev Stuff"];
+        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "WIP", "Dev Stuff"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
@@ -501,26 +501,6 @@ class Config {
         subcategory: "Autopet Rule Title"
     })
     autopetRuleTitle = true
-
-    //HUD
-    @SwitchProperty({
-        name: "Enable Test HUD",
-        description: "Shows a test HUD on your screen (Currently not cuz i disabled it).",    
-        category: "HUD",
-        subcategory: "Test HUD"
-    })
-    enableTestHud = true;
-
-    @ButtonProperty({
-        name: "Edit HUD Positions",
-        description: "Click to open the HUD editor. Drag elements to move them and scroll to resize",
-        category: "HUD",
-        subcategory: "HUD Editor",
-        placeholder: "Edit"
-    })
-    openHudEditor() {
-        ChatLib.command("ja hud", true);
-    }
 
     //WIP Stuff
     @SwitchProperty({

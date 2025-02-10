@@ -4,25 +4,20 @@ import config from "./config";
 // General
 import * as CustomEmotes from "./features/general/CustomEmotes";
 import * as Reminders from "./features/general/Reminders";
-import "./features/general/TestHud";
 import "./features/general/Todo";
 
 // Utils
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
-import HudManager from "./utils/HudManager";
 import "./utils/ClickableMessageContent";
 import "./utils/KuudraLootScanner";
 import "./utils/AttributeAbbrev";
 import "./utils/HighlightSlots";
-import "./utils/InventoryHud";
 import "./utils/Formatting";
 import "./utils/Constants";
 import "./utils/Dungeon";
 import "./utils/Title";
 import "./utils/Items";
 import "./utils/Area";
-import "./utils/Data";
-import "./utils/Hud";
 
 // Dungeons
 import "./features/dungeons/SimonSaysPhaseTracker";
@@ -109,24 +104,15 @@ registerSlashCommand(
       case "test":
         showGeneralJAMessage("The Module is actually running!");
         break;
-      case "hud":
-        HudManager.openGui();
-        showDebugMessage("Opened HUD editor");
-        break;
       case "help":
         showGeneralJAMessage(
           "Available subcommands: crypts, help, emote, test"
         );
         showDebugMessage("Displayed /ja help information");
         break;
-      //default:
-      //  showGeneralJAMessage(
-      //    "Unknown subcommand. Use 'crypts' to see crypt count, or 'help' for more info."
-      //  );
-      //  showDebugMessage(`Unknown /ja subcommand: ${subCommand}`);
     }
   },
-  ["crypts", "help", "emote", "test", "hud"]
+  ["crypts", "help", "emote", "test"]
 );
 
 // /reminder command
