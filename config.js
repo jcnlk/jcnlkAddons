@@ -28,13 +28,13 @@ const ConfigHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YEL
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "WIP", "Dev Stuff"];
+        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "HUD", "WIP", "Dev Stuff"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
 
 class Config {
-    //General Settings
+    ////////// General Settings //////////
     @SwitchProperty({
         name: "Enable Attribute Abbreviations",
         description: "Show attribute abbreviations on items in inventory.",
@@ -51,7 +51,7 @@ class Config {
     })
     enableCustomEmotes = true;
 
-    //Reminder Settings
+    ////////// Reminder Settings //////////
     @SwitchProperty({
         name: "Enable Reminders",
         description: "Enable the reminder feature.",
@@ -121,7 +121,7 @@ class Config {
     })
     saveTodos = true;
 
-    // Dungeons
+    ////////// Dungeons Settings //////////
     @SwitchProperty({
         name: "Enable Crypt Reminder",
         description: "Enable the crypt reminder feature in dungeons.",
@@ -218,6 +218,14 @@ class Config {
         subcategory: "F7/M7"
     })
     MaskReminder = true;
+
+    @SwitchProperty({
+        name: "Mask Timer",
+        description: "",
+        category: "Dungeons",
+        subcategory: "Mask Timer"
+    })
+    maskTimer = true;
 
     @SwitchProperty({
         name: "Announce Pre Enter P3",
@@ -339,7 +347,7 @@ class Config {
     })
     enablePlayerHiding = true;
 
-    // Party Commands
+    //////////// Party Commands Settings //////////
     @SwitchProperty({
         name: "Enable Party Commands",
         description: "Enable or disable all party commands.",
@@ -428,7 +436,7 @@ class Config {
     })
     reminderCommand = true;
 
-    //DM Commands
+    ////////// DM Commands Settings //////////
     @SwitchProperty({
         name: "Enable DM Commands",
         description: "Enable or disable all DM commands.",
@@ -453,7 +461,7 @@ class Config {
     })
     kickCommand = true;
 
-    //Miscellaneous
+    ////////// Miscellaneous Settings //////////
     @SwitchProperty({
         name: "Enable Math Teacher Solver",
         description: "Enable the solver for Math Teacher.",
@@ -502,7 +510,19 @@ class Config {
     })
     autopetRuleTitle = true
 
-    //WIP Stuff
+    ////////// HUD Settings //////////
+    @ButtonProperty({
+        name: "Move HUD",
+        description: "You can customize your HUD here.",
+        placeholder: "Click Me!",
+        category: "HUD",
+        subcategory: "HUD"
+    })
+    openHudGui() {
+        ChatLib.command("ja hud", true);
+    }
+
+    ////////// WIP Stuff Settings //////////
     @SwitchProperty({
         name: "Enable Chest Highlighting",
         description: `Highlights loot in kuudra chests according to their value \n(${GREEN}God Roll${RESET}, ${YELLOW}Good Roll${RESET}, ${RED}Bad Roll${RESET}).`,
@@ -519,7 +539,7 @@ class Config {
     })
     enableAttributeChatOutput = true;
     
-    //Dev Stuff
+    ////////// Dev Stuff Settings //////////
     @SwitchProperty({
         name: "Debug Mode",
         description: `Enable detailed debug messages for troubleshooting. \n${GRAY}(We don't talk about the messed up debgging..)${RESET}`,

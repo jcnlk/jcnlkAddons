@@ -1,55 +1,42 @@
-import { showDebugMessage } from "./ChatUtils";
-import Config from "../config";
-
-let registers = [];
+import config from "../config";
 
 /**
- * Register a trigger with a dependency
- * @param {Trigger} trigger - The trigger to register
- * @param {Function} dependency - The dependency function that determines if the trigger should be registered
- * @param {Object} debugInfo - Debug information for the trigger
- * @param {string} debugInfo.type - The type of the trigger
- * @param {string} debugInfo.name - The name of the trigger
+ * Full Creadit to TakeshiClient: https://www.chattriggers.com/modules/v/TakeshiClient
  */
+let registers = [];
 export const registerWhen = (trigger, dependency, debugInfo = { type: '', name: '' }) => {
     registers.push([trigger.unregister(), dependency, false, debugInfo]);
 }
 
-/**
- * Set all registers based on their dependencies
- */
 export const setRegisters = () => {
     let registerInfo = '';
     let unregisterInfo = '';
     let registerCount = 0;
     let unregisterCount = 0;
-    
     registers.forEach((trigger) => {
         if (trigger[1]() && !trigger[2]) {
             trigger[0].register();
             trigger[2] = true;
-            registerInfo += `${trigger[3].type} of ${trigger[3].name}, `;
+            registerInfo += `&b${trigger[3].type} &7of &a${trigger[3].name}, `;
             if (registerCount % 3 === 2) registerInfo += '\n';
             registerCount++;
         } else if (!trigger[1]() && trigger[2]) {
             trigger[0].unregister();
             trigger[2] = false;
-            unregisterInfo += `${trigger[3].type} of ${trigger[3].name}, `;
+            unregisterInfo += `&b${trigger[3].type} &7of &a${trigger[3].name}, `;
             if (unregisterCount % 3 === 2) unregisterInfo += '\n';
             unregisterCount++;
         }
     });
-
-    if (Config.debugMode) {
+    if (config.debugMode) {
         if (!(registerCount === 0 && unregisterCount === 0)) {
-            showDebugMessage(`Registered or unregistered triggers.`);
-            showDebugMessage(`Registered: ${registerInfo}`);
-            showDebugMessage(`Unregistered: ${unregisterInfo}`);
+            const debugMessage = new TextComponent(`&e[DEBUG] Registered or unregistered triggers.`)
+                .setHoverValue(`&2Registered:\n${registerInfo}\n\n&4Unregistered:\n${unregisterInfo}`);
+            ChatLib.chat(debugMessage);
         }
     }
 }
 
-// Initial setup of registers
 setTimeout(() => {
     setRegisters();
 }, 1000);

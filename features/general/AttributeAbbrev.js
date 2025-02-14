@@ -1,5 +1,5 @@
-import Config from "../config";
-import { AQUA } from "./Constants";
+import Config from "../../config";
+import { AQUA } from "../../utils/Constants";
 
 /**
  * Renders attribute abbreviations on an item
