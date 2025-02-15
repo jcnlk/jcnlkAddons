@@ -9,7 +9,7 @@ import "./features/general/CustomEmotes";
 import "./features/general/Reminders";
 
 // Utils
-import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
+import { showGeneralJAMessage } from "./utils/ChatUtils";
 import HudManager from "./utils/Hud";
 import "./utils/KuudraLootScanner";
 import "./utils/HighlightSlots";
@@ -31,6 +31,7 @@ import "./features/dungeons/CryptReminder";
 import "./features/dungeons/PreEnterP2-P5";
 import "./features/dungeons/MaskReminder";
 import "./features/dungeons/TitleAlerts";
+import "./features/dungeons/QuizTimer";
 import "./features/dungeons/MaskTimer";
 import "./features/dungeons/PreDev";
 import "./features/dungeons/i4";
@@ -39,7 +40,7 @@ import "./features/dungeons/i4";
 import "./features/commands/PartyCommands";
 import "./features/commands/DmCommands";
 
-register("command", (subCommand, ...args) => {
+register("command", (subCommand) => {
   if (!subCommand) {
     config.openGUI();
     return;
@@ -53,12 +54,11 @@ register("command", (subCommand, ...args) => {
       break;
     case "help":
       showGeneralJAMessage(
-        "Available subcommands: crypts, help, hud, emote, test"
+        "Available subcommands: help, hud"
       );
-      showDebugMessage("Displayed /ja help information");
       break;
   }
-}).setName("ja").setAliases("jcnlkAddons").setTabCompletions(["crypts", "help", "emote", "hud"]);
+}).setName("ja").setAliases("jcnlkAddons").setTabCompletions(["help", "hud"]);
 
 register("gameLoad", () => {
   showGeneralJAMessage(`jcnlkAddons loaded successfully!`, "success");

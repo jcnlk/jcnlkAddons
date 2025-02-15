@@ -136,10 +136,18 @@ class Config {
     FireFreezeNotifier = true
 
     @SwitchProperty({
+        name: "Quiz Timer",
+        description: "Show a Timer how long you have to wait until you can answer.",
+        category: "Dungeons",
+        subcategory: "Quiz Timer"
+    })
+    quizTimer = true;
+
+    @SwitchProperty({
         name: "Hide Players After Leap",
         description: "Hide nearby players after leaping.",
         category: "Dungeons",
-        subcategory: "Miscellaneous"
+        subcategory: "Spirit Leap"
     })
     enablePlayerHiding = true;
 
