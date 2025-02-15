@@ -13,7 +13,7 @@ const defaultData = {
     }
 };
 
-export let data = new PogObject("jcnlkAddons/data", defaultData, "PogData.json");
+export let data = new PogObject("jcnlkAddons/data", defaultData, "Data.json");
 
 export const saveData = () => {
     data.save();

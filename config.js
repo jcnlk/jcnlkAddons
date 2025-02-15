@@ -41,7 +41,7 @@ class Config {
         category: "General",
         subcategory: "Attributes"
     })
-    enableAttributeAbbreviations = true;
+    attributeAbbreviations = true;
 
     @SwitchProperty({
         name: "Enable Custom Emotes",
@@ -51,7 +51,6 @@ class Config {
     })
     enableCustomEmotes = true;
 
-    ////////// Reminder Settings //////////
     @SwitchProperty({
         name: "Enable Reminders",
         description: "Enable the reminder feature.",
@@ -90,36 +89,12 @@ class Config {
     reminderSoundVolume = 0.5;
 
     @SwitchProperty({
-        name: "Enable Todos",
-        description: `Enable the todo feature. \nAdd Todos with ${AQUA}/todo${RESET}.`,
+        name: "Show Autopet Rule Title",
+        description: "Show a Title when a Autopet Rule get triggered",
         category: "General",
-        subcategory: "Todo"
+        subcategory: "Autopet Rule Title"
     })
-    enableTodos = true;
-
-    @SwitchProperty({
-        name: "Show Todos on Skyblock Join",
-        description: "Automatically shows your todo list when joining Skyblock.",
-        category: "General",
-        subcategory: "Todo"
-    })
-    showTodosOnJoin = true;
-
-    @SwitchProperty({
-        name: "Clear Completed Todos",
-        description: "Automatically remove todos when marked as completed.",
-        category: "General",
-        subcategory: "Todo"
-    })
-    clearCompletedTodos = true;
-
-    @SwitchProperty({
-        name: "Save Todos",
-        description: "Save todos between game sessions.",
-        category: "General",
-        subcategory: "Todo"
-    })
-    saveTodos = true;
+    autopetRuleTitle = true
 
     ////////// Dungeons Settings //////////
     @SwitchProperty({
@@ -461,55 +436,6 @@ class Config {
     })
     kickCommand = true;
 
-    ////////// Miscellaneous Settings //////////
-    @SwitchProperty({
-        name: "Enable Math Teacher Solver",
-        description: "Enable the solver for Math Teacher.",
-        category: "Miscellaneous",
-        subcategory: "Great Spook"
-    })
-    enableMathTeacherSolver = true;
-    
-    @SwitchProperty({
-        name: "Auto solve Math Teacher",
-        description: `Automatically send the answer to Math Teacher questions in chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Miscellaneous",
-        subcategory: "Great Spook"
-    })
-    autoSendMathTeacherAnswer = false;
-    
-    @SwitchProperty({
-        name: "Enable Public Speaking Demon Solver",
-        description: "Enable the solver for Public Speaking Demon.",
-        category: "Miscellaneous",
-        subcategory: "Great Spook"
-    })
-    enablePublicSpeakingDemonSolver = true;
-    
-    @SwitchProperty({
-        name: "Auto solve Public Speaking Demon",
-        description: `Automatically send a response to Public Speaking Demon in chat.\n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Miscellaneous",
-        subcategory: "Great Spook"
-    })
-    autoSendPublicSpeakingResponse = false;
-    
-    @SwitchProperty({
-        name: "Auto solve Commitment Phobia",
-        description: `Automatically executes the command to solve Commitment Phobia. \n\n${RED}${BOLD}Note:${RESET} This feature ${RED}does not${RESET} simulate clicking the sign button.\nIt only executes the command sent by the game.\n\n${DARK_RED}Technically a chat macro so [UAYOR]!${RESET}`,
-        category: "Miscellaneous",
-        subcategory: "Great Spook"
-    })
-    autoSendCommitmentPhobiaResponse = false;
-
-    @SwitchProperty({
-        name: "Show Autopet Rule Title",
-        description: "Show a Title when a Autopet Rule get triggered",
-        category: "Miscellaneous",
-        subcategory: "Autopet Rule Title"
-    })
-    autopetRuleTitle = true
-
     ////////// HUD Settings //////////
     @ButtonProperty({
         name: "Move HUD",
@@ -556,7 +482,6 @@ class Config {
         this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
         this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
-        this.setCategoryDescription("Miscellaneous", `${ConfigHeader}\n\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
         this.setCategoryDescription("HUD", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
         this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
         this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <test>, /getcurrentarea, /getdungeoninfo, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
@@ -565,10 +490,6 @@ class Config {
         this.addDependency("Reminder Popup Color", "Enable Reminders");
         this.addDependency("Reminder Sound", "Enable Reminders");
         this.addDependency("Reminder Sound Volume", "Enable Reminders");
-        this.addDependency("Show Todos on Skyblock Join","Enable Todos");
-        this.addDependency("Clear Completed Todos","Enable Todos");
-        this.addDependency("Save Todos","Enable Todos");
-
 
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
@@ -586,10 +507,6 @@ class Config {
         // Add dependencies for DM Commands
         this.addDependency("Invite Command (DMs) &3!p&r", "Enable DM Commands");
         this.addDependency("Kick Command (DMs) &3!kick&r", "Enable DM Commands");
-
-        // Add dependencies for Miscellaneous
-        this.addDependency("Auto solve Math Teacher", "Enable Math Teacher Solver");
-        this.addDependency("Auto solve Public Speaking Demon", "Enable Public Speaking Demon Solver");
 
         // Add dependencies for WIP
         this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting");

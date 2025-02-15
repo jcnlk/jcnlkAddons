@@ -2,6 +2,5 @@ config.toml
 data/CustomEmotes.json
 data/KuudraLoot.js
 data/Reminders.json
-features/kuudra/HighlightKuudraLoot.js
 data/Todos.json
-data/PogData.json
+data/Data.json

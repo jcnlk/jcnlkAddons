@@ -5,11 +5,10 @@ import config from "./config";
 import * as CustomEmotes from "./features/general/CustomEmotes";
 import * as Reminders from "./features/general/Reminders";
 import "./features/general/AttributeAbbrev";
-import "./features/general/Todo";
 
 // Utils
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
-import "./utils/ClickableMessageContent";
+import HudManager from "./utils/Hud";
 import "./utils/KuudraLootScanner";
 import "./utils/HighlightSlots";
 import "./utils/Formatting";
@@ -20,7 +19,6 @@ import "./utils/Dungeon";
 import "./utils/Title";
 import "./utils/Items";
 import "./utils/Area";
-import HudManager from "./utils/Hud";
 
 // Dungeons
 import "./features/dungeons/SimonSaysPhaseTracker";
@@ -36,8 +34,7 @@ import "./features/dungeons/PreDev";
 import "./features/dungeons/i4";
 
 // Miscellaneous
-import "./features/miscellaneous/AutoPetruleAlert";
-import "./features/miscellaneous/GreatSpookSolver";
+import "./features/miscellaneous/AutoPetruleTitle";
 
 // Commands
 import "./features/commands/PartyCommands";
@@ -46,11 +43,10 @@ import "./features/commands/DmCommands";
 /**
  * Registers a slash command
  * @param {string} command - The command to register
- * @param {string} description - The description of the command
  * @param {Function} action - The action to perform when the command is executed
  * @param {Array} tabCompletions - The tab completions for the command
  */
-function registerSlashCommand(command, description, action, tabCompletions) {
+function registerSlashCommand(command, action, tabCompletions) {
   register("command", (...args) => {
     showDebugMessage(`Executing slash command: /${command} ${args.join(" ")}`);
     action(...args);
@@ -61,7 +57,6 @@ function registerSlashCommand(command, description, action, tabCompletions) {
 
 registerSlashCommand(
   "ja",
-  "Main command for jcnlkAddons",
   (subCommand, ...args) => {
     if (!subCommand) {
       config.openGUI();
@@ -108,9 +103,6 @@ registerSlashCommand(
       case "hud":
         HudManager.openGui();
         break;
-      case "test":
-        showGeneralJAMessage("The Module is actually running!");
-        break;
       case "help":
         showGeneralJAMessage(
           "Available subcommands: crypts, help, hud, emote, test"
@@ -119,13 +111,12 @@ registerSlashCommand(
         break;
     }
   },
-  ["crypts", "help", "emote", "hud", "test"]
+  ["crypts", "help", "emote", "hud"]
 );
 
 // /reminder command
 registerSlashCommand(
   "reminder",
-  "Set a reminder",
   (...args) => {
     if (!config.enableReminders) {
       showGeneralJAMessage("Reminders are currently disabled in the config.");

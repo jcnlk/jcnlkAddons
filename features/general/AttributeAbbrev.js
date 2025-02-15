@@ -1,15 +1,8 @@
-import Config from "../../config";
-import { AQUA } from "../../utils/Constants";
+import config from "../../config";
+import { AQUA, isInSkyblock } from "../../utils/Constants";
+import { registerWhen } from "../../utils/Register";
 
-/**
- * Renders attribute abbreviations on an item
- * @param {Object} item - The item to render abbreviations on
- * @param {number} x - The x coordinate of the item
- * @param {number} y - The y coordinate of the item
- */
 function renderAttributeAbbreviations(item, x, y) {
-    if (!Config.enableAttributeAbbreviations) return;
-
     const attributes = item
         ?.getNBT()
         ?.getCompoundTag("tag")
@@ -33,9 +26,9 @@ function renderAttributeAbbreviations(item, x, y) {
     Renderer.drawString(overlay, x * 1.25 + 1, y * 1.25 + 1);
 }
 
-/**
- * Event handler for rendering items in GUI
- */
-register("renderItemIntoGui", (item, x, y) => {
+registerWhen(register("renderItemIntoGui", (item, x, y) => {
+    if (!World.isLoaded) return;
+    if (!isInSkyblock) return;
+
     renderAttributeAbbreviations(item, x, y);
-});
+}),() => config.attributeAbbreviations);

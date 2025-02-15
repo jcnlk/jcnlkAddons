@@ -3,6 +3,7 @@ import { data } from "../../utils/Data";
 import HudManager from "../../utils/Hud";
 import { Hud } from "../../utils/Hud";
 import { registerWhen } from "../../utils/Register";
+import { getIsInDungeon } from "../../utils/Dungeon";
 
 const masks = {
     bonzo: {
@@ -76,7 +77,11 @@ Object.keys(masks).forEach(key => {
 const maskTimerHud = new Hud("maskTimerHud", `&9&bBonzo Mask: &aREADY \n&f&bSpirit Mask: &aREADY \n&c&bPhoenix: &aREADY`, HudManager, data);
 
 registerWhen(register("renderOverlay", () => {
-    if (!config.maskTimer || HudManager.isEditing) return;
+    if (!World.isLoaded) return;
+    if (HudManager.isEditing) return; //!config.maskTimer || 
+
+    const isInDungeon = getIsInDungeon();
+    if (!isInDungeon) return;
     
     const [baseX, baseY] = maskTimerHud.getCoords();
     const scale = maskTimerHud.getScale();

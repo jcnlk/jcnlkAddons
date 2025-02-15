@@ -27,7 +27,7 @@ export const ITALIC = "§o";
 export const RESET = "§r";
 
 // Checks if current server is hypixel
-export const InSkyblock = () => {
+export const isInSkyblock = () => {
     if (Server.getIP().includes('hypixel') && ChatLib.removeFormatting(Scoreboard.getTitle()).includes('SKYBLOCK'))
         return true;
     return false;
