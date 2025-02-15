@@ -28,7 +28,7 @@ const ConfigHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YEL
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "Party Commands", "DM Commands", "Miscellaneous", "HUD", "WIP", "Dev Stuff"];
+        const order = ["General", "Dungeons", "F7/M7", "Party Commands", "DM Commands", "Miscellaneous", "HUD", "WIP", "Dev Stuff"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
@@ -44,6 +44,14 @@ class Config {
     attributeAbbreviations = true;
 
     @SwitchProperty({
+        name: "Show Autopet Rule Title",
+        description: "Show a Title when a Autopet Rule get triggered.",
+        category: "General",
+        subcategory: "Autopet Rule Title"
+    })
+    autopetRuleTitle = true
+
+    @SwitchProperty({
         name: "Enable Custom Emotes",
         description: `Enable the use of custom emotes in chat. \nAdd custom emotes with ${AQUA}/ja emote${RESET}.`,
         category: "General",
@@ -53,7 +61,7 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Reminders",
-        description: "Enable the reminder feature.",
+        description: "Enable reminder feature.",
         category: "General",
         subcategory: "Reminders"
     })
@@ -61,7 +69,7 @@ class Config {
 
     @SelectorProperty({
         name: "Reminder Popup Color",
-        description: "Choose the color for reminder popups.",
+        description: "Choose the color for reminder popup.",
         category: "General",
         subcategory: "Reminders",
         options: ["§cRed§r", "§aGreen§r", "§bCyan§r", "§eYellow§r", "§fWhite§r", "§dLight Pink§r"]
@@ -70,7 +78,7 @@ class Config {
 
     @SelectorProperty({
         name: "Reminder Sound",
-        description: "Choose the sound for reminders.",
+        description: "Choose the sound for reminder.",
         category: "General",
         subcategory: "Reminders",
         options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
@@ -88,26 +96,18 @@ class Config {
     })
     reminderSoundVolume = 0.5;
 
-    @SwitchProperty({
-        name: "Show Autopet Rule Title",
-        description: "Show a Title when a Autopet Rule get triggered",
-        category: "General",
-        subcategory: "Autopet Rule Title"
-    })
-    autopetRuleTitle = true
-
     ////////// Dungeons Settings //////////
     @SwitchProperty({
         name: "Enable Crypt Reminder",
-        description: "Enable the crypt reminder feature in dungeons.",
+        description: "Enable crypt reminder feature in dungeons.",
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
-    enableCryptReminder = true;
+    cryptReminder = true;
 
     @DecimalSliderProperty({
         name: "Crypt Reminder Time",
-        description: `Time in minutes to remind about crypts \n(0 to turn it ${RED}OFF${RESET}).`,
+        description: `Time in minutes to remind about missing crypts \n(0 to turn it ${RED}OFF${RESET}).`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         minF: 0.0,
@@ -118,7 +118,7 @@ class Config {
 
     @TextProperty({
         name: "Crypt Reminder Message",
-        description: `Message to send as a crypt reminder. \nUse ${AQUA}{count}${RESET} for the number of needed crypts.`,
+        description: `Message to send as crypt reminder. \nUse ${AQUA}{count}${RESET} for the number of needed crypts.`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         placeholder: "We need {count} more crypts!"
@@ -127,44 +127,15 @@ class Config {
 
     @CheckboxProperty({
         name: "Enable Crypt Reminder Popup",
-        description: "Show a popup for crypt reminders.",
+        description: "Show a popup for crypt reminder.",
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
-    enableCryptReminderPopup = true;
-
-    @SelectorProperty({
-        name: "Crypt Reminder Popup Color",
-        description: "Choose the color for crypt reminder popups.",
-        category: "Dungeons",
-        subcategory: "Crypt Reminder",
-        options: ["§cRed§r", "§aGreen§r", "§bBlue§r", "§eYellow§r", "§fWhite§r", "§dPink§r"]
-    })
-    cryptReminderPopupColor = 0;
-    
-    @SelectorProperty({
-        name: "Crypt Reminder Sound",
-        description: "Choose the sound for crypt reminders.",
-        category: "Dungeons",
-        subcategory: "Crypt Reminder",
-        options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
-    })
-    cryptReminderSound = 0;
-    
-    @DecimalSliderProperty({
-        name: "Crypt Reminder Sound Volume",
-        description: `Volume of the crypt reminder sound \n(0 to turn it ${RED}OFF${RESET}).`,
-        category: "Dungeons",
-        subcategory: "Crypt Reminder",
-        minF: 0,
-        maxF: 2.0,
-        decimalPlaces: 1
-    })
-    cryptReminderSoundVolume = 0.5;
+    cryptReminderPopup = true;
 
     @SwitchProperty({
         name: "Enable Dungeon Chest Highlighting",
-        description: "Highlights loot in dungeon chests.",
+        description: `Highlight loot in dungeon chests. \n(${GREEN}Good Loot${RESET}, ${YELLOW}Mid Loot${RESET}, ${RED}Bad Loot${RESET}).`,
         category: "Dungeons",
         subcategory: "Dungeon Loot Highlighting"
     })
@@ -172,139 +143,11 @@ class Config {
     
     @SwitchProperty({
         name: "Enable Dungeon Loot Chat Output",
-        description: "Displays dungeon loot in the chat.",
+        description: "Show dungeon loot in the chat.",
         category: "Dungeons",
         subcategory: "Dungeon Loot Highlighting"
     })
     enableDungeonLootChatOutput = false;
-
-    @SwitchProperty({
-        name: "Announce Pre Enter P2",
-        description: `Announce to Party Chat when you Pre Enter P2 (Storm Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcePreEnterP2 = true;
-
-    @SwitchProperty({
-        name: "Mask Reminder",
-        description: "Reminds you to equip a Bonzo/Spirit Mask before P3.",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    MaskReminder = true;
-
-    @SwitchProperty({
-        name: "Mask Timer",
-        description: "",
-        category: "Dungeons",
-        subcategory: "Mask Timer"
-    })
-    maskTimer = true;
-
-    @SwitchProperty({
-        name: "Announce Pre Enter P3",
-        description: `Announce to Party Chat when you Pre Enter in Phase 3 (Terminal Phase). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcePreEnterPhase3 = true
-
-    @SwitchProperty({
-        name: "Enable Pre Enter Titles",
-        description: "Show titles when players announce Pre Enter positions in party chat.",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreEnterTitles = true;
-
-    @SwitchProperty({
-        name: "Announce i4 Position",
-        description: `Announce your i4 position in Party Chat (i4 Entry, Moving to i4, At i4). \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcei4Position = true;
-
-    @SwitchProperty({
-        name: "i4 Position Titles",
-        description: "Show titles when players announce i4 positions in party chat.",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    i4PositionTitles = true;
-    
-    @SwitchProperty({
-        name: "Announce Pre Dev Position",
-        description: `Announce your position during Pre Dev to Party Chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcePreDevPosition = true;
-
-    @SwitchProperty({
-        name: "Announce Pre Enter P4",
-        description: `Announce your Pre Enter P4 position to Party Chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcePreP4 = true;
-
-    @SwitchProperty({
-        name: "Announce Pre Enter P5",
-        description: `Announce your Pre Enter P5 position to Party Chat. \n${DARK_RED}Technically a chat macro [UAYOR]!${RESET}`,
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announcePreP5 = true;
-
-    @SwitchProperty({
-        name: "Pre Enter P2 Titles",
-        description: "Gives you a title when someone Pre Enter P2.",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreP2Titles = true;
-
-    @SwitchProperty({
-        name: "Pre Enter P4 Titles",
-        description: "Gives you a title when someone Pre Enter P4.",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreP4Titles = true;
-
-    @SwitchProperty({
-        name: "Pre Enter P5 Titles",
-        description: "Gives you a title when Healer Pre Enter P5.",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreP5Titles = true;
-
-    @SwitchProperty({
-        name: "Pre Dev Title",
-        description: "Gives you a title when someone is at SS (Simon Says).",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    PreDevTitles = true;
-
-    @SwitchProperty({
-        name: "EE2 Helper",
-        description: "Gives you a title when SS (Simon Says) is 4/5. This is Archer only!",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    EE2Helper = true;
-
-    @SwitchProperty({
-        name: "Announce SS Progression",
-        description: "Announces your SS (Simon Says) Progression to Party Chat. Only Announces if you are at SS.",
-        category: "Dungeons",
-        subcategory: "F7/M7"
-    })
-    announceSSProgression = true;
 
     @SwitchProperty({
         name: "Fire Freeze Notification",
@@ -316,11 +159,140 @@ class Config {
 
     @SwitchProperty({
         name: "Hide Players After Leap",
-        description: "Hide nearby players on after leaping to them.",
+        description: "Hide nearby players after leaping.",
         category: "Dungeons",
         subcategory: "Miscellaneous"
     })
     enablePlayerHiding = true;
+
+    ////////// F7/M7 Settings //////////
+    @SwitchProperty({
+        name: "Mask Timer",
+        description: "Displays a HUD with Masks/Phoenix cooldowns.",
+        category: "F7/M7",
+        subcategory: "Mask Timer"
+    })
+    maskTimer = true;
+
+    @SwitchProperty({
+        name: "Announce Pre Enter P2",
+        description: "Announce to Party Chat when you Pre Enter P2.",
+        category: "F7/M7",
+        subcategory: "P1 (Maxor Phase)"
+    })
+    announcePreEnterP2 = true;
+
+    @SwitchProperty({
+        name: "Pre Enter P2 Titles",
+        description: "Show a title when someone Pre Enter P2.",
+        category: "F7/M7",
+        subcategory: "P1 (Maxor Phase)"
+    })
+    PreP2Titles = true;
+
+    @SwitchProperty({
+        name: "Mask Reminder",
+        description: "Reminds you to equip Bonzo/Spirit Mask before P3 has started.",
+        category: "F7/M7",
+        subcategory: "P2 (Storm Phase)"
+    })
+    MaskReminder = true;
+
+    @SwitchProperty({
+        name: "Announce i4 Position",
+        description: "Announce your i4 position to Party Chat (i4 Entry, Moving to i4, At i4).",
+        category: "F7/M7",
+        subcategory: "P2 (Storm Phase)"
+    })
+    announcei4Position = true;
+
+    @SwitchProperty({
+        name: "i4 Position Titles",
+        description: "Show titles when someone announce i4 positions in your party.",
+        category: "F7/M7",
+        subcategory: "P2 (Storm Phase)"
+    })
+    i4PositionTitles = true;
+
+    @SwitchProperty({
+        name: "Announce Pre Enter P3",
+        description: "Announce to Party Chat when you Pre Enter in Phase 3 (EE2, EE3, EE4/Core).",
+        category: "F7/M7",
+        subcategory: "P3 (Goldor Phase)"
+    })
+    announcePreEnterPhase3 = true
+
+    @SwitchProperty({
+        name: "Enable Pre Enter Titles",
+        description: "Show titles when someone announce Pre Enter positions in your party.",
+        category: "F7/M7",
+        subcategory: "P3 (Goldor Phase)"
+    })
+    PreEnterTitles = true;
+
+    @SwitchProperty({
+        name: "Announce Pre Dev Position",
+        description: "Announce your position during Pre Dev to Party Chat (At Dev 2, At Dev 3).",
+        category: "F7/M7",
+        subcategory: "P3 (Goldor Phase)"
+    })
+    announcePreDevPosition = true;
+
+    @SwitchProperty({
+        name: "Announce Pre Enter P4",
+        description: "Announce your Pre Enter P4 position to Party Chat.",
+        category: "F7/M7",
+        subcategory: "P3 (Goldor Phase)"
+    })
+    announcePreP4 = true;
+
+    @SwitchProperty({
+        name: "Pre Enter P4 Titles",
+        description: "Show a title when someone Pre Enter P4.",
+        category: "F7/M7",
+        subcategory: "P3 (Goldor Phase)"
+    })
+    PreP4Titles = true;
+
+    @SwitchProperty({
+        name: "Pre Dev Title",
+        description: "Show a title when someone is at SS (Simon Says).",
+        category: "F7/M7",
+        subcategory: "P3 (Goldor Phase)"
+    })
+    PreDevTitles = true;
+
+    @SwitchProperty({
+        name: "EE2 Helper",
+        description: "Show a title when SS (Simon Says) is 4/5 & 5/5 done. Only shown to Archer!",
+        category: "F7/M7",
+        subcategory: "P3 (Goldor Phase)"
+    })
+    EE2Helper = true;
+
+    @SwitchProperty({
+        name: "Announce SS Progression",
+        description: "Announces your SS (Simon Says) Progression to Party Chat. Only if you are standing at SS.",
+        category: "F7/M7",
+        subcategory: "P3 (Goldor Phase)"
+    })
+    announceSSProgression = true;
+
+    @SwitchProperty({
+        name: "Announce Pre Enter P5",
+        description: "Announce your Pre Enter P5 position to Party Chat.",
+        category: "F7/M7",
+        subcategory: "P4 (Necron Phase)"
+    })
+    announcePreP5 = true;
+
+    @SwitchProperty({
+        name: "Pre Enter P5 Titles",
+        description: "Show a title when someone Pre Enter P5. Healer only!",
+        category: "F7/M7",
+        subcategory: "P4 (Necron Phase)"
+    })
+    PreP5Titles = true;
 
     //////////// Party Commands Settings //////////
     @SwitchProperty({
@@ -478,13 +450,14 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, help>, /reminder, /todo${RESET}`);
-        this.setCategoryDescription("Dungeons", `${ConfigHeader}\n\n${DARK_RED}${BOLD}CAUTION: Features marked with '[UAYOR]' are technically macros,\n${DARK_RED}${BOLD} so use at your own risk${RESET}`);
-        this.setCategoryDescription("Party Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
-        this.setCategoryDescription("DM Commands", `${ConfigHeader}\n\n${DARK_RED}${BOLD}Technically a chat macro [UAYOR]${RESET}`);
+        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, hud, help>, /reminder${RESET}`);
+        this.setCategoryDescription("Dungeons", `${ConfigHeader}`);
+        this.setCategoryDescription("F7/M7", `${ConfigHeader}`);
+        this.setCategoryDescription("Party Commands", `${ConfigHeader}`);
+        this.setCategoryDescription("DM Commands", `${ConfigHeader}`);
         this.setCategoryDescription("HUD", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
         this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
-        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <test>, /getcurrentarea, /getdungeoninfo, /getitemid,\n§7§o/getenchantedbookdetail§r\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
+        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /getcurrentarea, /getdungeoninfo, /getitemid, /getenchantedbookdetail\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
 
         // Add dependencies for General
         this.addDependency("Reminder Popup Color", "Enable Reminders");
@@ -495,9 +468,6 @@ class Config {
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
         this.addDependency("Enable Crypt Reminder Popup", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Popup Color", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Sound", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Sound Volume", "Enable Crypt Reminder");
         this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting");
 
         // Add dependencies for Party Commands
