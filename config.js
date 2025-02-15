@@ -57,7 +57,7 @@ class Config {
         category: "General",
         subcategory: "Chat"
     })
-    enableCustomEmotes = true;
+    customEmotes = true;
 
     @SwitchProperty({
         name: "Enable Reminders",
@@ -68,15 +68,6 @@ class Config {
     enableReminders = true;
 
     @SelectorProperty({
-        name: "Reminder Popup Color",
-        description: "Choose the color for reminder popup.",
-        category: "General",
-        subcategory: "Reminders",
-        options: ["§cRed§r", "§aGreen§r", "§bCyan§r", "§eYellow§r", "§fWhite§r", "§dLight Pink§r"]
-    })
-    reminderPopupColor = 0;
-
-    @SelectorProperty({
         name: "Reminder Sound",
         description: "Choose the sound for reminder.",
         category: "General",
@@ -84,17 +75,6 @@ class Config {
         options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
     })
     reminderSound = 0;
-
-    @DecimalSliderProperty({
-        name: "Reminder Sound Volume",
-        description: `Volume of the reminder sound \n(0 to turn it ${RED}OFF${RESET}).`,
-        category: "General",
-        subcategory: "Reminders",
-        minF: 0,
-        maxF: 2.0,
-        decimalPlaces: 1
-    })
-    reminderSoundVolume = 0.5;
 
     ////////// Dungeons Settings //////////
     @SwitchProperty({
@@ -375,14 +355,6 @@ class Config {
     })
     partyInviteCommand = true;
 
-    @SwitchProperty({
-        name: "Reminder Command &3!reminder&r",
-        description: "Enable the reminder command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    reminderCommand = true;
-
     ////////// DM Commands Settings //////////
     @SwitchProperty({
         name: "Enable DM Commands",
@@ -460,9 +432,7 @@ class Config {
         this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /getcurrentarea, /getdungeoninfo, /getitemid, /getenchantedbookdetail\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
 
         // Add dependencies for General
-        this.addDependency("Reminder Popup Color", "Enable Reminders");
         this.addDependency("Reminder Sound", "Enable Reminders");
-        this.addDependency("Reminder Sound Volume", "Enable Reminders");
 
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
@@ -471,7 +441,7 @@ class Config {
         this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting");
 
         // Add dependencies for Party Commands
-        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r ", "Reminder Command &3!reminder&r"];
+        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r "];
         partyCommands.forEach(command => this.addDependency(command, "Enable Party Commands"));
 
         // Add dependencies for DM Commands

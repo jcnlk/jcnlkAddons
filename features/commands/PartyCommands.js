@@ -1,5 +1,4 @@
 import Config from "../../config";
-import { addPartyReminder } from "../general/Reminders";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 
 let commandOutputs;
@@ -83,12 +82,7 @@ function createResponse(commandType, variables) {
   );
 }
 
-function handleHelpCommand(args) {
-  if (!commandOutputs.commands) {
-    showGeneralJAMessage("Error: Commands information not available");
-    return;
-  }
-
+function handleHelpCommand() {
   const availableCommands = [
     Config.rngCommand && "!rng",
     Config.coinFlipCommand && "!cf",
@@ -99,8 +93,6 @@ function handleHelpCommand(args) {
     Config.susCommand && "!sus",
     Config.partyKickCommand && "!kick",
     Config.partyInviteCommand && "!p",
-    Config.reminderCommand && "!reminder",
-    "!commands",
   ].filter(Boolean);
 
   sendPartyChatMessage(`Available commands: ${availableCommands.join(", ")}`);
@@ -174,22 +166,6 @@ function handleInviteCommand(commandParts) {
   }
 }
 
-function handleReminderCommand(senderName, message) {
-  const timeRegex = /(\d+[smh])$/;
-  const timeMatch = message.match(timeRegex);
-  if (timeMatch) {
-    const reminderTime = timeMatch[1];
-    const reminderName = message.slice(9, -reminderTime.length).trim();
-    if (reminderName && reminderTime) {
-      addPartyReminder(senderName, reminderName, reminderTime, () => {
-        sendPartyChatMessage(`Reminder for ${senderName}: ${reminderName}`);
-      });
-      return `Reminder '${reminderName}' set for ${reminderTime}.`;
-    }
-  }
-  return "Invalid time format. Use s for seconds, m for minutes, h for hours.";
-}
-
 function isCommandEnabled(command) {
   const commandMapping = {
     "!rng": Config.rngCommand,
@@ -201,7 +177,6 @@ function isCommandEnabled(command) {
     "!sus": Config.susCommand,
     "!kick": Config.partyKickCommand,
     "!p": Config.partyInviteCommand,
-    "!reminder": Config.reminderCommand,
     "!commands": true,
   };
   return commandMapping[command] || false;
@@ -254,9 +229,6 @@ register("chat", (player, message) => {
     case "!p":
       handleInviteCommand(commandParts);
       return;
-    case "!reminder":
-      createdResponse = handleReminderCommand(senderName, message);
-      break;
   }
 
   if (createdResponse) {

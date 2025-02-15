@@ -2,9 +2,11 @@
 import config from "./config";
 
 // General
-import * as CustomEmotes from "./features/general/CustomEmotes";
-import * as Reminders from "./features/general/Reminders";
+
+import "./features/general/AutoPetruleTitle";
 import "./features/general/AttributeAbbrev";
+import "./features/general/CustomEmotes";
+import "./features/general/Reminders";
 
 // Utils
 import { showGeneralJAMessage, showDebugMessage } from "./utils/ChatUtils";
@@ -14,10 +16,10 @@ import "./utils/HighlightSlots";
 import "./utils/Formatting";
 import "./utils/Constants";
 import "./utils/Register";
-import "./utils/Data";
 import "./utils/Dungeon";
 import "./utils/Title";
 import "./utils/Items";
+import "./utils/Data";
 import "./utils/Area";
 
 // Dungeons
@@ -33,175 +35,66 @@ import "./features/dungeons/MaskTimer";
 import "./features/dungeons/PreDev";
 import "./features/dungeons/i4";
 
-// Miscellaneous
-import "./features/miscellaneous/AutoPetruleTitle";
-
 // Commands
 import "./features/commands/PartyCommands";
 import "./features/commands/DmCommands";
 
-/**
- * Registers a slash command
- * @param {string} command - The command to register
- * @param {Function} action - The action to perform when the command is executed
- * @param {Array} tabCompletions - The tab completions for the command
- */
-function registerSlashCommand(command, action, tabCompletions) {
-  register("command", (...args) => {
-    showDebugMessage(`Executing slash command: /${command} ${args.join(" ")}`);
-    action(...args);
-  })
-    .setName(command)
-    .setTabCompletions(tabCompletions || []);
-}
+register("command", (subCommand, ...args) => {
+  if (!subCommand) {
+    config.openGUI();
+    return;
+  }
 
-registerSlashCommand(
-  "ja",
-  (subCommand, ...args) => {
-    if (!subCommand) {
-      config.openGUI();
-      return;
-    }
+  subCommand = subCommand.toLowerCase();
 
-    subCommand = subCommand.toLowerCase();
-
-    switch (subCommand) {
-      case "emote":
-        if (!args[0]) {
-          showGeneralJAMessage(
-            "Usage: /ja emote [add|remove|list] [emotename] [emote]"
-          );
-          return;
-        }
-        const emoteAction = args[0].toLowerCase();
-        switch (emoteAction) {
-          case "add":
-            if (args.length < 3) {
-              showGeneralJAMessage("Usage: /ja emote add [emotename] [emote]");
-              return;
-            }
-            const emoteName = args[1];
-            const emote = args.slice(2).join(" ");
-            CustomEmotes.addCustomEmote(emoteName, emote);
-            break;
-          case "remove":
-            if (args.length !== 2) {
-              showGeneralJAMessage("Usage: /ja emote remove [emotename]");
-              return;
-            }
-            CustomEmotes.removeCustomEmote(args[1]);
-            break;
-          case "list":
-            CustomEmotes.listCustomEmotes();
-            break;
-          default:
-            showGeneralJAMessage(
-              "Unknown emote action. Use add, remove, or list."
-            );
-        }
-        break;
-      case "hud":
-        HudManager.openGui();
-        break;
-      case "help":
+  switch (subCommand) {
+    /**
+    case "emote":
+      if (!args[0]) {
         showGeneralJAMessage(
-          "Available subcommands: crypts, help, hud, emote, test"
+          "Usage: /ja emote [add|remove|list] [emotename] [emote]"
         );
-        showDebugMessage("Displayed /ja help information");
-        break;
-    }
-  },
-  ["crypts", "help", "emote", "hud"]
-);
-
-// /reminder command
-registerSlashCommand(
-  "reminder",
-  (...args) => {
-    if (!config.enableReminders) {
-      showGeneralJAMessage("Reminders are currently disabled in the config.");
-      return;
-    }
-
-    if (args.length === 0) {
+        return;
+      }
+      const emoteAction = args[0].toLowerCase();
+      switch (emoteAction) {
+        case "add":
+          if (args.length < 3) {
+            showGeneralJAMessage("Usage: /ja emote add [emotename] [emote]");
+            return;
+          }
+          const emoteName = args[1];
+          const emote = args.slice(2).join(" ");
+          addCustomEmote(emoteName, emote);
+          break;
+        case "remove":
+          if (args.length !== 2) {
+            showGeneralJAMessage("Usage: /ja emote remove [emotename]");
+            return;
+          }
+          removeCustomEmote(args[1]);
+          break;
+        case "list":
+          listCustomEmotes();
+          break;
+        default:
+          showGeneralJAMessage(
+            "Unknown emote action. Use add, remove, or list."
+          );
+      }
+      break;
+      */
+    case "hud":
+      HudManager.openGui();
+      break;
+    case "help":
       showGeneralJAMessage(
-        "Usage: /reminder [add|remove|list] [name|index] [time]"
+        "Available subcommands: crypts, help, hud, emote, test"
       );
-      return;
-    }
-
-    const action = args[0].toLowerCase();
-
-    switch (action) {
-      case "add":
-        if (args.length < 3) {
-          showGeneralJAMessage("Usage: /reminder add [name] [time]");
-          return;
-        }
-        const timeArg = args[args.length - 1];
-        const name = args.slice(1, -1).join(" ");
-        if (
-          Reminders.addReminder(name, timeArg, (reminderName) => {
-            showGeneralJAMessage(`Reminder: ${reminderName}`);
-          })
-        ) {
-          showGeneralJAMessage(
-            `Reminder '${name}' set for ${timeArg}`,
-            "success"
-          );
-        } else {
-          showGeneralJAMessage(
-            `Failed to set reminder '${name}'. Please check the time format.`,
-            "error"
-          );
-        }
-        break;
-      case "remove":
-        if (args.length < 2) {
-          showGeneralJAMessage("Usage: /reminder remove [name|index]");
-          return;
-        }
-        const removeIdentifier = args[1];
-        const removeIndex = parseInt(removeIdentifier);
-        if (
-          Reminders.removeReminder(
-            isNaN(removeIndex) ? removeIdentifier : removeIndex
-          )
-        ) {
-          showGeneralJAMessage(
-            `Reminder '${removeIdentifier}' removed`,
-            "success"
-          );
-        } else {
-          showGeneralJAMessage(
-            `No reminder found with identifier '${removeIdentifier}'`,
-            "error"
-          );
-        }
-        break;
-      case "list":
-        const list = Reminders.listReminders();
-        if (list.length > 0) {
-          showGeneralJAMessage("Active reminders:");
-          list.forEach((reminder) => {
-            showGeneralJAMessage(
-              `${reminder.index}. ${
-                reminder.name
-              } - Time left: ${Reminders.formatTime(reminder.timeLeft)}`
-            );
-          });
-        } else {
-          showGeneralJAMessage("No active reminders");
-        }
-        break;
-      default:
-        showGeneralJAMessage(
-          "Usage: /reminder [add|remove|list] [name|index] [time]"
-        );
-    }
-  },
-  ["add", "remove", "list"]
-);
+      showDebugMessage("Displayed /ja help information");
+      break;
+  }
+}).setName("ja").setAliases("jcnlkAddons").setTabCompletions(["crypts", "help", "emote", "hud"]);
 
 register("gameLoad", () => {
   showGeneralJAMessage(`jcnlkAddons loaded successfully!`, "success");

@@ -1,89 +1,86 @@
-import Config from "../../config";
+import { data } from "../../utils/Data";
+import { registerWhen } from "../../utils/Register";
+import config from "../../config";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 
-let customEmotes = new Map();
-
-function loadCustomEmotes() {
-  try {
-    const storedEmotes = FileLib.read("jcnlkAddons", "data/CustomEmotes.json");
-    if (storedEmotes) {
-      customEmotes = new Map(JSON.parse(storedEmotes));
-      //showDebugMessage(`Loaded ${customEmotes.size} custom emotes`);
-    }
-  } catch (error) {
-    console.error(`Error loading custom emotes: ${error}`);
-  }
+if (typeof data.customEmotes !== "object" || data.customEmotes === null) {
+  data.customEmotes = {};
 }
 
-function saveCustomEmotes() {
-  try {
-    const emoteArray = Array.from(customEmotes.entries());
-    FileLib.write(
-      "jcnlkAddons",
-      "data/CustomEmotes.json",
-      JSON.stringify(emoteArray)
-    );
-    //showDebugMessage(`Saved ${customEmotes.size} custom emotes`);
-  } catch (error) {
-    console.error(`Error saving custom emotes: ${error}`);
-  }
-}
+let nextMessage;
 
-export function addCustomEmote(emoteName, emote) {
-  if (customEmotes.has(emoteName)) {
-    showGeneralJAMessage(
-      `Emote ${emoteName} already exists. Use remove command first to update.`
-    );
-    return false;
-  }
-  customEmotes.set(emoteName, emote);
-  saveCustomEmotes();
-  showGeneralJAMessage(`Added custom emote: ${emoteName} -> ${emote}`);
-  return true;
-}
+registerWhen(
+  register("messageSent", (message, event) => {
+    if (message === nextMessage) return;
+    let contains = false;
 
-export function removeCustomEmote(emoteName) {
-  if (customEmotes.has(emoteName)) {
-    customEmotes.delete(emoteName);
-    saveCustomEmotes();
-    showGeneralJAMessage(`Removed custom emote: ${emoteName}`);
-    return true;
-  }
-  showGeneralJAMessage(`Emote ${emoteName} not found.`);
-  return false;
-}
-
-export function listCustomEmotes() {
-  if (customEmotes.size === 0) {
-    showGeneralJAMessage("No custom emotes defined.");
-  } else {
-    showGeneralJAMessage("Custom Emotes:");
-    customEmotes.forEach((emote, name) => {
-      showGeneralJAMessage(`${name} -> ${emote}`);
+    Object.keys(data.customEmotes).forEach((key) => {
+      if (message.includes(key)) {
+        const reg = new RegExp(key, "g");
+        message = message.replace(reg, data.customEmotes[key]);
+        contains = true;
+      }
     });
+
+    if (contains) {
+      nextMessage = message;
+      ChatLib.say(message);
+      cancel(event);
+    }
+  }),
+  () => config.customEmotes
+);
+
+register("command", (subCommand, ...args) => {
+  subCommand = subCommand ? subCommand.toLowerCase() : "list";
+
+  if (subCommand === "list") {
+    const keys = Object.keys(data.customEmotes);
+    if (keys.length === 0) {
+      showGeneralJAMessage("No custom emotes defined.");
+    } else {
+      showGeneralJAMessage("Custom Emotes:");
+      keys.forEach((key) => {
+        showGeneralJAMessage(`${key} -> ${data.customEmotes[key]}`);
+      });
+    }
+    return;
   }
-}
 
-function replaceEmotesInMessage(message) {
-  if (!Config.enableCustomEmotes) return message;
-
-  let newMessage = message;
-  customEmotes.forEach((emote, name) => {
-    newMessage = newMessage.replace(new RegExp(name, "g"), emote);
-  });
-
-  return newMessage;
-}
-
-register("messageSent", (message, event) => {
-  if (!Config.enableCustomEmotes) return;
-
-  const newMessage = replaceEmotesInMessage(message);
-
-  if (newMessage !== message) {
-    cancel(event);
-    ChatLib.say(newMessage);
+  if (subCommand === "add") {
+    if (args.length < 2) {
+      showGeneralJAMessage("Usage: /emote add [emotename] [emote]");
+      return;
+    }
+    const emotename = args[0];
+    const emote = args.slice(1).join(" ");
+    if (data.customEmotes[emotename]) {
+      showGeneralJAMessage(
+        `Emote "${emotename}" already exists. Remove it first to update it.`
+      );
+    } else {
+      data.customEmotes[emotename] = emote;
+      data.save();
+      showGeneralJAMessage(`Added: ${emotename} -> ${emote}`);
+    }
+    return;
   }
-});
 
-register("gameLoad", loadCustomEmotes);
+  if (subCommand === "remove") {
+    if (args.length !== 1) {
+      showGeneralJAMessage("Usage: /emote remove [emotename]");
+      return;
+    }
+    const emotename = args[0];
+    if (data.customEmotes[emotename]) {
+      delete data.customEmotes[emotename];
+      data.save();
+      showGeneralJAMessage(`Removed: ${emotename}`);
+    } else {
+      showGeneralJAMessage(`Emote "${emotename}" not found.`);
+    }
+    return;
+  }
+
+  showGeneralJAMessage("Usage: /emote [list|add|remove]");
+}).setName("emote").setAliases("emotes");
