@@ -1,6 +1,7 @@
 import config from "../../config";
-import { getCurrentClass, getIsInStorm } from "../../utils/Dungeon";
+import { getCurrentClass, getIsInMaxor, getIsInStorm } from "../../utils/Dungeon";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
+import { registerWhen } from "../../utils/Register";
 
 let hasAnnouncedAtI4 = false;
 let hasAnnouncedI4Entry = false;
@@ -40,9 +41,10 @@ function getI4Position() {
 
 function announceI4Position() {
   if (!World.isLoaded()) return;
-  if (!config.announcei4Position) return;
   if (playerClass === "Healer") return;
-  if (!getIsInStorm()) return;
+
+  const isInMaxor = getIsInMaxor();
+  if (!isInMaxor) return;
 
   const i4Position = getI4Position();
 
@@ -67,7 +69,7 @@ function announceI4Position() {
   }
 }
 
-register("tick", announceI4Position);
+registerWhen(register("tick", announceI4Position), () => config.announceI4Position);
 
 register("worldUnload", () => {
   playerClass = null;

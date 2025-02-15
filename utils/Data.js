@@ -12,15 +12,6 @@ const defaultData = {
 
 export let data = new PogObject("jcnlkAddons/data", defaultData, "Data.json");
 
-/**
-export const resetData = () => {
-    Object.keys(defaultData).forEach((k) => {
-        data[k] = defaultData[k];
-    });
-    saveData();
-};
-*/
-
 register("gameUnload", () => {
     data.save();
 });

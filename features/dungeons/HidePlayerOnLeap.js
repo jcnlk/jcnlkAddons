@@ -1,6 +1,6 @@
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
-import Config from "../../config";
 import { registerWhen } from "../../utils/Register";
+import config from "../../config";
 
 let shownHidingMessage = false;
 let shownShowingMessage = false;
@@ -35,9 +35,7 @@ function shouldHidePlayer(entity) {
   return false;
 }
 
-register("chat", (location) => {
-  if (!Config.enablePlayerHiding) return;
-
+registerWhen(register("chat", (location) => {
   const playerX = Player.getX();
   const playerY = Player.getY();
   const playerZ = Player.getZ();
@@ -59,20 +57,17 @@ register("chat", (location) => {
       shownShowingMessage = false;
     }
   });
-}).setCriteria("You have teleported to ${location}!");
+}).setCriteria("You have teleported to ${location}!"), () => config.enablePlayerHiding);
 //You have teleported to JOE123546!
 
-registerWhen(
-  register("renderEntity", (entity, pos, partialTicks, event) => {
-    if (!Config.enablePlayerHiding) return;
-
+registerWhen(register("renderEntity", (entity, pos, partialTicks, event) => {
     if (!getIsPlayer(entity)) return;
 
     if (shouldHidePlayer(entity)) {
       cancel(event);
     }
   }),
-  () => Config.enablePlayerHiding
+  () => config.enablePlayerHiding
 );
 
 register("worldUnload", () => {

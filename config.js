@@ -1,5 +1,4 @@
 import {   
-    DARK_RED, 
     GOLD, 
     GRAY, 
     DARK_GRAY, 
@@ -7,8 +6,7 @@ import {
     AQUA, 
     RED,  
     YELLOW, 
-    WHITE, 
-    BOLD, 
+    WHITE,  
     ITALIC, 
     RESET,
     ModuleVersion,   
@@ -422,7 +420,7 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, hud, help>, /reminder${RESET}`);
+        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud, help>, /reminder /emote${RESET}`);
         this.setCategoryDescription("Dungeons", `${ConfigHeader}`);
         this.setCategoryDescription("F7/M7", `${ConfigHeader}`);
         this.setCategoryDescription("Party Commands", `${ConfigHeader}`);

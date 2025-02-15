@@ -48,42 +48,6 @@ register("command", (subCommand, ...args) => {
   subCommand = subCommand.toLowerCase();
 
   switch (subCommand) {
-    /**
-    case "emote":
-      if (!args[0]) {
-        showGeneralJAMessage(
-          "Usage: /ja emote [add|remove|list] [emotename] [emote]"
-        );
-        return;
-      }
-      const emoteAction = args[0].toLowerCase();
-      switch (emoteAction) {
-        case "add":
-          if (args.length < 3) {
-            showGeneralJAMessage("Usage: /ja emote add [emotename] [emote]");
-            return;
-          }
-          const emoteName = args[1];
-          const emote = args.slice(2).join(" ");
-          addCustomEmote(emoteName, emote);
-          break;
-        case "remove":
-          if (args.length !== 2) {
-            showGeneralJAMessage("Usage: /ja emote remove [emotename]");
-            return;
-          }
-          removeCustomEmote(args[1]);
-          break;
-        case "list":
-          listCustomEmotes();
-          break;
-        default:
-          showGeneralJAMessage(
-            "Unknown emote action. Use add, remove, or list."
-          );
-      }
-      break;
-      */
     case "hud":
       HudManager.openGui();
       break;

@@ -53,7 +53,6 @@ function loadPersistentReminders() {
 }
 
 register("gameLoad", loadPersistentReminders);
-//register("gameUnload", updatePersistentReminders);
 
 register("tick", () => {
   const currentTime = Date.now();

@@ -2,7 +2,7 @@ import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
 import { getItemId } from "../../utils/Items";
 import { getEnchantedBookDetail } from "../../utils/Items";
 import { setItemsToHighlight } from "../../utils/HighlightSlots";
-import Config from "../../config";
+import config from "../../config";
 import {
   greenItems,
   yellowItems,
@@ -11,6 +11,7 @@ import {
   yellowEnchantments,
   redEnchantments,
 } from "../../data/DungeonLoot";
+import { registerWhen } from "../../utils/Register";
 
 let isProcessingChestOpen = false;
 
@@ -51,7 +52,7 @@ function getCategorySymbol(category) {
 }
 
 function scanChestContents(container) {
-  if (!Config.enableDungeonChestHighlighting) {
+  if (!config.enableDungeonChestHighlighting) {
     showDebugMessage(
       "Dungeon chest highlighting is disabled, skipping scan",
       "info"
@@ -157,7 +158,7 @@ function scanChestContents(container) {
     }
   }
 
-  if (Config.enableDungeonLootChatOutput) {
+  if (config.enableDungeonLootChatOutput) {
     if (notableItems.length > 0) {
       ChatLib.chat("§6&l========= Dungeon Loot =========");
       notableItems.forEach((item) => ChatLib.chat(item));
@@ -172,15 +173,7 @@ function scanChestContents(container) {
   setItemsToHighlight(itemsToHighlight);
 }
 
-register("guiOpened", function (event) {
-  if (!Config.enableDungeonChestHighlighting) {
-    showDebugMessage(
-      "Dungeon chest highlighting is disabled, skipping scan",
-      "info"
-    );
-    return;
-  }
-
+registerWhen(register("guiOpened", function (event) {
   //showDebugMessage("GUI opened event triggered", 'info');
 
   if (isProcessingChestOpen) {
@@ -210,4 +203,4 @@ register("guiOpened", function (event) {
     isProcessingChestOpen = false;
     //showDebugMessage("Finished processing GUI open event", 'info');
   }, 50);
-});
+}), () => config.enableDungeonChestHighlighting);

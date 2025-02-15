@@ -1,22 +1,24 @@
-import Config from "../../config";
+import config from "../../config";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
+import { registerWhen } from "../../utils/Register";
 
 let commandOutputs;
-try {
-  const jsonPath = "./data/PartyCommands.json";
-  const jsonContent = FileLib.read("jcnlkAddons", jsonPath);
-  if (!jsonContent) {
-    throw new Error(
-      `PartyCommands.json is empty or not found at path: ${jsonPath}`
-    );
+
+function loadResponses() {
+  try {
+    const jsonPath = "./data/PartyCommands.json";
+    const jsonContent = FileLib.read("jcnlkAddons", jsonPath);
+    if (!jsonContent) {
+      throw new Error(`PartyCommands.json is empty or not found at path: ${jsonPath}`);
+    }
+    commandOutputs = JSON.parse(jsonContent);
+    if (!commandOutputs || typeof commandOutputs !== "object") {
+      throw new Error("Invalid JSON format in PartyCommands.json");
+    }
+  } catch (error) {
+    console.error("Error loading PartyCommands.json:", error);
+    commandOutputs = {};
   }
-  commandOutputs = JSON.parse(jsonContent);
-  if (!commandOutputs || typeof commandOutputs !== "object") {
-    throw new Error("Invalid JSON format in PartyCommands.json");
-  }
-} catch (error) {
-  console.error("Error loading PartyCommands.json:", error);
-  commandOutputs = {};
 }
 
 function sendPartyChatMessage(message) {
@@ -84,15 +86,15 @@ function createResponse(commandType, variables) {
 
 function handleHelpCommand() {
   const availableCommands = [
-    Config.rngCommand && "!rng",
-    Config.coinFlipCommand && "!cf",
-    Config.eightBallCommand && "!8ball",
-    Config.throwCommand && "!throw",
-    Config.diceCommand && "!dice",
-    Config.simpCommand && "!simp",
-    Config.susCommand && "!sus",
-    Config.partyKickCommand && "!kick",
-    Config.partyInviteCommand && "!p",
+    config.rngCommand && "!rng",
+    config.coinFlipCommand && "!cf",
+    config.eightBallCommand && "!8ball",
+    config.throwCommand && "!throw",
+    config.diceCommand && "!dice",
+    config.simpCommand && "!simp",
+    config.susCommand && "!sus",
+    config.partyKickCommand && "!kick",
+    config.partyInviteCommand && "!p",
   ].filter(Boolean);
 
   sendPartyChatMessage(`Available commands: ${availableCommands.join(", ")}`);
@@ -168,15 +170,15 @@ function handleInviteCommand(commandParts) {
 
 function isCommandEnabled(command) {
   const commandMapping = {
-    "!rng": Config.rngCommand,
-    "!cf": Config.coinFlipCommand,
-    "!8ball": Config.eightBallCommand,
-    "!throw": Config.throwCommand,
-    "!dice": Config.diceCommand,
-    "!simp": Config.simpCommand,
-    "!sus": Config.susCommand,
-    "!kick": Config.partyKickCommand,
-    "!p": Config.partyInviteCommand,
+    "!rng": config.rngCommand,
+    "!cf": config.coinFlipCommand,
+    "!8ball": config.eightBallCommand,
+    "!throw": config.throwCommand,
+    "!dice": config.diceCommand,
+    "!simp": config.simpCommand,
+    "!sus": config.susCommand,
+    "!kick": config.partyKickCommand,
+    "!p": config.partyInviteCommand,
     "!commands": true,
   };
   return commandMapping[command] || false;
@@ -186,8 +188,8 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-register("chat", (player, message) => {
-  if (!Config.enablePartyCommands || !message.startsWith("!")) return;
+registerWhen(register("chat", (player, message) => {
+  if (!message.startsWith("!")) return;
 
   const commandParts = message.split(" ");
   const command = commandParts[0].toLowerCase();
@@ -238,4 +240,6 @@ register("chat", (player, message) => {
       `Failed to generate message for ${command}. Command type might be missing in PartyCommands.json`
     );
   }
-}).setChatCriteria("Party > ${player}: ${message}");
+}).setChatCriteria("Party > ${player}: ${message}"), () => config.enablePartyCommands);
+
+registerWhen(register("worldLoad", loadResponses), () => config.enablePartyCommands); // maybe not needed but yea

@@ -1,5 +1,6 @@
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 import { getCurrentClass } from "../../utils/Dungeon";
+import { registerWhen } from "../../utils/Register";
 import { showTitle } from "../../utils/Title";
 import { GREEN } from "../../utils/Constants";
 import config from "../../config";
@@ -25,8 +26,6 @@ let hasSentTitle = false;
 
 const start = [111, 120, 92];
 const doneListeners = [];
-
-//const onButtonsSpawned = (func) => doneListeners.push(func);
 
 const getCurrentPhase = () => {
   return Math.min(blocks.size, 5);
@@ -99,18 +98,17 @@ register("playerInteract", (action, pos) => {
   blocks.delete(coordinateKey);
 });
 
-register("tick", () => {
-  if (config.EE2Helper) {
-    const playerClass = getCurrentClass();
-    const PhaseSS = getCurrentPhase();
-    if (playerClass === "Archer" && PhaseSS >= 4 && !hasSentTitle) {
-      showTitle(" ", 3000, true, `${GREEN}Early enter now!`);
-      hasSentTitle = true;
-      World.playSound("note.harp", 2, 1);
-    }
-    if (PhaseSS < 4) hasSentTitle = false;
+registerWhen(register("tick", () => {
+  const playerClass = getCurrentClass();
+  const PhaseSS = getCurrentPhase();
+  if (playerClass === "Archer" && PhaseSS >= 4 && !hasSentTitle) {
+    showTitle(" ", 3000, true, `${GREEN}Early enter now!`);
+    hasSentTitle = true;
+    World.playSound("note.harp", 2, 1);
   }
-});
+  if (PhaseSS < 4) hasSentTitle = false;
+
+}), () => config.EE2Helper);
 
 register("worldUnload", () => {
   currentPhase = 0;

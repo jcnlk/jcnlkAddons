@@ -7,6 +7,7 @@ import {
   getDungeonTime,
 } from "../../utils/Dungeon";
 import { RED } from "../../utils/Constants";
+import { registerWhen } from "../../utils/Register";
 
 const MAX_CRYPTS_DISPLAY = 5;
 const REQUIRED_CRYPTS = 5;
@@ -69,8 +70,7 @@ const showCryptReminderPopup = (cryptsNeeded) => {
   World.playSound("random.orb", 0.5, 1);
 };
 
-register("step", () => {
-  if (!config.cryptReminder) return;
+registerWhen(register("step", () => {
   if (checkDungeonTimeout !== null) return;
 
   const wasInDungeon = getIsInDungeon();
@@ -96,4 +96,4 @@ register("step", () => {
 
     checkDungeonTimeout = null;
   }, 5000);
-}).setFps(1);
+}).setFps(1), () => config.cryptReminder);
