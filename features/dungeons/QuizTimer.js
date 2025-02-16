@@ -4,7 +4,7 @@ import config from "../../config";
 import HudManager from "../../utils/Hud";
 import { Hud } from "../../utils/Hud";
 import { data } from "../../utils/Data";
-import { GREEN, YELLOW, RED } from "../../utils/Constants";
+import { GREEN, YELLOW, RED } from "../../utils/Utils";
 
 let timerStart = 0;
 let timerDuration = 0;

@@ -1,5 +1,5 @@
 import config from "../../config";
-import { showGeneralJAMessage } from "../../utils/ChatUtils";
+import { showChatMessage } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Register";
 
 let commandOutputs;
@@ -152,7 +152,7 @@ function handleKickCommand(commandParts) {
   const playerToKick = commandParts[1];
   if (playerToKick) {
     ChatLib.command(`party kick ${playerToKick}`);
-    showGeneralJAMessage(`Kicking -> ${playerToKick}`);
+    showChatMessage(`Kicking -> ${playerToKick}`);
   } else {
     sendPartyChatMessage("Please specify a player to kick.");
   }
@@ -162,7 +162,7 @@ function handleInviteCommand(commandParts) {
   const playerToInvite = commandParts[1];
   if (playerToInvite) {
     ChatLib.command(`party invite ${playerToInvite}`);
-    showGeneralJAMessage(`Inviting -> ${playerToInvite}`);
+    showChatMessage(`Inviting -> ${playerToInvite}`);
   } else {
     sendPartyChatMessage("Please specify a player to invite.");
   }

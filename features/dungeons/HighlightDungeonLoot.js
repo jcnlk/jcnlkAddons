@@ -1,7 +1,6 @@
 import { getIsInDungeon, getBossHealthPercent } from "../../utils/Dungeon";
 import { fn, getSkyblockItemID } from "../../../BloomCore/utils/Utils";
 import { setItemsToHighlight } from "../../utils/HighlightSlots";
-import { showDebugMessage } from "../../utils/ChatUtils";
 import PriceUtils from "../../../BloomCore/PriceUtils";
 import { registerWhen } from "../../utils/Register";
 import config from "../../config";
@@ -34,13 +33,11 @@ registerWhen(register("step", () => {
     let costMatch = lore[7].removeFormatting().match(/^([\d,]+) Coins$/);
     if (costMatch) {
       chest.cost = parseInt(costMatch[1].replace(/,/g, ""));
-      showDebugMessage(`Chest coasts: ${chest.cost}`, "info");
     }
   }
   
   chest.items = items.map(a => new ChestItem(a));
   chest.calcValueAndProfit();
-  showDebugMessage(`Chest calculated: Combined value=${chest.value}, Combined profit=${chest.profit}`, "info");
 
   let highlightItems = [];
   for (let i = 0; i < chest.items.length; i++) {
@@ -50,13 +47,10 @@ registerWhen(register("step", () => {
     
     if (ci.profit >= 1000000) {
       color = Renderer.color(0, 255, 0, 128);
-      showDebugMessage(`Slot ${slot}: Profit ${ci.profit} -> green`, "info");
     } if (ci.profit >= 100000) {
       color = Renderer.color(255, 255, 0, 128);
-      showDebugMessage(`Slot ${slot}: Profit ${ci.profit} -> yellow`, "info");
     } if (ci.profit < 100000) {
       color = Renderer.color(255, 0, 0, 128);
-      showDebugMessage(`Slot ${slot}: Profit ${ci.profit} -> red`, "info");
     }
     highlightItems.push({ slot, color });
   }
@@ -186,21 +180,6 @@ class ChestItem {
     return `ChestItem[${this.itemID}, qty=${this.quantity}, value=${this.value}, profit=${this.profit}]`;
   }
 }
-
-const alwaysBuy = new Set([
-    "NECRON_HANDLE",
-    "DARK_CLAYMORE",
-    "FIRST_MASTER_STAR",
-    "SECOND_MASTER_STAR",
-    "THIRD_MASTER_STAR",
-    "FOURTH_MASTER_STAR",
-    "FIFTH_MASTER_STAR",
-    "SHADOW_FURY",
-    "SHADOW_WARP_SCROLL",
-    "IMPLOSION_SCROLL",
-    "WITHER_SHIELD_SCROLL",
-    "ENCHANTMENT_ULTIMATE_ONE_FOR_ALL_1"
-])
 
 const worthless = new Set([
     "DUNGEON_DISC_5",

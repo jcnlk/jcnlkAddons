@@ -1,7 +1,7 @@
-import config from "../../config";
-import { RED } from "../../utils/Constants";
+import config from "../../config"
+import { RED } from "../../utils/Utils";
 import { getIsInF7, getIsInM7 } from "../../utils/Dungeon";
-import { getItemId } from "../../utils/Items";
+import { getSkyblockItemID } from "../../../BloomCore/utils/Utils";
 import { showTitle } from "../../utils/Title";
 import { registerWhen } from "../../utils/Register";
 
@@ -16,7 +16,7 @@ registerWhen(register("chat", () => {
   if (!getIsInF7() || !getIsInM7()) return;
   if (!reminderShown) return;
 
-  const helmetId = getItemId(Player.armor.getHelmet());
+  const helmetId = getSkyblockItemID(Player.armor.getHelmet());
 
   if (
     helmetId !== "BONZO_MASK" ||

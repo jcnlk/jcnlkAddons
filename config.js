@@ -1,16 +1,3 @@
-import {   
-    GOLD, 
-    GRAY, 
-    DARK_GRAY, 
-    GREEN, 
-    AQUA, 
-    RED,  
-    YELLOW, 
-    WHITE,  
-    ITALIC, 
-    RESET,
-    ModuleVersion,   
-    Creator         } from "./utils/Constants";
 import { 
     @Vigilant, 
     @SwitchProperty, 
@@ -20,13 +7,26 @@ import {
     @SelectorProperty, 
     @ColorProperty, 
     @ButtonProperty,    
-    @CheckboxProperty   } from 'Vigilance';
+    @CheckboxProperty,
+    Color   } from "Vigilance";
 
-const ConfigHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YELLOW}v${ModuleVersion} \nMade by ${Creator}${RESET}`
+const GOLD = "§6";
+const GRAY = "§7";
+const DARK_GRAY = "§8";
+const GREEN = "§a";
+const AQUA = "§b";
+const RED = "§c";
+const YELLOW = "§e";
+const WHITE = "§f";
+const ITALIC = "§o";
+const RESET = "§r";
+const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
+const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
+const configHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YELLOW}v${moduleVersion} \nMade by ${moduleAuthor}${RESET}`
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "F7/M7", "Party Commands", "DM Commands", "Miscellaneous", "HUD", "WIP", "Dev Stuff"];
+        const order = ["General", "Dungeons", "F7/M7", "Commands", "HUD", "WIP", "Dev Stuff"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
@@ -272,92 +272,11 @@ class Config {
     })
     PreP5Titles = true;
 
-    //////////// Party Commands Settings //////////
-    @SwitchProperty({
-        name: "Enable Party Commands",
-        description: "Enable or disable all party commands.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    enablePartyCommands = true;
-
-    @SwitchProperty({
-        name: "RNG Command &3!rng&r",
-        description: "Enable the rng command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    rngCommand = true;
-
-    @SwitchProperty({
-        name: "Coinflip Command &3!cf&r",
-        description: "Enable the coinflip command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    coinFlipCommand = true;
-
-    @SwitchProperty({
-        name: "8ball Command &3!8ball&r",
-        description: "Enable the 8ball command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    eightBallCommand = true;
-
-    @SwitchProperty({
-        name: "Throw Command &3!throw&r",
-        description: "Enable the throw command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    throwCommand = true;
-
-    @SwitchProperty({
-        name: "Dice Command &3!dice&r",
-        description: "Enable the dice command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    diceCommand = true;
-
-    @SwitchProperty({
-        name: "Simp Command &3!simp&r",
-        description: "Enable the simp command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    simpCommand = true;
-
-    @SwitchProperty({
-        name: "Sus Command &3!sus&r",
-        description: "Enable the sus command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    susCommand = true;
-
-    @SwitchProperty({
-        name: "Kick Command (Party) &3!<kick, pk>&r",
-        description: "Enable the kick command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    partyKickCommand = true;
-
-    @SwitchProperty({
-        name: "Invite Command (Party) &3!p&r ",
-        description: "Enable the invite command in Party Chat.",
-        category: "Party Commands",
-        subcategory: "Party Commands"
-    })
-    partyInviteCommand = true;
-
-    ////////// DM Commands Settings //////////
+    //////////// Commands Settings //////////
     @SwitchProperty({
         name: "Enable DM Commands",
         description: "Enable or disable all DM commands.",
-        category: "DM Commands",
+        category: "Commands",
         subcategory: "DM Commands"
     })
     enableDmCommands = true;
@@ -365,7 +284,7 @@ class Config {
     @SwitchProperty({
         name: "Invite Command (DMs) &3!p&r",
         description: "Enable the invite command in DMs.",
-        category: "DM Commands",
+        category: "Commands",
         subcategory: "DM Commands"
     })
     partyCommand = true;
@@ -373,10 +292,90 @@ class Config {
     @SwitchProperty({
         name: "Kick Command (DMs) &3!kick&r",
         description: "Enable the kick Command command in DMs.",
-        category: "DM Commands",
+        category: "Commands",
         subcategory: "DM Commands"
     })
     kickCommand = true;
+
+    @SwitchProperty({
+        name: "Enable Party Commands",
+        description: "Enable or disable all party commands.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    enablePartyCommands = true;
+
+    @SwitchProperty({
+        name: "RNG Command &3!rng&r",
+        description: "Enable the rng command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    rngCommand = true;
+
+    @SwitchProperty({
+        name: "Coinflip Command &3!cf&r",
+        description: "Enable the coinflip command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    coinFlipCommand = true;
+
+    @SwitchProperty({
+        name: "8ball Command &3!8ball&r",
+        description: "Enable the 8ball command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    eightBallCommand = true;
+
+    @SwitchProperty({
+        name: "Throw Command &3!throw&r",
+        description: "Enable the throw command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    throwCommand = true;
+
+    @SwitchProperty({
+        name: "Dice Command &3!dice&r",
+        description: "Enable the dice command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    diceCommand = true;
+
+    @SwitchProperty({
+        name: "Simp Command &3!simp&r",
+        description: "Enable the simp command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    simpCommand = true;
+
+    @SwitchProperty({
+        name: "Sus Command &3!sus&r",
+        description: "Enable the sus command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    susCommand = true;
+
+    @SwitchProperty({
+        name: "Kick Command (Party) &3!<kick, pk>&r",
+        description: "Enable the kick command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    partyKickCommand = true;
+
+    @SwitchProperty({
+        name: "Invite Command (Party) &3!p&r ",
+        description: "Enable the invite command in Party Chat.",
+        category: "Commands",
+        subcategory: "Party Commands"
+    })
+    partyInviteCommand = true;
 
     ////////// HUD Settings //////////
     @ButtonProperty({
@@ -389,28 +388,11 @@ class Config {
     openHudGui() {
         ChatLib.command("ja hud", true);
     }
-
-    ////////// WIP Stuff Settings //////////
-    @SwitchProperty({
-        name: "Enable Chest Highlighting",
-        description: `Highlights loot in kuudra chests according to their value \n(${GREEN}God Roll${RESET}, ${YELLOW}Good Roll${RESET}, ${RED}Bad Roll${RESET}).`,
-        category: "WIP",
-        subcategory: `Kuudra Loot Highlight (${GREEN}SHOULD WORK${RESET})`
-    })
-    enableChestScanning = true;
-
-    @SwitchProperty({
-        name: "Enable Chat Output of Chest Content",
-        description: "Displays kuudra loot in Chat.",
-        category: "WIP",
-        subcategory: `Kuudra Loot Highlight (${GREEN}SHOULD WORK${RESET})`
-    })
-    enableAttributeChatOutput = true;
     
     ////////// Dev Stuff Settings //////////
     @SwitchProperty({
         name: "Debug Mode",
-        description: `Enable detailed debug messages for troubleshooting. \n${GRAY}(We don't talk about the messed up debgging..)${RESET}`,
+        description: `Enable detailed debug messages for troubleshooting.`,
         category: "Dev Stuff",
         subcategory: "Debug"
      })
@@ -420,14 +402,13 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud, help, update>, /reminder <add, list, remove>, \n${GRAY}${ITALIC}/emote <add, list, remove>${RESET}`);
-        this.setCategoryDescription("Dungeons", `${ConfigHeader}`);
-        this.setCategoryDescription("F7/M7", `${ConfigHeader}`);
-        this.setCategoryDescription("Party Commands", `${ConfigHeader}`);
-        this.setCategoryDescription("DM Commands", `${ConfigHeader}`);
-        this.setCategoryDescription("HUD", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
-        this.setCategoryDescription("WIP", `${ConfigHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
-        this.setCategoryDescription("Dev Stuff", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /getcurrentarea, /getdungeoninfo, /getitemid, /getenchantedbookdetail\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
+        this.setCategoryDescription("General", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, reminder, update, help>${RESET}`);
+        this.setCategoryDescription("Dungeons", `${configHeader}`);
+        this.setCategoryDescription("F7/M7", `${configHeader}`);
+        this.setCategoryDescription("Commands", `${configHeader}`);
+        this.setCategoryDescription("HUD", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
+        this.setCategoryDescription("WIP", `${configHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
+        this.setCategoryDescription("Dev Stuff", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /getcurrentarea, /getdungeoninfo, /getitemid, /getenchantedbookdetail\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
 
         // Add dependencies for General
         this.addDependency("Reminder Sound", "Enable Reminders");
@@ -444,9 +425,6 @@ class Config {
         // Add dependencies for DM Commands
         this.addDependency("Invite Command (DMs) &3!p&r", "Enable DM Commands");
         this.addDependency("Kick Command (DMs) &3!kick&r", "Enable DM Commands");
-
-        // Add dependencies for WIP
-        this.addDependency("Enable Chat Output of Chest Content", "Enable Chest Highlighting");
     }
 }
 

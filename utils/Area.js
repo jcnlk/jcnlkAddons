@@ -1,7 +1,15 @@
-import { showDebugMessage, showGeneralJAMessage } from "./ChatUtils";
-
+const MAX_RETRIES = 20;
 let currentArea = "";
 let retryCount = 0;
+
+const extractZone = (zoneStr) => {
+  return zoneStr
+    .replace("⏣ ", "")
+    .replace("ф ", "")
+    .removeFormatting()
+    .replace(/[^\x00-\x7F]/g, "")
+    .trim();
+};
 
 export const updateCurrentArea = () => {
   try {
@@ -13,55 +21,42 @@ export const updateCurrentArea = () => {
     const areaLine = tabList.find(
       (name) => name.includes("Area") || name.includes("Dungeon: ")
     );
+
     if (areaLine) {
       if (areaLine.includes("Dungeon: ") || areaLine.includes("Kuudra")) {
         setTimeout(() => {
           const scoreboard = Scoreboard.getLines();
-          const zoneLine = scoreboard.find(
-            (line) =>
-              line.getName().includes("⏣") || line.getName().includes("ф")
+          const zoneLine = scoreboard.find((line) =>
+            line.getName().includes("⏣") || line.getName().includes("ф")
           );
           if (zoneLine) {
-            const zone = zoneLine
-              .getName()
-              .replace("⏣ ", "")
-              .replace("ф ", "")
-              .removeFormatting()
-              .replace(/[^\x00-\x7F]/g, "")
-              .trim();
+            const zone = extractZone(zoneLine.getName());
             if (currentArea !== zone) {
               currentArea = zone;
-              showDebugMessage(`Current area updated to: ${currentArea}`);
+              retryCount = 0;
             }
           } else {
             retryCount++;
-            if (retryCount < 20) {
+            if (retryCount < MAX_RETRIES) {
               setTimeout(updateCurrentArea, 1000);
-            } else {
-              showDebugMessage(
-                "Failed to get zone from scoreboard after 20 attempts",
-                "error"
-              );
             }
           }
         }, 1000);
-      } else if (areaLine.includes("Area")) {
-        const area = areaLine.replace("Area: ", "").removeFormatting();
+      }
+      else if (areaLine.includes("Area")) {
+        const area = areaLine.replace("Area: ", "").removeFormatting().trim();
         if (currentArea !== area) {
           currentArea = area;
-          showDebugMessage(`Current area updated to: ${currentArea}`);
+          retryCount = 0;
         }
       }
     } else {
-      if (retryCount < 20) {
-        retryCount++;
+      retryCount++;
+      if (retryCount < MAX_RETRIES) {
         setTimeout(updateCurrentArea, 1000);
-      } else {
-        showDebugMessage("Failed to get current area :(", "error");
       }
     }
   } catch (e) {
-    showDebugMessage(`Error in updateCurrentArea: ${e.message}`, "error");
     console.error(e);
   }
 };
@@ -70,17 +65,11 @@ export const getCurrentArea = () => currentArea;
 
 export const getCurrentZone = () => {
   const scoreboard = Scoreboard.getLines();
-  const zoneLine = scoreboard.find(
-    (l) => l.getName().includes("⏣") || l.getName().includes("ф")
+  const zoneLine = scoreboard.find((line) =>
+    line.getName().includes("⏣") || line.getName().includes("ф")
   );
   if (zoneLine) {
-    return zoneLine
-      .getName()
-      .replace("⏣ ", "")
-      .replace("ф ", "")
-      .removeFormatting()
-      .replace(/[^\x00-\x7F]/g, "")
-      .trim();
+    return extractZone(zoneLine.getName());
   }
   return "";
 };
@@ -106,10 +95,3 @@ export function isPlayerInArea(x1, x2, y1, y2, z1, z2) {
     z >= Math.min(z1, z2) && z <= Math.max(z1, z2)
   );
 }
-
-register("command", () => {
-  const area = getCurrentArea();
-  const zone = getCurrentZone();
-  showGeneralJAMessage(`Current Area: ${area}`);
-  showGeneralJAMessage(`Current Zone: ${zone}`);
-}).setName("getCurrentArea");

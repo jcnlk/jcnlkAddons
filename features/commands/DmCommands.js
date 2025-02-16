@@ -1,5 +1,5 @@
 import config from "../../config";
-import { showGeneralJAMessage } from "../../utils/ChatUtils";
+import { showChatMessage } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Register";
 
 function handleInviteCommand(commandParts, senderName) {
@@ -7,14 +7,14 @@ function handleInviteCommand(commandParts, senderName) {
 
   let playerToInvite = commandParts.slice(1).join(" ") || senderName;
   ChatLib.command(`party invite ${playerToInvite}`);
-  showGeneralJAMessage(`Inviting -> ${playerToInvite}`);
+  showChatMessage(`Inviting -> ${playerToInvite}`);
 }
 
 function handleKickCommand(commandParts) {
   let playerToKick = commandParts[1]?.trim();
   if (!playerToKick) return;
   ChatLib.command(`party kick ${playerToKick}`);
-  showGeneralJAMessage(`Kicking -> ${playerToKick}`);
+  showChatMessage(`Kicking -> ${playerToKick}`);
 }
 
 registerWhen(register("chat", (rank, player, message) => {

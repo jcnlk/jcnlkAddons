@@ -1,5 +1,5 @@
 import config from "../../config";
-import { GREEN, RED, YELLOW } from "../../utils/Constants";
+import { GREEN, RED, YELLOW } from "../../utils/Utils";
 import { getIsInDungeon, getCurrentClass } from "../../utils/Dungeon";
 import { registerWhen } from "../../utils/Register";
 

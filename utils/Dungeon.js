@@ -1,9 +1,6 @@
 import { getCurrentArea } from "./Area";
-import { showGeneralJAMessage } from "./ChatUtils";
-import { convertToTimeString, timeToMS } from "../../BloomCore/utils/Utils";
 
 const BossStatus = Java.type("net.minecraft.entity.boss.BossStatus");
-
 
 export function getCurrentClass() {
   let index = TabList?.getNames()?.findIndex((line) =>
@@ -150,22 +147,3 @@ export function getDungeonTime() {
     return null;
   }
 }
-
-register("command", function () {
-  const floor = getCurrentFloor();
-  const currentClass = getCurrentClass();
-  showGeneralJAMessage(
-    "Current Floor: " + (floor ? floor.type + floor.number : "Not in dungeon")
-  );
-  const getDungeonTimeInMs = timeToMS(getDungeonTime() + "s");
-  showGeneralJAMessage("Current Dungeon Time: " + (convertToTimeString(getDungeonTimeInMs) || "Not in Dungeon"));
-  showGeneralJAMessage("Current Class: " + (currentClass || "Unknown"));
-  showGeneralJAMessage("Crypt Count: " + getCrypts());
-  showGeneralJAMessage("In Dungeon: " + getIsInDungeon());
-  showGeneralJAMessage("Boss Health: " + getBossHealthPercent() * 100 + "%");
-  showGeneralJAMessage(`InMaxor: ` + getIsInMaxor());
-  showGeneralJAMessage(`InStorm: ` + getIsInStorm());
-  showGeneralJAMessage(`InGoldor: ` + getIsInGoldor());
-  showGeneralJAMessage(`InNecron: ` + getIsInNecron());
-  showGeneralJAMessage(`InWitherKing: ` + getIsInWitherKing());
-}).setName("getDungeonInfo");

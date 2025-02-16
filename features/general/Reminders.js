@@ -1,9 +1,7 @@
-import config from "../../config";
 import { showTitle } from "../../utils/Title";
-import { showGeneralJAMessage } from "../../utils/ChatUtils";
-import { RED } from "../../utils/Constants";
+import { showChatMessage, RED } from "../../utils/Utils";
 import { data } from "../../utils/Data.js";
-import { timeToMS, convertToTimeString } from "../../../BloomCore/utils/Utils.js";
+import { timeToMS } from "../../../BloomCore/utils/Utils.js";
 
 const reminders = new Map();
 
@@ -41,7 +39,7 @@ function loadPersistentReminders() {
 
   activeStoredReminders.forEach(storedReminder => {
     const callback = (name) => {
-      showGeneralJAMessage(`Reminder: ${name}`);
+      showChatMessage(`Reminder: ${name}`);
       showReminderPopup(name);
     };
     reminders.set(storedReminder.name, {
@@ -120,68 +118,6 @@ export function triggerReminder(name) {
 function showReminderPopup(name) {
   showTitle()
   showTitle(`${RED}Reminder: ${name}`, 5000, true, `${RED}JA Reminder`);
-  showGeneralJAMessage(`Reminder: ${name}`);
+  showChatMessage(`Reminder: ${name}`);
   World.playSound("random.orb", 1, 1);
 }
-
-register("command", (...args) => {
-  if (!config.enableReminders) {
-    showGeneralJAMessage("Reminders are currently disabled in the config.");
-    return;
-  }
-
-  if (!args || args.length === 0) {
-    showGeneralJAMessage("Usage: /reminder [add|remove|list] [name|index] [time]");
-    return;
-  }
-
-  const action = args[0].toLowerCase();
-
-  switch (action) {
-    case "add":
-      if (args.length < 3) {
-        showGeneralJAMessage("Usage: /reminder add [name] [time]");
-        return;
-      }
-      const timeArg = args[args.length - 1];
-      const name = args.slice(1, -1).join(" ");
-      if (addReminder(name, timeArg, (reminderName) => {
-        showGeneralJAMessage(`Reminder: ${reminderName}`);
-        showReminderPopup(reminderName);
-      })) {
-        showGeneralJAMessage(`Reminder '${name}' set for ${timeArg}`, "success");
-      } else {
-        showGeneralJAMessage(`Failed to set reminder '${name}'. Please check the time format.`, "error");
-      }
-      break;
-
-    case "remove":
-      if (args.length < 2) {
-        showGeneralJAMessage("Usage: /reminder remove [name|index]");
-        return;
-      }
-      const removeIdentifier = args[1];
-      const removeIndex = parseInt(removeIdentifier);
-      if (removeReminder(isNaN(removeIndex) ? removeIdentifier : removeIndex)) {
-        showGeneralJAMessage(`Reminder '${removeIdentifier}' removed`, "success");
-      } else {
-        showGeneralJAMessage(`No reminder found with identifier '${removeIdentifier}'`, "error");
-      }
-      break;
-
-    case "list":
-      const list = listReminders();
-      if (list.length > 0) {
-        showGeneralJAMessage("Active reminders:");
-        list.forEach(reminder => {
-          showGeneralJAMessage(`${reminder.index}. ${reminder.name} - Time left: ${convertToTimeString(reminder.timeLeft)}`);
-        });
-      } else {
-        showGeneralJAMessage("No active reminders");
-      }
-      break;
-
-    default:
-      showGeneralJAMessage("Usage: /reminder [add|remove|list] [name|index] [time]");
-  }
-}).setName("reminder").setTabCompletions(["add", "remove", "list"]);

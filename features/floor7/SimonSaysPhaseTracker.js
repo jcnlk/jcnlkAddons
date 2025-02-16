@@ -1,8 +1,7 @@
-import { showGeneralJAMessage } from "../../utils/ChatUtils";
+import { showChatMessage, GREEN } from "../../utils/Utils";
 import { getCurrentClass } from "../../utils/Dungeon";
 import { registerWhen } from "../../utils/Register";
 import { showTitle } from "../../utils/Title";
-import { GREEN } from "../../utils/Constants";
 import config from "../../config";
 
 function atSS() {
@@ -51,7 +50,7 @@ const announcePhaseToParty = (phase) => {
   if (config.announceSSProgression && atSS()) {
     const text = `party chat Current Simon Says phase: ${phase}/5`;
     setTimeout(() => ChatLib.command(`${text}`), 300);
-    showGeneralJAMessage(`Announcing -> SS Phase ${phase}`);
+    showChatMessage(`Announcing -> SS Phase ${phase}`);
   }
 };
 

@@ -1,5 +1,5 @@
 import config from "../../config";
-import { showGeneralJAMessage } from "../../utils/ChatUtils";
+import { showChatMessage } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Register";
 import { isPlayerInArea } from "../../utils/Area";
 import {
@@ -41,7 +41,7 @@ let playerClass = getCurrentClass();
 
 function sendAnnouncement(chatMsg, generalMsg) {
   setTimeout(() => ChatLib.command(`party chat ${chatMsg}`), 300);
-  showGeneralJAMessage(`Announcing -> ${generalMsg}`);
+  showChatMessage(`Announcing -> ${generalMsg}`);
 }
 
 //////////////////////

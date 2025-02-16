@@ -1,4 +1,4 @@
-import { showGeneralJAMessage } from "../../utils/ChatUtils";
+import { showChatMessage } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Register";
 import config from "../../config";
 
@@ -24,7 +24,7 @@ function shouldHidePlayer(entity) {
       hiddenPlayers.delete(entity.getName());
 
       if (shownShowingMessage) return;
-      showGeneralJAMessage(`Showing Players`);
+      showChatMessage(`Showing Players`);
       shownShowingMessage = true;
       shownHidingMessage = false;
 
@@ -52,7 +52,7 @@ registerWhen(register("chat", (location) => {
       tempHidePlayer(player.getName());
 
       if (shownHidingMessage) return;
-      showGeneralJAMessage(`Hiding players`);
+      showChatMessage(`Hiding players`);
       shownHidingMessage = true;
       shownShowingMessage = false;
     }

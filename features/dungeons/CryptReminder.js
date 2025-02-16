@@ -1,12 +1,11 @@
 import config from "../../config";
-import { showGeneralJAMessage } from "../../utils/ChatUtils";
+import { showChatMessage, RED } from "../../utils/Utils";
 import { showTitle } from "../../utils/Title";
 import {
   getIsInDungeon,
   getCrypts,
   getDungeonTime,
 } from "../../utils/Dungeon";
-import { RED } from "../../utils/Constants";
 import { registerWhen } from "../../utils/Register";
 
 const MAX_CRYPTS_DISPLAY = 5;
@@ -27,7 +26,7 @@ const updateCryptCount = () => {
   const newCount = getCrypts();
   if (newCount !== killedCrypts) {
     killedCrypts = newCount;
-    showGeneralJAMessage(
+    showChatMessage(
       `Updated Killed Crypts: ${formatCryptCount(killedCrypts)}`
     );
     return true;
@@ -53,7 +52,7 @@ const sendCryptReminder = (currentTime) => {
         cryptsNeeded
       );
       ChatLib.command(`party chat ${message}`);
-      showGeneralJAMessage(`Announcing -> Crypt Reminder`);
+      showChatMessage(`Announcing -> Crypt Reminder`);
 
       if (config.cryptReminderPopup) {
         showCryptReminderPopup(cryptsNeeded);

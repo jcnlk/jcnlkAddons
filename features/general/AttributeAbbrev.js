@@ -1,5 +1,5 @@
 import config from "../../config";
-import { AQUA, isInSkyblock } from "../../utils/Constants";
+import { AQUA, isInSkyblock } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Register";
 
 function renderAttributeAbbreviations(item, x, y) {

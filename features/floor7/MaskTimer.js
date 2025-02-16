@@ -4,7 +4,7 @@ import HudManager from "../../utils/Hud";
 import { Hud } from "../../utils/Hud";
 import { registerWhen } from "../../utils/Register";
 import { getIsInDungeon } from "../../utils/Dungeon";
-import { WHITE, BLUE, RED, GREEN } from "../../utils/Constants";
+import { WHITE, BLUE, RED, GREEN } from "../../utils/Utils";
 
 const maskTimerPlaceholder = `${BLUE}Bonzo Mask: ${GREEN}READY\n${WHITE}Spirit Mask: ${GREEN}READY\n${RED}Pheonix: ${GREEN}READY`;
 const procPlaceholder = `${BLUE}Bonzo Mask Procced!`;
