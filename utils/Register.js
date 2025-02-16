@@ -21,4 +21,4 @@ export const setRegisters = () => {
   });
 };
 
-setTimeout(setRegisters, 1000);
+register("step", setRegisters).setFps(0.1);

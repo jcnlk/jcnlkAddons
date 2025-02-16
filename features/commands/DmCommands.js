@@ -18,6 +18,7 @@ function handleKickCommand(commandParts) {
 }
 
 registerWhen(register("chat", (rank, player, message) => {
+  if (!config.enableDmCommands) return;
   if (!message.startsWith("!")) return;
 
   let commandParts = message.split(" ");
@@ -25,9 +26,9 @@ registerWhen(register("chat", (rank, player, message) => {
   let senderName = player.trim();
 
 
-  if (command === "!p" && config.partyCommand) {
+  if (command === "!p" && Config.partyCommand) {
     handleInviteCommand(commandParts, senderName);
-  } else if ((command === "!kick" || command === "!pk") && config.kickCommand) {
+  } else if ((command === "!kick" || command === "!pk") && Config.kickCommand) {
     handleKickCommand(commandParts);
   }
-}).setChatCriteria("From ${rank} ${player}: ${message}"), () => config.enableDmCommands);
+}).setChatCriteria("From ${rank} ${player}: ${message}"), () => config.enableDmCommands == true);

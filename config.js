@@ -43,7 +43,7 @@ class Config {
 
     @SwitchProperty({
         name: "Show Autopet Rule Title",
-        description: "Show a Title when a Autopet Rule get triggered.",
+        description: "Show a title when an Autopet Rule gets triggered.",
         category: "General",
         subcategory: "Autopet Rule Title"
     })
@@ -51,7 +51,7 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Custom Emotes",
-        description: `Enable the use of custom emotes in chat. \nAdd custom emotes with ${AQUA}/ja emote${RESET}.`,
+        description: `Enable custom emotes in chat. \nAdd custom emotes with ${AQUA}/ja emote${RESET}.`,
         category: "General",
         subcategory: "Chat"
     })
@@ -59,25 +59,16 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Reminders",
-        description: "Enable reminder feature.",
+        description: `Enable the reminder feature. \nAdd reminder with ${AQUA}/ja reminder${RESET}.`,
         category: "General",
         subcategory: "Reminders"
     })
     enableReminders = true;
 
-    @SelectorProperty({
-        name: "Reminder Sound",
-        description: "Choose the sound for reminder.",
-        category: "General",
-        subcategory: "Reminders",
-        options: ["Orb", "Level Up", "Pop", "Note Pling", "Ender Dragon Growl"]
-    })
-    reminderSound = 0;
-
     ////////// Dungeons Settings //////////
     @SwitchProperty({
         name: "Enable Crypt Reminder",
-        description: "Enable crypt reminder feature in dungeons.",
+        description: "Enable the crypt reminder feature in dungeons.",
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
@@ -92,7 +83,7 @@ class Config {
         maxF: 3.0,
         decimalPlaces: 1
     })
-    cryptReminderTime = 1.5;
+    cryptReminderTime = 1.0;
 
     @TextProperty({
         name: "Crypt Reminder Message",
@@ -129,7 +120,7 @@ class Config {
 
     @SwitchProperty({
         name: "Quiz Timer",
-        description: "Show a Timer how long you have to wait until you can answer.",
+        description: "Show a timer indicating how long you have to wait before you can answer.",
         category: "Dungeons",
         subcategory: "Quiz Timer"
     })
@@ -154,7 +145,7 @@ class Config {
 
     @SwitchProperty({
         name: "Announce Pre Enter P2",
-        description: "Announce to Party Chat when you Pre Enter P2.",
+        description: "Announce in Party Chat when you Pre Enter P2.",
         category: "F7/M7",
         subcategory: "P1 (Maxor Phase)"
     })
@@ -178,7 +169,7 @@ class Config {
 
     @SwitchProperty({
         name: "Announce i4 Position",
-        description: "Announce your i4 position to Party Chat (i4 Entry, Moving to i4, At i4).",
+        description: "Announce your i4 position in Party Chat (i4 Entry, Moving to i4, At i4).",
         category: "F7/M7",
         subcategory: "P2 (Storm Phase)"
     })
@@ -194,7 +185,7 @@ class Config {
 
     @SwitchProperty({
         name: "Announce Pre Enter P3",
-        description: "Announce to Party Chat when you Pre Enter in Phase 3 (EE2, EE3, EE4/Core).",
+        description: "Announce in Party Chat when you Pre Enter in Phase 3 (EE2, EE3, EE4/Core).",
         category: "F7/M7",
         subcategory: "P3 (Goldor Phase)"
     })
@@ -210,7 +201,7 @@ class Config {
 
     @SwitchProperty({
         name: "Announce Pre Dev Position",
-        description: "Announce your position during Pre Dev to Party Chat (At SS, At Dev 2, At Dev 3).",
+        description: "Announce your position during Pre Dev in Party Chat (At SS, At Dev 2, At Dev 3).",
         category: "F7/M7",
         subcategory: "P3 (Goldor Phase)"
     })
@@ -218,7 +209,7 @@ class Config {
 
     @SwitchProperty({
         name: "Announce Pre Enter P4",
-        description: "Announce your Pre Enter P4 position to Party Chat.",
+        description: "Announce your Pre Enter P4 position in Party Chat.",
         category: "F7/M7",
         subcategory: "P3 (Goldor Phase)"
     })
@@ -250,7 +241,7 @@ class Config {
 
     @SwitchProperty({
         name: "Announce SS Progression",
-        description: "Announces your SS (Simon Says) Progression to Party Chat. Only if you are standing at SS.",
+        description: "Announces your SS (Simon Says) Progression in Party Chat. Only if you are standing at SS.",
         category: "F7/M7",
         subcategory: "P3 (Goldor Phase)"
     })
@@ -258,7 +249,7 @@ class Config {
 
     @SwitchProperty({
         name: "Announce Pre Enter P5",
-        description: "Announce your Pre Enter P5 position to Party Chat.",
+        description: "Announce your Pre Enter P5 position in Party Chat.",
         category: "F7/M7",
         subcategory: "P4 (Necron Phase)"
     })
@@ -279,23 +270,23 @@ class Config {
         category: "Commands",
         subcategory: "DM Commands"
     })
-    enableDmCommands = true;
+    enableDmCommands = false;
 
     @SwitchProperty({
         name: "Invite Command (DMs) &3!p&r",
-        description: "Enable the invite command in DMs.",
+        description: "Enable the invite command in direct messages.",
         category: "Commands",
         subcategory: "DM Commands"
     })
-    partyCommand = true;
+    partyCommand = false;
 
     @SwitchProperty({
         name: "Kick Command (DMs) &3!kick&r",
-        description: "Enable the kick Command command in DMs.",
+        description: "Enable the kick Command command in direct messages.",
         category: "Commands",
         subcategory: "DM Commands"
     })
-    kickCommand = true;
+    kickCommand = false;
 
     @SwitchProperty({
         name: "Enable Party Commands",
@@ -303,7 +294,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    enablePartyCommands = true;
+    enablePartyCommands = false;
 
     @SwitchProperty({
         name: "RNG Command &3!rng&r",
@@ -311,7 +302,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    rngCommand = true;
+    rngCommand = false;
 
     @SwitchProperty({
         name: "Coinflip Command &3!cf&r",
@@ -319,7 +310,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    coinFlipCommand = true;
+    coinFlipCommand = false;
 
     @SwitchProperty({
         name: "8ball Command &3!8ball&r",
@@ -327,7 +318,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    eightBallCommand = true;
+    eightBallCommand = false;
 
     @SwitchProperty({
         name: "Throw Command &3!throw&r",
@@ -335,7 +326,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    throwCommand = true;
+    throwCommand = false;
 
     @SwitchProperty({
         name: "Dice Command &3!dice&r",
@@ -343,7 +334,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    diceCommand = true;
+    diceCommand = false;
 
     @SwitchProperty({
         name: "Simp Command &3!simp&r",
@@ -351,7 +342,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    simpCommand = true;
+    simpCommand = false;
 
     @SwitchProperty({
         name: "Sus Command &3!sus&r",
@@ -359,7 +350,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    susCommand = true;
+    susCommand = false;
 
     @SwitchProperty({
         name: "Kick Command (Party) &3!<kick, pk>&r",
@@ -367,7 +358,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    partyKickCommand = true;
+    partyKickCommand = false;
 
     @SwitchProperty({
         name: "Invite Command (Party) &3!p&r ",
@@ -375,7 +366,7 @@ class Config {
         category: "Commands",
         subcategory: "Party Commands"
     })
-    partyInviteCommand = true;
+    partyInviteCommand = false;
 
     ////////// HUD Settings //////////
     @ButtonProperty({
@@ -392,7 +383,7 @@ class Config {
     ////////// Dev Stuff Settings //////////
     @SwitchProperty({
         name: "Debug Mode",
-        description: `Enable detailed debug messages for troubleshooting.`,
+        description: `Enable debug messages.`,
         category: "Dev Stuff",
         subcategory: "Debug"
      })
@@ -409,9 +400,6 @@ class Config {
         this.setCategoryDescription("HUD", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
         this.setCategoryDescription("WIP", `${configHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
         this.setCategoryDescription("Dev Stuff", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /getcurrentarea, /getdungeoninfo, /getitemid, /getenchantedbookdetail\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
-
-        // Add dependencies for General
-        this.addDependency("Reminder Sound", "Enable Reminders");
 
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
