@@ -16,8 +16,7 @@ import { ModuleVersion } from "./utils/Constants";
 import HudManager from "./utils/Hud";
 import "./utils/KuudraLootScanner";
 import "./utils/HighlightSlots";
-import "./utils/Formatting";
-import { registerWhen } from "./utils/Register";
+import "./utils/Register";
 import "./utils/Dungeon";
 import "./utils/Title";
 import "./utils/Items";
@@ -106,7 +105,7 @@ register("serverConnect", () => {
   Client.scheduleTask(100, checkForUpdate);
 });
 
-registerWhen(register("gameLoad", () => {
+register("gameLoad", () => {
   showGeneralJAMessage("jcnlkAddons loaded successfully!", "success");
   checkForUpdate();
-}), () => World.isLoaded());
+});

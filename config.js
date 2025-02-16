@@ -118,14 +118,6 @@ class Config {
         subcategory: "Dungeon Loot Highlighting"
     })
     enableDungeonChestHighlighting = true;
-    
-    @SwitchProperty({
-        name: "Enable Dungeon Loot Chat Output",
-        description: "Show dungeon loot in the chat.",
-        category: "Dungeons",
-        subcategory: "Dungeon Loot Highlighting"
-    })
-    enableDungeonLootChatOutput = false;
 
     @SwitchProperty({
         name: "Fire Freeze Notification",
@@ -428,7 +420,7 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud, help>, /reminder /emote${RESET}`);
+        this.setCategoryDescription("General", `${ConfigHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud, help, update>, /reminder <add, list, remove>, \n${GRAY}${ITALIC}/emote <add, list, remove>${RESET}`);
         this.setCategoryDescription("Dungeons", `${ConfigHeader}`);
         this.setCategoryDescription("F7/M7", `${ConfigHeader}`);
         this.setCategoryDescription("Party Commands", `${ConfigHeader}`);
@@ -444,7 +436,6 @@ class Config {
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
         this.addDependency("Enable Crypt Reminder Popup", "Enable Crypt Reminder");
-        this.addDependency("Enable Dungeon Loot Chat Output", "Enable Dungeon Chest Highlighting");
 
         // Add dependencies for Party Commands
         const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r "];

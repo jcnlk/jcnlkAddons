@@ -1,24 +1,9 @@
 import { getCurrentArea } from "./Area";
 import { showGeneralJAMessage } from "./ChatUtils";
-import { formatTime } from "./Formatting";
+import { convertToTimeString, timeToMS } from "../../BloomCore/utils/Utils";
 
 const BossStatus = Java.type("net.minecraft.entity.boss.BossStatus");
 
-let lb = 0;
-let icespray = false;
-
-export function setLb(lbCount) {
-  lb = lbCount;
-}
-export function getLb() {
-  return lb;
-}
-export function setSpray(iceSprayHit) {
-  icespray = iceSprayHit;
-}
-export function getSpray() {
-  return icespray;
-}
 
 export function getCurrentClass() {
   let index = TabList?.getNames()?.findIndex((line) =>
@@ -172,7 +157,8 @@ register("command", function () {
   showGeneralJAMessage(
     "Current Floor: " + (floor ? floor.type + floor.number : "Not in dungeon")
   );
-  showGeneralJAMessage("Current Dungeon Time: " + formatTime(getDungeonTime()));
+  const getDungeonTimeInMs = timeToMS(getDungeonTime() + "s");
+  showGeneralJAMessage("Current Dungeon Time: " + (convertToTimeString(getDungeonTimeInMs) || "Not in Dungeon"));
   showGeneralJAMessage("Current Class: " + (currentClass || "Unknown"));
   showGeneralJAMessage("Crypt Count: " + getCrypts());
   showGeneralJAMessage("In Dungeon: " + getIsInDungeon());

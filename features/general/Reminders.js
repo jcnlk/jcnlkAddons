@@ -3,13 +3,13 @@ import { showTitle } from "../../utils/Title";
 import { showGeneralJAMessage } from "../../utils/ChatUtils";
 import { RED } from "../../utils/Constants";
 import { data } from "../../utils/Data.js";
+import { timeToMS, convertToTimeString } from "../../../BloomCore/utils/Utils.js";
 
 const reminders = new Map();
 
 if (!Array.isArray(data.reminders)) {
   data.reminders = [];
 }
-
 
 function updatePersistentReminders() {
   const reminderData = Array.from(reminders.entries()).map(([name, reminder]) => ({
@@ -67,7 +67,7 @@ export function addReminder(name, time, callback) {
   name = name.trim();
   if (reminders.has(name)) return false;
 
-  const timeInMs = parseTime(time);
+  const timeInMs = timeToMS(time);
   if (timeInMs === null) return false;
 
   const triggerTime = Date.now() + timeInMs;
@@ -102,38 +102,6 @@ export function listReminders() {
     reminderList.push({ name, timeLeft: remaining, index: index++ });
   }
   return reminderList;
-}
-
-export function parseTime(time) {
-  const regex = /^(\d+)([smh])$/;
-  const match = time.match(regex);
-  if (!match) return null;
-
-  const value = parseInt(match[1]);
-  const unit = match[2];
-
-  switch (unit) {
-    case "s": return value * 1000;
-    case "m": return value * 60 * 1000;
-    case "h": return value * 60 * 60 * 1000;
-    default: return null;
-  }
-}
-
-export function formatTime(ms) {
-  const totalSeconds = Math.floor(ms / 1000);
-  const seconds = totalSeconds % 60;
-  const totalMinutes = Math.floor(totalSeconds / 60);
-  const minutes = totalMinutes % 60;
-  const hours = Math.floor(totalMinutes / 60);
-
-  if (hours > 0) {
-    return `${hours}h ${minutes}m ${seconds}s`;
-  } else if (minutes > 0) {
-    return `${minutes}m ${seconds}s`;
-  } else {
-    return `${seconds}s`;
-  }
 }
 
 export function triggerReminder(name) {
@@ -206,7 +174,7 @@ register("command", (...args) => {
       if (list.length > 0) {
         showGeneralJAMessage("Active reminders:");
         list.forEach(reminder => {
-          showGeneralJAMessage(`${reminder.index}. ${reminder.name} - Time left: ${formatTime(reminder.timeLeft)}`);
+          showGeneralJAMessage(`${reminder.index}. ${reminder.name} - Time left: ${convertToTimeString(reminder.timeLeft)}`);
         });
       } else {
         showGeneralJAMessage("No active reminders");
