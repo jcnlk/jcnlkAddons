@@ -218,7 +218,7 @@ class Config {
 
     @SwitchProperty({
         name: "Announce Pre Dev Position",
-        description: "Announce your position during Pre Dev to Party Chat (At Dev 2, At Dev 3).",
+        description: "Announce your position during Pre Dev to Party Chat (At SS, At Dev 2, At Dev 3).",
         category: "F7/M7",
         subcategory: "P3 (Goldor Phase)"
     })

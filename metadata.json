@@ -4,5 +4,5 @@
   "entry": "index.js",
   "version": "1.1.0",
   "description": "cool ct module ig", 
-  "requires": ["Vigilance", "PogData"]
-} 
+  "requires": ["Vigilance", "PogData", "requestV2"]
+}

@@ -95,6 +95,18 @@ register("worldUnload", () => {
   currentArea = "";
 });
 
+export function isPlayerInArea(x1, x2, y1, y2, z1, z2) {
+  const x = Player.getX();
+  const y = Player.getY();
+  const z = Player.getZ();
+
+  return (
+    x >= Math.min(x1, x2) && x <= Math.max(x1, x2) &&
+    y >= Math.min(y1, y2) && y <= Math.max(y1, y2) &&
+    z >= Math.min(z1, z2) && z <= Math.max(z1, z2)
+  );
+}
+
 register("command", () => {
   const area = getCurrentArea();
   const zone = getCurrentZone();
