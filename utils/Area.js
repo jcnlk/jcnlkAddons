@@ -77,8 +77,14 @@ export const getCurrentZone = () => {
 register("worldLoad", () => {
   retryCount = 0;
   updateCurrentArea();
+register("worldLoad", () => {
+  retryCount = 0;
+  updateCurrentArea();
 });
 
+register("worldUnload", () => {
+  retryCount = 0;
+  currentArea = "";
 register("worldUnload", () => {
   retryCount = 0;
   currentArea = "";

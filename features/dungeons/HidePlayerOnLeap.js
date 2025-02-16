@@ -4,8 +4,17 @@ import config from "../../config";
 
 let shownHidingMessage = false;
 let shownShowingMessage = false;
+let shownHidingMessage = false;
+let shownShowingMessage = false;
 let hiddenPlayers = new Map();
 
+function tempHidePlayer(playerName) {
+  hiddenPlayers.set(playerName, Date.now() + 5000);
+}
+
+function getIsPlayer(entity) {
+  const player = World.getPlayerByName(entity.getName());
+  return player?.getPing() === 1;
 function tempHidePlayer(playerName) {
   hiddenPlayers.set(playerName, Date.now() + 5000);
 }
@@ -28,6 +37,11 @@ function shouldHidePlayer(entity) {
       shownShowingMessage = true;
       shownHidingMessage = false;
 
+      return false;
+    }
+    return true;
+  }
+  return false;
       return false;
     }
     return true;
@@ -74,4 +88,9 @@ register("worldUnload", () => {
   hiddenPlayers.clear();
   shownHidingMessage = false;
   shownShowingMessage = false;
+register("worldUnload", () => {
+  hiddenPlayers.clear();
+  shownHidingMessage = false;
+  shownShowingMessage = false;
 });
+

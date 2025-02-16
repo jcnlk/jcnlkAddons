@@ -1,5 +1,6 @@
 import config from "../../config";
 import { getIsInDungeon, getIsInM3 } from "../../utils/Dungeon";
+import { getIsInDungeon, getIsInM3 } from "../../utils/Dungeon";
 import { showTitle } from "../../utils/Title";
 import { RED, YELLOW, DARK_RED } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Register";
@@ -17,6 +18,8 @@ registerWhen(register("chat", (key) => {
     Thread.sleep(1000);
     showTitle(`${RED}In 4 sec`, 3000, true, `${YELLOW}Get Ready!`);
 
+    World.playSound("random.burp", 2, 1);
+    Thread.sleep(4000);
     World.playSound("random.burp", 2, 1);
     Thread.sleep(4000);
 

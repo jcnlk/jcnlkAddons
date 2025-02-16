@@ -24,7 +24,68 @@ function loadResponses() {
 function sendPartyChatMessage(message) {
   ChatLib.command(`party chat ${message}`);
 }
+function sendPartyChatMessage(message) {
+  ChatLib.command(`party chat ${message}`);
+}
 
+function createResponse(commandType, variables) {
+  if (!commandOutputs[commandType]) {
+    console.error(`Invalid or missing command type: ${commandType}`);
+    return null;
+  }
+
+  let templates;
+  switch (commandType) {
+    case "rng":
+      templates =
+        variables.rng <= 30
+          ? commandOutputs.rng.low
+          : variables.rng <= 70
+          ? commandOutputs.rng.medium
+          : commandOutputs.rng.high;
+      break;
+    case "throw":
+      templates =
+        variables.throwIntensity <= 30
+          ? commandOutputs.throw.low
+          : variables.throwIntensity <= 70
+          ? commandOutputs.throw.medium
+          : commandOutputs.throw.high;
+      break;
+    case "cf":
+      templates = commandOutputs.cf[variables.result];
+      break;
+    case "dice":
+      templates =
+        variables.result <= 2
+          ? commandOutputs.dice.low
+          : variables.result <= 4
+          ? commandOutputs.dice.medium
+          : commandOutputs.dice.high;
+      break;
+    case "simp":
+    case "sus":
+      templates =
+        variables.percentage <= 33
+          ? commandOutputs[commandType].low
+          : variables.percentage <= 66
+          ? commandOutputs[commandType].medium
+          : commandOutputs[commandType].high;
+      break;
+    default:
+      templates = commandOutputs[commandType];
+  }
+
+  if (!Array.isArray(templates)) {
+    console.error(`Invalid template array for command type: ${commandType}`);
+    return null;
+  }
+
+  const template = templates[Math.floor(Math.random() * templates.length)];
+  return template.replace(/\${(\w+)}/g, (_, key) =>
+    variables[key] !== undefined ? variables[key] : ""
+  );
+}
 function createResponse(commandType, variables) {
   if (!commandOutputs[commandType]) {
     console.error(`Invalid or missing command type: ${commandType}`);
