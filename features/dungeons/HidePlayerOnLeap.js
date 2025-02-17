@@ -4,17 +4,8 @@ import config from "../../config";
 
 let shownHidingMessage = false;
 let shownShowingMessage = false;
-let shownHidingMessage = false;
-let shownShowingMessage = false;
 let hiddenPlayers = new Map();
 
-function tempHidePlayer(playerName) {
-  hiddenPlayers.set(playerName, Date.now() + 5000);
-}
-
-function getIsPlayer(entity) {
-  const player = World.getPlayerByName(entity.getName());
-  return player?.getPing() === 1;
 function tempHidePlayer(playerName) {
   hiddenPlayers.set(playerName, Date.now() + 5000);
 }
@@ -31,17 +22,11 @@ function shouldHidePlayer(entity) {
     const unhideTime = hiddenPlayers.get(entity.getName());
     if (Date.now() >= unhideTime) {
       hiddenPlayers.delete(entity.getName());
-
-      if (shownShowingMessage) return;
-      showChatMessage(`Showing Players`);
-      shownShowingMessage = true;
-      shownHidingMessage = false;
-
-      return false;
-    }
-    return true;
-  }
-  return false;
+      if (!shownShowingMessage) {
+        showChatMessage("Showing Players");
+        shownShowingMessage = true;
+        shownHidingMessage = false;
+      }
       return false;
     }
     return true;
@@ -49,32 +34,35 @@ function shouldHidePlayer(entity) {
   return false;
 }
 
-registerWhen(register("chat", (location) => {
-  const playerX = Player.getX();
-  const playerY = Player.getY();
-  const playerZ = Player.getZ();
+registerWhen(
+  register("chat", (location) => {
+    const playerX = Player.getX();
+    const playerY = Player.getY();
+    const playerZ = Player.getZ();
 
-  World.getAllPlayers().forEach((player) => {
-    if (player.getName() === Player.getName()) return;
+    World.getAllPlayers().forEach((player) => {
+      if (player.getName() === Player.getName()) return;
 
-    const dx = player.getX() - playerX;
-    const dy = player.getY() - playerY;
-    const dz = player.getZ() - playerZ;
-    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      const dx = player.getX() - playerX;
+      const dy = player.getY() - playerY;
+      const dz = player.getZ() - playerZ;
+      const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-    if (distance <= 7) {
-      tempHidePlayer(player.getName());
+      if (distance <= 7) {
+        tempHidePlayer(player.getName());
+        if (!shownHidingMessage) {
+          showChatMessage("Hiding players");
+          shownHidingMessage = true;
+          shownShowingMessage = false;
+        }
+      }
+    });
+  }).setCriteria("You have teleported to ${location}!"),
+  () => config.enablePlayerHiding
+);
 
-      if (shownHidingMessage) return;
-      showChatMessage(`Hiding players`);
-      shownHidingMessage = true;
-      shownShowingMessage = false;
-    }
-  });
-}).setCriteria("You have teleported to ${location}!"), () => config.enablePlayerHiding);
-//You have teleported to JOE123546!
-
-registerWhen(register("renderEntity", (entity, pos, partialTicks, event) => {
+registerWhen(
+  register("renderEntity", (entity, pos, partialTicks, event) => {
     if (!getIsPlayer(entity)) return;
 
     if (shouldHidePlayer(entity)) {
@@ -88,9 +76,4 @@ register("worldUnload", () => {
   hiddenPlayers.clear();
   shownHidingMessage = false;
   shownShowingMessage = false;
-register("worldUnload", () => {
-  hiddenPlayers.clear();
-  shownHidingMessage = false;
-  shownShowingMessage = false;
 });
-
