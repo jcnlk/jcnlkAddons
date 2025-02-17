@@ -108,7 +108,7 @@ class Config {
         category: "Dungeons",
         subcategory: "Dungeon Loot Highlighting"
     })
-    enableDungeonChestHighlighting = true;
+    dungeonChestHighlighting = true;
 
     @SwitchProperty({
         name: "Fire Freeze Notification",
@@ -379,15 +379,6 @@ class Config {
     openHudGui() {
         ChatLib.command("ja hud", true);
     }
-    
-    ////////// Dev Stuff Settings //////////
-    @SwitchProperty({
-        name: "Debug Mode",
-        description: `Enable debug messages.`,
-        category: "Dev Stuff",
-        subcategory: "Debug"
-     })
-    debugMode = false;
 
     constructor() {
         this.initialize(this);
@@ -399,7 +390,6 @@ class Config {
         this.setCategoryDescription("Commands", `${configHeader}`);
         this.setCategoryDescription("HUD", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
         this.setCategoryDescription("WIP", `${configHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
-        this.setCategoryDescription("Dev Stuff", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /getcurrentarea, /getdungeoninfo, /getitemid, /getenchantedbookdetail\n\n${WHITE}No interesting Stuff for you :(${RESET}`);
 
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");

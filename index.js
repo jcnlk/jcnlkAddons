@@ -15,7 +15,6 @@ import "./features/general/CustomEmotes";
 import { showChatMessage, moduleVersion } from "./utils/Utils";
 import HudManager from "./utils/Hud";
 import { data } from "./utils/Data";
-import "./utils/HighlightSlots";
 import "./utils/Register";
 import "./utils/Dungeon";
 import "./utils/Title";

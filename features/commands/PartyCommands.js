@@ -303,4 +303,4 @@ registerWhen(register("chat", (player, message) => {
   }
 }).setChatCriteria("Party > ${player}: ${message}"), () => config.enablePartyCommands);
 
-registerWhen(register("worldLoad", loadResponses), () => config.enablePartyCommands); // maybe not needed but yea
+register("worldLoad", loadResponses);

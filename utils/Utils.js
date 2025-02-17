@@ -30,6 +30,8 @@ const DEBUG_PREFIX = `${DARK_GRAY}[${RED}JA${DARK_GRAY}-${RED}DEBUG${RED}]${RESE
 export const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
 export const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
 
+
+// Chat Message Stuff
 const messageColors = {
   info: `${YELLOW}`,
   success: `${GREEN}`,
@@ -41,17 +43,11 @@ function makeChatMessage(message, status = "info", isDebug = false) {
   const prefix = isDebug ? DEBUG_PREFIX : PREFIX;
   const color = messageColors[status] || messageColors.info;
 
-  if (isDebug && !config.debugMode) return;
-
   ChatLib.chat(`${prefix} ${color}${message}${RESET}`);
 }
 
 export function showChatMessage(message, status = "info") {
     makeChatMessage(message, status, false);
-}
-
-export function showDebugChatMessage(message, status = "info") {
-    makeChatMessage(message, status, true);
 }
 
 // Checks if current server is hypixel
