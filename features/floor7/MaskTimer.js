@@ -3,7 +3,7 @@ import { data } from "../../utils/Data";
 import HudManager from "../../utils/Hud";
 import { Hud } from "../../utils/Hud";
 import { registerWhen } from "../../utils/Register";
-import { getIsInDungeon } from "../../utils/Dungeon";
+import { getIsInDungeon, getIsInF7, getIsInM7 } from "../../utils/Dungeon";
 import { WHITE, BLUE, RED, GREEN } from "../../utils/Utils";
 
 const maskTimerPlaceholder = `${BLUE}Bonzo Mask: ${GREEN}READY\n${WHITE}Spirit Mask: ${GREEN}READY\n${RED}Pheonix: ${GREEN}READY`;
@@ -68,6 +68,7 @@ Object.keys(masks).forEach(key => {
 
 registerWhen(register("renderOverlay", () => {
   if (!World.isLoaded() || !getIsInDungeon() || HudManager.isEditing) return;
+  if (!getIsInF7() || !getIsInM7()) return;
   
   let timerText = "";
   Object.keys(masks).forEach(key => {

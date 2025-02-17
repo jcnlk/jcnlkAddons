@@ -1,4 +1,4 @@
-import { getIsInDungeon, getBossHealthPercent } from "../../utils/Dungeon";
+import { getBossHealthPercent } from "../../utils/Dungeon";
 import { fn, getSkyblockItemID } from "../../../BloomCore/utils/Utils";
 import { setItemsToHighlight } from "../../utils/HighlightSlots";
 import PriceUtils from "../../../BloomCore/PriceUtils";
@@ -10,12 +10,9 @@ let openedChests = []
 registerWhen(register("step", () => {
   if (!World.isLoaded()) return;
 
-  const isInDungeon = getIsInDungeon();
-  if (!isInDungeon) return;
-
   const bossHealthPercent = getBossHealthPercent();
   if (bossHealthPercent > 1) return;
-
+  
   let inv = Player.getContainer();
   let match = inv.getName().match(/^(\w+) Chest$/);
   if (!match) return;
