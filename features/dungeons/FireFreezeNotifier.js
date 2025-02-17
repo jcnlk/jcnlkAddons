@@ -1,6 +1,5 @@
 import config from "../../config";
 import { getIsInDungeon, getIsInM3 } from "../../utils/Dungeon";
-import { getIsInDungeon, getIsInM3 } from "../../utils/Dungeon";
 import { showTitle } from "../../utils/Title";
 import { RED, YELLOW, DARK_RED } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Register";
