@@ -158,18 +158,6 @@
     "Outlook not so good (like your chances of soloing Kuudra)",
     "Very likely (unlike finding a lobby without 'quitting' players)"
   ],
-  "commands": {
-    "list": "Available commands: !rng, !cf, !8ball, !throw, !dice, !simp, !sus, !kick, !p, !commands",
-    "help": "Use !commands help [command] for detailed help on a specific command.",
-    "specific": {
-      "rng": "!rng [player] [item]: Generates a random RNG percentage for a player and optional item.",
-      "cf": "!cf [player]: Performs a coin flip for the specified player.",
-      "8ball": "!8ball [player] [question]: Asks the Magic 8-Ball a question for the specified player.",
-      "throw": "!throw [player]: Shows how badly a player has thrown the run.",
-      "dice": "!dice [player]: Rolls a six-sided die for the specified player.",
-      "commands": "!commands: Lists all available commands. !commands help: Shows this help message. !commands help [command]: Shows detailed help for a specific command."
-    }
-  },
 "simp": {
     "low": [
       "${playerName} is ${percentage}% simp. They wouldn't even donate to Marina's OnlyFins.",

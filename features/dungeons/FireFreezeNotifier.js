@@ -1,18 +1,24 @@
 import config from "../../config";
 import { getIsInDungeon, getIsInM3 } from "../../utils/Dungeon";
 import { showTitle } from "../../utils/Title";
-import { RED, YELLOW, DARK_RED } from "../../utils/Constants";
+import { RED, YELLOW, DARK_RED } from "../../utils/Utils";
+import { registerWhen } from "../../utils/Register";
 
-register("chat", (key) => {
+registerWhen(register("chat", (key) => {
   if (!World.isLoaded) return;
-  if (!config.FireFreezeNotifier) return;
-  if (!getIsInDungeon) return;
-  if (!getIsInM3) return;
+
+  const isInDungeon = getIsInDungeon();
+  if (!isInDungeon) return;
+  
+  const isInM3 = getIsInM3();
+  if (!isInM3) return;
 
   new Thread(() => {
     Thread.sleep(1000);
     showTitle(`${RED}In 4 sec`, 3000, true, `${YELLOW}Get Ready!`);
 
+    World.playSound("random.burp", 2, 1);
+    Thread.sleep(4000);
     World.playSound("random.burp", 2, 1);
     Thread.sleep(4000);
 
@@ -26,4 +32,4 @@ register("chat", (key) => {
   }).start();
 }).setCriteria(
   "[BOSS] The Professor: Oh? You found my Guardians' one weakness?"
-); //.setContains();
+), () => config.FireFreezeNotifier);

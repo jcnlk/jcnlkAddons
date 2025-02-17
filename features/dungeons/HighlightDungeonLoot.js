@@ -1,213 +1,189 @@
-import { showDebugMessage, showGeneralJAMessage } from "../../utils/ChatUtils";
-import { getItemId } from "../../utils/Items";
-import { getEnchantedBookDetail } from "../../utils/Items";
+import { getIsInDungeon, getBossHealthPercent } from "../../utils/Dungeon";
+import { fn, getSkyblockItemID } from "../../../BloomCore/utils/Utils";
 import { setItemsToHighlight } from "../../utils/HighlightSlots";
-import Config from "../../config";
-import {
-  greenItems,
-  yellowItems,
-  redItems,
-  greenEnchantments,
-  yellowEnchantments,
-  redEnchantments,
-} from "../../data/DungeonLoot";
+import PriceUtils from "../../../BloomCore/PriceUtils";
+import { registerWhen } from "../../utils/Register";
+import config from "../../config";
 
-let isProcessingChestOpen = false;
+let openedChests = []
 
-const VALID_CHEST_TYPES = [
-  "Wood Chest",
-  "Gold Chest",
-  "Diamond Chest",
-  "Emerald Chest",
-  "Obsidian Chest",
-  "Bedrock Chest",
-];
+registerWhen(register("step", () => {
+  if (!World.isLoaded()) return;
 
-function getItemCategory(itemId) {
-  if (greenItems.includes(itemId)) return "green";
-  if (yellowItems.includes(itemId)) return "yellow";
-  if (redItems.includes(itemId)) return "red";
-  return null;
-}
+  const isInDungeon = getIsInDungeon();
+  if (!isInDungeon) return;
 
-function getEnchantmentCategory(enchantment) {
-  if (greenEnchantments.includes(enchantment)) return "green";
-  if (yellowEnchantments.includes(enchantment)) return "yellow";
-  if (redEnchantments.includes(enchantment)) return "red";
-  return null;
-}
+  const bossHealthPercent = getBossHealthPercent();
+  if (bossHealthPercent > 1) return;
 
-function getCategorySymbol(category) {
-  switch (category) {
-    case "green":
-      return "§a++§r";
-    case "yellow":
-      return "§e+§r";
-    case "red":
-      return "§c-§r";
-    default:
-      return "§7-§r";
-  }
-}
-
-function scanChestContents(container) {
-  if (!Config.enableDungeonChestHighlighting) {
-    showDebugMessage(
-      "Dungeon chest highlighting is disabled, skipping scan",
-      "info"
-    );
-    return;
-  }
-
-  if (!container) {
-    showDebugMessage("Invalid container", "error");
-    return;
-  }
-
-  const containerName = container.getName();
-  showDebugMessage(`Container name: ${containerName}`, "info");
-
-  if (
-    !VALID_CHEST_TYPES.some((chestType) => containerName.includes(chestType))
-  ) {
-    showDebugMessage(
-      `Container "${containerName}" is not a valid dungeon chest, skipping scan`,
-      "info"
-    );
-    return;
-  }
-
-  showDebugMessage(`Scanning chest: ${containerName}`, "info");
-
-  const containerSize = container.getSize();
-  const playerInventorySize = 36;
-  const slotsToScan = containerSize - playerInventorySize;
-
-  showDebugMessage(
-    `Container size: ${containerSize}, Slots to scan: ${slotsToScan}`,
-    "info"
-  );
-
-  let itemsToHighlight = [];
-  let notableItems = [];
-
-  for (let i = 0; i < slotsToScan; i++) {
-    const item = container.getStackInSlot(i);
-    if (item) {
-      showDebugMessage(`Processing item in slot ${i}`, "info");
-      try {
-        const itemId = getItemId(item);
-        const itemName = item.getName().replace(/§./g, "");
-        const itemCategory = getItemCategory(itemId);
-
-        if (itemCategory || itemId === "ENCHANTED_BOOK") {
-          const categorySymbol = getCategorySymbol(itemCategory);
-
-          let outputString = `${categorySymbol} §f${itemName}`;
-          let category = itemCategory;
-
-          if (itemId === "ENCHANTED_BOOK") {
-            const enchantDetails = getEnchantedBookDetail(item);
-            if (enchantDetails) {
-              const enchantmentCategory = getEnchantmentCategory(
-                `${enchantDetails.name} ${enchantDetails.level}`
-              );
-              const enchantmentSymbol = getCategorySymbol(enchantmentCategory);
-              outputString = `${enchantmentSymbol} Enchanted Book (§f${enchantDetails.name} ${enchantDetails.level})`;
-              category = enchantmentCategory || category;
-              showDebugMessage(
-                `Enchanted Book found - Name: ${enchantDetails.name}, Level: ${enchantDetails.level}`,
-                "info"
-              );
-            } else {
-              outputString += ` (§cUnable to read enchantment)`;
-              showDebugMessage(
-                `Unable to read enchantment details for book in slot ${i}`,
-                "warning"
-              );
-            }
-          }
-
-          if (category) {
-            notableItems.push(outputString);
-            itemsToHighlight.push({
-              slot: i,
-              color:
-                category === "green"
-                  ? Renderer.color(0, 255, 0, 128)
-                  : category === "yellow"
-                  ? Renderer.color(255, 255, 0, 128)
-                  : Renderer.color(255, 0, 0, 128),
-            });
-          }
-        }
-
-        showDebugMessage(
-          `Item processed - Name: ${itemName}, ID: ${itemId}`,
-          "info"
-        );
-      } catch (error) {
-        showDebugMessage(
-          `Error processing item in slot ${i}: ${error.message}`,
-          "error"
-        );
-      }
-    } else {
-      showDebugMessage(`Slot ${i} is empty`, "info");
+  let inv = Player.getContainer();
+  let match = inv.getName().match(/^(\w+) Chest$/);
+  if (!match) return;
+  
+  let chestName = match[1];
+  
+  let nugget = inv.getStackInSlot(31);
+  let items = inv.getItems().slice(9, 18).filter(a => a && a.getID() !== 160);
+  
+  const chest = new DungeonChest(chestName);
+  if (!nugget) return;
+  
+  let lore = nugget.getLore();
+  if (lore.length >= 7) {
+    let costMatch = lore[7].removeFormatting().match(/^([\d,]+) Coins$/);
+    if (costMatch) {
+      chest.cost = parseInt(costMatch[1].replace(/,/g, ""));
     }
   }
+  
+  chest.items = items.map(a => new ChestItem(a));
+  chest.calcValueAndProfit();
 
-  if (Config.enableDungeonLootChatOutput) {
-    if (notableItems.length > 0) {
-      ChatLib.chat("§6&l========= Dungeon Loot =========");
-      notableItems.forEach((item) => ChatLib.chat(item));
-      ChatLib.chat("§6&l=============================");
-    } else {
-      showGeneralJAMessage("§cNo notable Dungeon loot found.");
+  let highlightItems = [];
+  for (let i = 0; i < chest.items.length; i++) {
+    const ci = chest.items[i];
+    const slot = i + 9;
+    let color;
+    
+    if (ci.profit >= 1000000) {
+      color = Renderer.color(0, 255, 0, 128);
+    } if (ci.profit >= 100000) {
+      color = Renderer.color(255, 255, 0, 128);
+    } if (ci.profit < 100000) {
+      color = Renderer.color(255, 0, 0, 128);
     }
+    highlightItems.push({ slot, color });
   }
+  setItemsToHighlight(highlightItems);
+  
+  const existingInd = openedChests.findIndex(a => a.name === chestName);
+  if (existingInd !== -1) openedChests.splice(existingInd, 1);
+  openedChests.push(chest);
+}).setFps(1), () => config.enableDungeonChestHighlighting);
 
-  showDebugMessage("Chest scan completed", "info");
-
-  setItemsToHighlight(itemsToHighlight);
-}
-
-register("guiOpened", function (event) {
-  if (!Config.enableDungeonChestHighlighting) {
-    showDebugMessage(
-      "Dungeon chest highlighting is disabled, skipping scan",
-      "info"
-    );
-    return;
-  }
-
-  //showDebugMessage("GUI opened event triggered", 'info');
-
-  if (isProcessingChestOpen) {
-    //showDebugMessage("Already processing a chest open event, skipping", 'info');
-    return;
-  }
-
-  isProcessingChestOpen = true;
-
-  setTimeout(function () {
-    const screen = Client.currentGui.get();
-    //showDebugMessage(`Current GUI: ${screen}`, 'info');
-
-    if (screen && screen.toString().includes("GuiChest")) {
-      showDebugMessage("Chest GUI detected", "info");
-      const container = Player.getContainer();
-      if (container) {
-        showDebugMessage("Valid container found, starting scan", "info");
-        scanChestContents(container);
-      } else {
-        showDebugMessage("No valid container detected", "warning");
-      }
-    } else {
-      showDebugMessage("Opened GUI is not a chest", "info");
-    }
-
-    isProcessingChestOpen = false;
-    //showDebugMessage("Finished processing GUI open event", 'info');
-  }, 50);
+register("worldUnload", () => {
+  openedChests = [];
 });
+
+export const chestData = {
+    "Wood": {
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWFlMzg1NWY5NTJjZDRhMDNjMTQ4YTk0NmUzZjgxMmE1OTU1YWQzNWNiY2I1MjYyN2VhNGFjZDQ3ZDMwODEifX19",
+        color: "&f"
+    },
+    "Gold": {
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGFkMDQ3NmU4NjcxNjk2YWYzYTg5NDlhZmEyYTgxNGI5YmRkZTY1ZWNjZDFhOGI1OTNhZWVmZjVhMDMxOGQifX19",
+        color: "&6"
+    },
+    "Diamond": {
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzdiOWRmZDI4MWRlYWVmMjYyOGFkNTg0MGQ0NWJjZGE0MzZkNjYyNjg0NzU4N2YzYWM3NjQ5OGE1MWM4NjEifX19",
+        color: "&b"
+    },
+    "Emerald": {
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTBlZDk0YmY1ZmNjZGQ5ZDNiN2NhN2ZhMzhlMmNlYjUwMTMzMmU2YjMzNTM0MDQyNzY1NjZiNTIxNmMxMzA0ZiJ9fX0K",
+        color: "&2"
+    },
+    "Obsidian": {
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODkzM2VlZmFiOGZjYjNmYTBmNDdiYjAzOTlhNTA4ZWY2YzkxMWRhZTRiMTE0NTU3ZjkwNjg5N2FlY2VkZjg1YSJ9fX0K",
+        color: "&5"
+    },
+    "Bedrock": {
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzRhYzY0NjMzMjQ5ZjEzZjFiMGM5NTI1YzZlZmE0NGNkZTk2YWJjZDY0N2UwOTVhMTcxZmUyNDRjMWEyNDRlNSJ9fX0K",
+        color: "&8"
+    }
+}
+
+class DungeonChest {
+  constructor(chestName) {
+    this.name = chestName;
+    this.items = [];
+    this.value = 0;
+    this.cost = 0;
+    this.profit = 0;
+  }
+  getChestProfitStr() {
+    let color = this.profit > 0 ? "&a+" : "&c";
+    return `${this.getFormattedName()} &6(${fn(this.cost)})&f: ${color}${fn(this.profit)}`;
+  }
+  getChestStr() {
+    let str = this.items.reduce((a, b) => a + `  ${b.getPriceStr()}\n`, "");
+    return `${this.getChestProfitStr()}\n${str}`;
+  }
+  getFormattedName() {
+    return `${chestData[this.name]?.color}&l${this.name} Chest&r`;
+  }
+  calcValueAndProfit() {
+    this.value = this.items.reduce((a, b) => a + b.value, 0);
+    this.profit = Math.floor(this.value - this.cost);
+    
+    if (this.value > 0) {
+      for (let item of this.items) {
+        const itemShare = item.value / this.value;
+        item.profit = Math.floor(item.value - (itemShare * this.cost));
+      }
+    }
+  }
+}
+
+class ChestItem {
+  /**
+   * @param {Item} item 
+   */
+  constructor(item) {
+    this.item = item;
+    this.name = item.getName();
+    this.quantity = 1;
+    this.profit = 0;
+    this.init();
+  }
+  init() {
+    const name = this.item.getName().removeFormatting();
+    const match = name.match(/^(\w+) Essence x(\d+)$/);
+    this.itemID = getSkyblockItemID(this.item);
+    if (match) {
+      let [_, type, amt] = match;
+      this.itemID = `ESSENCE_${type}`.toUpperCase();
+      this.quantity = parseInt(amt);
+    }
+    if (this.itemID.startsWith("ENCHANTMENT")) {
+      let lore = this.item.getLore();
+      if (lore.length < 2) return;
+      this.name = lore[1];
+    }
+    this.calcValue();
+  }
+  calcValue() {
+    if (worthless.has(this.itemID)) {
+      this.value = 0;
+      return 0;
+    }
+    
+    const sellInfo = PriceUtils.getSellPrice(this.itemID, true);
+    if (!sellInfo) return 0;
+    const [price, from] = sellInfo;
+    
+    this.value = price * this.quantity;
+    
+    if (this.item.getRegistryName() == "minecraft:enchanted_book") {
+      this.value = PriceUtils.getBookPriceWhenCrafted(this.item);
+    }
+    
+    if (from == PriceUtils.locations.AUCTION) this.value = PriceUtils.getBINPriceAfterTax(this.value);
+    else this.value *= (1 - 0.0125);
+    
+    return Math.floor(this.value);
+  }
+  getPriceStr() {
+    let color = this.profit > 0 ? "&a+" : "&c";
+    return `${this.name}&f: ${color}${fn(Math.floor(this.profit))}`;
+  }
+  toString() {
+    return `ChestItem[${this.itemID}, qty=${this.quantity}, value=${this.value}, profit=${this.profit}]`;
+  }
+}
+
+const worthless = new Set([
+    "DUNGEON_DISC_5",
+    "MAXOR_THE_FISH",
+    "STORM_THE_FISH",
+    "GOLDOR_THE_FISH",
+])

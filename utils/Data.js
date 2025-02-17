@@ -1,29 +1,27 @@
-import PogObject from "PogData";
+import PogObject from "../../PogData";
 
 const defaultData = {
-    // More Data here
-}
-
-const defaultHudData = {
-    /**
-    testHud: {
+    maskTimerHud: {
+        x: 0.65,
+        y: 0.50,
+        scale: 1.0
+    },
+    quizTimerHud: {
         x: 0.5,
         y: 0.5,
         scale: 1.0
-    }
-    */
-    // More HudData here
-}
-
-
-export let Data = new PogObject('jcnlkAddons', defaultData, './data/Data.json');
-export let HudData = new PogObject('jcnlkAddons', defaultHudData, './data/HudData.json');
-// More DataObjects here
-
-
-export const resetData = () => {
-    Object.keys(defaultData).forEach((k) => {
-        data[k] = defaultData[k];
-    });
-    data.save();
+    },
+    procHud: {
+        x: 0.45,
+        y: 0.35,
+        scale: 1.5
+    },
+    reminders: [],
+    customEmotes: {}
 };
+
+export let data = new PogObject("jcnlkAddons/data", defaultData, "Data.json");
+
+register("gameUnload", () => {
+    data.save();
+});

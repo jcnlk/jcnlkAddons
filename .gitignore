@@ -1,10 +1,2 @@
-
 config.toml
-data/CustomEmotes.json
-data/KuudraLoot.js
-data/Reminders.json
-features/kuudra/HighlightKuudraLoot.js
-data/Todos.json
-data/HudData.json
-data/MacroCheckWhitelist.json
-data/MacroCheckData.json
+data/Data.json

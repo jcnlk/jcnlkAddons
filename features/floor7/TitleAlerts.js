@@ -1,6 +1,7 @@
 import config from "../../config";
-import { GREEN, RED, YELLOW } from "../../utils/Constants";
+import { GREEN, RED, YELLOW } from "../../utils/Utils";
 import { getIsInDungeon, getCurrentClass } from "../../utils/Dungeon";
+import { registerWhen } from "../../utils/Register";
 
 let lastTitleTime = 0;
 const TITLE_COOLDOWN = 1000;
@@ -192,9 +193,9 @@ function checkPhaseMessage(message) {
 }
 
 // Handle pre-enter phase announcements
-register("chat", (name, message) => {
+registerWhen(register("chat", (name, message) => {
   if (!getIsInDungeon) return;
-  if (!config.PreEnterTitles || isOwnMessage(name)) return;
+  if (isOwnMessage(name)) return; //!config.PreEnterTitles || 
 
   const currentTime = Date.now();
   if (currentTime - lastTitleTime < TITLE_COOLDOWN) return;
@@ -210,12 +211,12 @@ register("chat", (name, message) => {
     showDungeonAlert(mainText);
     lastTitleTime = currentTime;
   }
-}).setChatCriteria("Party > ${name}: ${message}");
+}).setChatCriteria("Party > ${name}: ${message}"), () => config.PreEnterTitles);
 
 // Handle i4 position announcements - Healer only
-register("chat", (name, message) => {
+registerWhen(register("chat", (name, message) => {
   if (!getIsInDungeon) return;
-  if (!config.i4PositionTitles || isOwnMessage(name)) return;
+  if (isOwnMessage(name)) return; //!config.i4PositionTitles || 
 
   const playerClass = getCurrentClass();
   if (playerClass !== "Healer") return;
@@ -237,7 +238,7 @@ register("chat", (name, message) => {
     }
     lastTitleTime = currentTime;
   }
-}).setChatCriteria("Party > ${name}: ${message}");
+}).setChatCriteria("Party > ${name}: ${message}"), () => config.i4PositionTitles);
 
 // Handle phase announcements (P2/P4/Mid/P5/SS)
 register("chat", (event) => {

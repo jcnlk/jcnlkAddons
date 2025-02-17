@@ -1,11 +1,20 @@
-import { showGeneralJAMessage } from "../../utils/ChatUtils";
-import Config from "../../config";
+import { showChatMessage } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Register";
+import config from "../../config";
 
+let shownHidingMessage = false;
+let shownShowingMessage = false;
 let shownHidingMessage = false;
 let shownShowingMessage = false;
 let hiddenPlayers = new Map();
 
+function tempHidePlayer(playerName) {
+  hiddenPlayers.set(playerName, Date.now() + 5000);
+}
+
+function getIsPlayer(entity) {
+  const player = World.getPlayerByName(entity.getName());
+  return player?.getPing() === 1;
 function tempHidePlayer(playerName) {
   hiddenPlayers.set(playerName, Date.now() + 5000);
 }
@@ -24,7 +33,7 @@ function shouldHidePlayer(entity) {
       hiddenPlayers.delete(entity.getName());
 
       if (shownShowingMessage) return;
-      showGeneralJAMessage(`Showing Players`);
+      showChatMessage(`Showing Players`);
       shownShowingMessage = true;
       shownHidingMessage = false;
 
@@ -33,11 +42,14 @@ function shouldHidePlayer(entity) {
     return true;
   }
   return false;
+      return false;
+    }
+    return true;
+  }
+  return false;
 }
 
-register("chat", (location) => {
-  if (!Config.enablePlayerHiding) return;
-
+registerWhen(register("chat", (location) => {
   const playerX = Player.getX();
   const playerY = Player.getY();
   const playerZ = Player.getZ();
@@ -54,29 +66,31 @@ register("chat", (location) => {
       tempHidePlayer(player.getName());
 
       if (shownHidingMessage) return;
-      showGeneralJAMessage(`Hiding players`);
+      showChatMessage(`Hiding players`);
       shownHidingMessage = true;
       shownShowingMessage = false;
     }
   });
-}).setCriteria("You have teleported to ${location}!");
+}).setCriteria("You have teleported to ${location}!"), () => config.enablePlayerHiding);
 //You have teleported to JOE123546!
 
-registerWhen(
-  register("renderEntity", (entity, pos, partialTicks, event) => {
-    if (!Config.enablePlayerHiding) return;
-
+registerWhen(register("renderEntity", (entity, pos, partialTicks, event) => {
     if (!getIsPlayer(entity)) return;
 
     if (shouldHidePlayer(entity)) {
       cancel(event);
     }
   }),
-  () => Config.enablePlayerHiding
+  () => config.enablePlayerHiding
 );
 
 register("worldUnload", () => {
   hiddenPlayers.clear();
   shownHidingMessage = false;
   shownShowingMessage = false;
+register("worldUnload", () => {
+  hiddenPlayers.clear();
+  shownHidingMessage = false;
+  shownShowingMessage = false;
 });
+
