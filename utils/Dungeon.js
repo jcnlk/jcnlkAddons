@@ -28,6 +28,10 @@ export function getIsInDungeon() {
   return getCurrentArea().includes("The Catacombs");
 }
 
+export function getIsInDungeonHub() {
+  return getCurrentArea().includes("Dungeon Hub");
+}
+
 function createFloorFunction(type, number) {
   return function () {
     const floor = getCurrentFloor();
