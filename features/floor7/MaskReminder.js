@@ -13,7 +13,7 @@ registerWhen(register("chat", () => {
 
   isGoldorStarted = true;
 
-  if (!getIsInF7() || !getIsInM7()) return;
+  if (!getIsInF7() && !getIsInM7()) return;
   if (!reminderShown) return;
 
   const helmetId = getSkyblockItemID(Player.armor.getHelmet());

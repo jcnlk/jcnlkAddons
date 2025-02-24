@@ -195,7 +195,7 @@ function checkPhaseMessage(message) {
 // Handle pre-enter phase announcements
 registerWhen(register("chat", (name, message) => {
   if (!getIsInDungeon) return;
-  if (isOwnMessage(name)) return; //!config.PreEnterTitles || 
+  if (isOwnMessage(name)) return; 
 
   const currentTime = Date.now();
   if (currentTime - lastTitleTime < TITLE_COOLDOWN) return;
@@ -216,7 +216,7 @@ registerWhen(register("chat", (name, message) => {
 // Handle i4 position announcements - Healer only
 registerWhen(register("chat", (name, message) => {
   if (!getIsInDungeon) return;
-  if (isOwnMessage(name)) return; //!config.i4PositionTitles || 
+  if (isOwnMessage(name)) return;
 
   const playerClass = getCurrentClass();
   if (playerClass !== "Healer") return;

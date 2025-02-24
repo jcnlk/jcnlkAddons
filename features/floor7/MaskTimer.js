@@ -68,7 +68,7 @@ Object.keys(masks).forEach(key => {
 
 registerWhen(register("renderOverlay", () => {
   if (!World.isLoaded() || !getIsInDungeon() || HudManager.isEditing) return;
-  if (!getIsInF7() || !getIsInM7()) return;
+  if (!getIsInF7() && !getIsInM7()) return;
   
   let timerText = "";
   Object.keys(masks).forEach(key => {
