@@ -1,3 +1,4 @@
+import SwitchElement from "../DocGuiLib/elements/Switch";
 import { 
     @Vigilant, 
     @SwitchProperty, 
@@ -64,6 +65,14 @@ class Config {
         subcategory: "Reminders"
     })
     enableReminders = true;
+
+    @SwitchProperty({
+        name: "UwUAddons Hider",
+        description: "Hide messages sent by UwUAddons.",
+        category: "General",
+        subcategory: "UwuAddons Hider"
+    })
+    hideUwUAddons = true;
 
     ////////// Dungeons Settings //////////
     @SwitchProperty({
