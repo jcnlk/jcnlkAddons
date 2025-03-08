@@ -9,6 +9,7 @@ import config from "./config";
 import { addReminder, removeReminder, listReminders } from "./features/general/Reminders";
 import "./features/general/AutoPetruleTitle";
 import "./features/general/AttributeAbbrev";
+import "./features/general/UwuAddonsHider";
 import "./features/general/CustomEmotes";
 
 // Utils
@@ -29,10 +30,10 @@ import "./features/dungeons/QuizTimer";
 
 // Floor 7
 import "./features/floor7/SimonSaysPhaseTracker";
-import "./features/floor7/MaskReminder.js";
+import "./features/floor7/MaskReminder";
 import "./features/floor7/TitleAlerts";
 import "./features/floor7/MaskTimer";
-import "./features/floor7/Posmsg.js";
+import "./features/floor7/Posmsg";
 
 // Commands
 import "./features/commands/PartyCommands";
