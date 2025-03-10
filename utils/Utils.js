@@ -56,3 +56,9 @@ export const isInSkyblock = () => {
       return true;
   return false;
 }
+
+export function playSound(soundName, volume, pitch) {
+  try {
+      new net.minecraft.network.play.server.S29PacketSoundEffect(soundName, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection()) // Idk why I couldn't get World.playSound() to work but whatever
+  } catch (e) { }
+}
