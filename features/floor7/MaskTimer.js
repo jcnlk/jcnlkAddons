@@ -17,7 +17,7 @@ const masks = {
     name: `${BLUE}Bonzo Mask`,
     duration: 1800,
     procText: `${BLUE}Bonzo Mask Procced!`,
-    chatCriteria: [/Your (⚚)? Bonzo's Mask saved your life!/]
+    chatCriteria: [/Your (?:⚚ )?Bonzo's Mask saved your life!/]
   },
   spirit: {
     name: `${WHITE}Spirit Mask`,
