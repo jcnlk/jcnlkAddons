@@ -92,7 +92,7 @@ function getI4Position() {
 function announceI4Position() {
   if (!World.isLoaded()) return;
   if (playerClass === "Healer") return;
-  if (!getIsInMaxor()) return;
+  if (!getIsInStorm()) return;
 
   const pos = getI4Position();
 

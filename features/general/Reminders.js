@@ -116,7 +116,6 @@ export function triggerReminder(name) {
 }
 
 function showReminderPopup(name) {
-  showTitle()
   showTitle(`${RED}Reminder: ${name}`, 5000, true, `${RED}JA Reminder`);
   showChatMessage(`Reminder: ${name}`);
   World.playSound("random.orb", 1, 1);

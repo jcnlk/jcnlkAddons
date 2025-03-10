@@ -69,7 +69,7 @@ function checkForUpdate() {
     if (localVersion < remoteVersion) {
       showChatMessage("Update available: " + localVersion + " -> " + remoteVersion);
       ChatLib.chat(
-        new TextComponent("&8[&6JA&8]&r &a[Click here to go to the Github release page!}")
+        new TextComponent("&8[&6JA&8]&r &a[Click here to go to the Github release page!]")
           .setClick("open_url", GITHUB_RELEASE_URL)
       );
     } else if (localVersion > remoteVersion) {
