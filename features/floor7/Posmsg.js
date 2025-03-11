@@ -52,7 +52,6 @@ function getDevPosition() {
   if (isPlayerInArea(106, 111, 119, 122, 92, 95)) return 1;
   if (isPlayerInArea(58, 62, 130, 135, 137, 143)) return 2;
   if (isPlayerInArea(-3, 4, 119, 123, 75, 79)) return 3;
-  return 0;
 }
 
 function announceDevPosition() {
@@ -86,7 +85,6 @@ function getI4Position() {
   if (isPlayerInArea(91, 93, 129, 133, 44, 46)) return 1;
   if (isPlayerInArea(87, 91, 129, 134, 46, 50)) return 2;
   if (isPlayerInArea(61, 65, 126, 130, 33, 37)) return 3;
-  return 0;
 }
 
 function announceI4Position() {
@@ -108,7 +106,7 @@ function announceI4Position() {
   }
 }
 
-registerWhen(register("tick", announceI4Position), () => config.announceI4Position);
+registerWhen(register("tick", announceI4Position), () => config.announcei4Position);
 
 //////////////////////////
 // Pre Enter Announcements//
@@ -120,7 +118,6 @@ function getGoldorPhaseLocation() {
   if (isPlayerInArea(-2, 15, 107, 145, 49, 137)) return 3;
   if (isPlayerInArea(-2, 88, 107, 145, 30, 48)) return 4;
   if (isPlayerInArea(41, 68, 110, 150, 59, 117)) return 5;
-  return 0;
 }
 
 function getPrePhaseLocation() {
