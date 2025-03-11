@@ -19,7 +19,15 @@ export function getClassOf(name = Player.getName()) {
   if(result.includes("Mage")) return "Mage"
   if(result.includes("Berserk")) return "Berserk"
   if(result.includes("Archer")) return "Archer"
-  else return "?"
+  else return null;
+}
+
+export function getClassColor(playerName) {
+  if (getClassOf(playerName) === "Healer") return "&d";
+  if (getClassOf(playerName) === "Tank") return "&a";
+  if (getClassOf(playerName) === "Mage") return "&b";
+  if (getClassOf(playerName) === "Berserk") return "&c";
+  if (getClassOf(playerName) === "Archer") return "&6";
 }
 
 export function getCurrentFloor() {

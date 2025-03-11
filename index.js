@@ -25,7 +25,6 @@ import "./features/dungeons/CryptReminder";
 import "./features/dungeons/QuizTimer";
 
 // Floor 7
-import "./features/floor7/SimonSaysPhaseTracker";
 import "./features/floor7/MaskReminder";
 import "./features/floor7/MaskTimer";
 import "./features/floor7/PosTitles";

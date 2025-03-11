@@ -147,89 +147,35 @@ class Config {
         name: "Mask Timer",
         description: "Displays a HUD with Masks/Phoenix cooldowns.",
         category: "F7/M7",
-        subcategory: "Mask Timer"
+        subcategory: "General"
     })
     maskTimer = true;
-
-    @SwitchProperty({
-        name: "Toggle Posmsg",
-        description: "Toggle this cool messages",
-        category: "F7/M7",
-        subcategory: "!"
-    })
-    togglePosMsg = true;
-
-    @SwitchProperty({
-        name: "Toggle PosTitles",
-        description: "text",
-        category: "F7/M7",
-        subcategory: "!"
-    })
-    togglePosTitles = true;
 
     @SwitchProperty({
         name: "Mask Reminder",
         description: "Reminds you to equip Bonzo/Spirit Mask before P3 has started.",
         category: "F7/M7",
-        subcategory: "P2 (Storm Phase)"
+        subcategory: "General"
     })
     MaskReminder = true;
 
     @SwitchProperty({
-        name: "i4 Position Titles",
-        description: "Show titles when someone announce i4 positions in your party.",
+        name: "Toggle Positional Messages",
+        description: "Announce your position at specific spots (P2, EE2, EE3, At Core, In Core, At Mid, At P5).",
         category: "F7/M7",
-        subcategory: "P2 (Storm Phase)"
+        subcategory: "Positional Messages"
     })
-    i4PositionTitles = true;
+    togglePosMsg = true;
 
     @SwitchProperty({
-        name: "Enable Pre Enter Titles",
-        description: "Show titles when someone announce Pre Enter positions in your party.",
+        name: "Toggle Positional Titles",
+        description: "Show a title when your team is at a specific spots (P2, EE2, EE3, At Core, In Core, At Mid, At P5).",
         category: "F7/M7",
-        subcategory: "P3 (Goldor Phase)"
+        subcategory: "Positional Titles"
     })
-    PreEnterTitles = true;
+    togglePosTitles = true;
 
-    @SwitchProperty({
-        name: "Pre Enter P4 Titles",
-        description: "Show a title when someone Pre Enter P4.",
-        category: "F7/M7",
-        subcategory: "P3 (Goldor Phase)"
-    })
-    PreP4Titles = true;
-
-    @SwitchProperty({
-        name: "Pre Dev Title",
-        description: "Show a title when someone is at SS (Simon Says).",
-        category: "F7/M7",
-        subcategory: "P3 (Goldor Phase)"
-    })
-    PreDevTitles = true;
-
-    @SwitchProperty({
-        name: "EE2 Helper",
-        description: "Show a title when SS (Simon Says) is 4/5 & 5/5 done. Only shown to Archer!",
-        category: "F7/M7",
-        subcategory: "P3 (Goldor Phase)"
-    })
-    EE2Helper = true;
-
-    @SwitchProperty({
-        name: "Announce SS Progression",
-        description: "Announces your SS (Simon Says) Progression in Party Chat. Only if you are standing at SS.",
-        category: "F7/M7",
-        subcategory: "P3 (Goldor Phase)"
-    })
-    announceSSProgression = true;
-
-    @SwitchProperty({
-        name: "Pre Enter P5 Titles",
-        description: "Show a title when someone Pre Enter P5. Healer only!",
-        category: "F7/M7",
-        subcategory: "P4 (Necron Phase)"
-    })
-    PreP5Titles = true;
+    
 
     //////////// Commands Settings //////////
     @SwitchProperty({

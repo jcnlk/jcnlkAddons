@@ -16,7 +16,7 @@ const lastLocation = {
 
 function sendMessage(message) {
   setTimeout(() => ChatLib.command(`party chat ` + message), 200);
-  showChatMessage("Announcing: " + message);
+  showChatMessage("Announcing -> " + message);
 }
 
 registerWhen(register("tick", () => {
