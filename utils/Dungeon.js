@@ -1,7 +1,6 @@
 import Dungeon from "../../BloomCore/dungeons/Dungeon";
 import { getCurrentArea } from "./Utils";
 
-
 const BossStatus = Java.type("net.minecraft.entity.boss.BossStatus");
 const tablistClassRegex = /\[(?:.+)\] (.+) \((Berserk|Archer|Mage|Tank|Healer) ([a-zA-Z]+)\)/;
 
@@ -57,20 +56,8 @@ function createFloorFunction(type, number) {
   };
 }
 
-export const getIsInF1 = createFloorFunction("F", 1);
-export const getIsInF2 = createFloorFunction("F", 2);
-export const getIsInF3 = createFloorFunction("F", 3);
-export const getIsInF4 = createFloorFunction("F", 4);
-export const getIsInF5 = createFloorFunction("F", 5);
-export const getIsInF6 = createFloorFunction("F", 6);
 export const getIsInF7 = createFloorFunction("F", 7);
-
-export const getIsInM1 = createFloorFunction("M", 1);
-export const getIsInM2 = createFloorFunction("M", 2);
 export const getIsInM3 = createFloorFunction("M", 3);
-export const getIsInM4 = createFloorFunction("M", 4);
-export const getIsInM5 = createFloorFunction("M", 5);
-export const getIsInM6 = createFloorFunction("M", 6);
 export const getIsInM7 = createFloorFunction("M", 7);
 
 export function getIsInBoss(boss) {

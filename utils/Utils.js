@@ -29,12 +29,14 @@ export const isInSkyblock = () => {
   return false;
 }
 
+// Alternative to World.playSound()
 export function playSound(soundName, volume, pitch) {
   try {
-      new net.minecraft.network.play.server.S29PacketSoundEffect(soundName, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection()) // Idk why I couldn't get World.playSound() to work but whatever
+      new net.minecraft.network.play.server.S29PacketSoundEffect(soundName, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection());
   } catch (e) { }
 }
 
+// Registering and unregistering of triggers
 const SettingsGui = Java.type("gg.essential.vigilance.gui.SettingsGui");
 const registers = [];
 
@@ -59,11 +61,11 @@ export const setRegisters = () => {
   });
 };
 
+register("gameLoad", () => setRegisters()); // idk if i need this one but whatever
+
 register("guiClosed", (gui) => {
   if (gui instanceof SettingsGui) setRegisters();
 });
-
-register("gameLoad", () => setRegisters());
 
 /**
  * Full credit to AsuAddons: https://www.chattriggers.com/modules/v/AsuAddons
@@ -101,6 +103,7 @@ export function showTitle(title, duration, shadow = false, subtitle = "") {
     },duration)
 }
 
+// Checks if a entity is in a specific area
 export function isPlayerInArea(x1, x2, y1, y2, z1, z2, entity = Player) {
   const x = entity.getX();
   const y = entity.getY();
@@ -115,6 +118,7 @@ export function isPlayerInArea(x1, x2, y1, y2, z1, z2, entity = Player) {
   );
 }
 
+// Skyblock location stuff
 const MAX_RETRIES = 20;
 let currentArea = "";
 let retryCount = 0;
@@ -182,7 +186,6 @@ export const updateCurrentArea = () => {
 };
 
 export const getCurrentArea = () => currentArea;
-
 export const getCurrentZone = getZoneFromScoreboard;
 
 register("worldLoad", () => {

@@ -24,7 +24,7 @@ registerWhen(register("chat", (rank, player, message) => {
   let senderName = player.trim();
 
 
-  if (command === "!p" && Config.partyCommand) {
+  if (command === "!p" && config.partyCommand) {
     handleInviteCommand(commandParts, senderName);
   } else if ((command === "!kick" || command === "!pk") && Config.kickCommand) {
     handleKickCommand(commandParts);
