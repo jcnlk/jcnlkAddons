@@ -19,9 +19,9 @@ const masks = {
     chatCriteria: ["Second Wind Activated! Your Spirit Mask saved your life!"]
   },
   phoenix: {
-    name: "&cPheonix",
+    name: "&cPhoenix",
     duration: 600,
-    procText: "&cPheonix Procced!",
+    procText: "&cPhoenix Procced!",
     chatCriteria: ["Your Phoenix Pet saved you from certain death!"]
   }
 };
