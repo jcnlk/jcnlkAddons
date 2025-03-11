@@ -1,4 +1,3 @@
-import SwitchElement from "../DocGuiLib/elements/Switch";
 import { 
     @Vigilant, 
     @SwitchProperty, 
@@ -153,20 +152,20 @@ class Config {
     maskTimer = true;
 
     @SwitchProperty({
-        name: "Announce Pre Enter P2",
-        description: "Announce in Party Chat when you Pre Enter P2.",
+        name: "Toggle Posmsg",
+        description: "Toggle this cool messages",
         category: "F7/M7",
-        subcategory: "P1 (Maxor Phase)"
+        subcategory: "!"
     })
-    announcePreEnterP2 = true;
+    togglePosMsg = true;
 
     @SwitchProperty({
-        name: "Pre Enter P2 Titles",
-        description: "Show a title when someone Pre Enter P2.",
+        name: "Toggle PosTitles",
+        description: "text",
         category: "F7/M7",
-        subcategory: "P1 (Maxor Phase)"
+        subcategory: "!"
     })
-    PreP2Titles = true;
+    togglePosTitles = true;
 
     @SwitchProperty({
         name: "Mask Reminder",
@@ -177,14 +176,6 @@ class Config {
     MaskReminder = true;
 
     @SwitchProperty({
-        name: "Announce i4 Position",
-        description: "Announce your i4 position in Party Chat (i4 Entry, Moving to i4, At i4).",
-        category: "F7/M7",
-        subcategory: "P2 (Storm Phase)"
-    })
-    announcei4Position = true;
-
-    @SwitchProperty({
         name: "i4 Position Titles",
         description: "Show titles when someone announce i4 positions in your party.",
         category: "F7/M7",
@@ -193,36 +184,12 @@ class Config {
     i4PositionTitles = true;
 
     @SwitchProperty({
-        name: "Announce Pre Enter P3",
-        description: "Announce in Party Chat when you Pre Enter in Phase 3 (EE2, EE3, EE4/Core).",
-        category: "F7/M7",
-        subcategory: "P3 (Goldor Phase)"
-    })
-    announcePreEnterPhase3 = true
-
-    @SwitchProperty({
         name: "Enable Pre Enter Titles",
         description: "Show titles when someone announce Pre Enter positions in your party.",
         category: "F7/M7",
         subcategory: "P3 (Goldor Phase)"
     })
     PreEnterTitles = true;
-
-    @SwitchProperty({
-        name: "Announce Pre Dev Position",
-        description: "Announce your position during Pre Dev in Party Chat (At SS, At Dev 2, At Dev 3).",
-        category: "F7/M7",
-        subcategory: "P3 (Goldor Phase)"
-    })
-    announcePreDevPosition = true;
-
-    @SwitchProperty({
-        name: "Announce Pre Enter P4",
-        description: "Announce your Pre Enter P4 position in Party Chat.",
-        category: "F7/M7",
-        subcategory: "P3 (Goldor Phase)"
-    })
-    announcePreP4 = true;
 
     @SwitchProperty({
         name: "Pre Enter P4 Titles",
@@ -257,14 +224,6 @@ class Config {
     announceSSProgression = true;
 
     @SwitchProperty({
-        name: "Announce Pre Enter P5",
-        description: "Announce your Pre Enter P5 position in Party Chat.",
-        category: "F7/M7",
-        subcategory: "P4 (Necron Phase)"
-    })
-    announcePreP5 = true;
-
-    @SwitchProperty({
         name: "Pre Enter P5 Titles",
         description: "Show a title when someone Pre Enter P5. Healer only!",
         category: "F7/M7",
@@ -297,86 +256,6 @@ class Config {
     })
     kickCommand = false;
 
-    @SwitchProperty({
-        name: "Enable Party Commands",
-        description: "Enable or disable all party commands.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    enablePartyCommands = false;
-
-    @SwitchProperty({
-        name: "RNG Command &3!rng&r",
-        description: "Enable the rng command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    rngCommand = false;
-
-    @SwitchProperty({
-        name: "Coinflip Command &3!cf&r",
-        description: "Enable the coinflip command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    coinFlipCommand = false;
-
-    @SwitchProperty({
-        name: "8ball Command &3!8ball&r",
-        description: "Enable the 8ball command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    eightBallCommand = false;
-
-    @SwitchProperty({
-        name: "Throw Command &3!throw&r",
-        description: "Enable the throw command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    throwCommand = false;
-
-    @SwitchProperty({
-        name: "Dice Command &3!dice&r",
-        description: "Enable the dice command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    diceCommand = false;
-
-    @SwitchProperty({
-        name: "Simp Command &3!simp&r",
-        description: "Enable the simp command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    simpCommand = false;
-
-    @SwitchProperty({
-        name: "Sus Command &3!sus&r",
-        description: "Enable the sus command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    susCommand = false;
-
-    @SwitchProperty({
-        name: "Kick Command (Party) &3!<kick, pk>&r",
-        description: "Enable the kick command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    partyKickCommand = false;
-
-    @SwitchProperty({
-        name: "Invite Command (Party) &3!p&r ",
-        description: "Enable the invite command in Party Chat.",
-        category: "Commands",
-        subcategory: "Party Commands"
-    })
-    partyInviteCommand = false;
-
     ////////// HUD Settings //////////
     @ButtonProperty({
         name: "Move HUD",
@@ -404,11 +283,7 @@ class Config {
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
         this.addDependency("Enable Crypt Reminder Popup", "Enable Crypt Reminder");
-
-        // Add dependencies for Party Commands
-        const partyCommands = ["RNG Command &3!rng&r", "Coinflip Command &3!cf&r", "8ball Command &3!8ball&r", "Throw Command &3!throw&r", "Dice Command &3!dice&r", "Simp Command &3!simp&r", "Sus Command &3!sus&r", "Kick Command (Party) &3!<kick, pk>&r", "Invite Command (Party) &3!p&r "];
-        partyCommands.forEach(command => this.addDependency(command, "Enable Party Commands"));
-
+    
         // Add dependencies for DM Commands
         this.addDependency("Invite Command (DMs) &3!p&r", "Enable DM Commands");
         this.addDependency("Kick Command (DMs) &3!kick&r", "Enable DM Commands");

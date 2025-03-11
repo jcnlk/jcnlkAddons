@@ -1,21 +1,10 @@
-import { showChatMessage, GREEN } from "../../utils/Utils";
-import { getCurrentClass } from "../../utils/Dungeon";
-import { registerWhen } from "../../utils/Register";
-import { showTitle } from "../../utils/Title";
-import config from "../../config";
+/**
+ * TODO: Make this one actually good..
+ */
 
-function atSS() {
-  if (
-    Player.getX() > 106 &&
-    Player.getX() < 111 &&
-    Player.getY() > 119 &&
-    Player.getY() < 122 &&
-    Player.getZ() > 92 &&
-    Player.getZ() < 95
-  )
-    return true;
-  else return false;
-}
+import { showChatMessage, registerWhen, showTitle, isPlayerInArea } from "../../utils/Utils";
+import { getClassOf } from "../../utils/Dungeon";
+import config from "../../config";
 
 let lastExisted = false;
 let blocks = new Set();
@@ -47,10 +36,10 @@ const checkPhaseChange = () => {
 };
 
 const announcePhaseToParty = (phase) => {
-  if (config.announceSSProgression && atSS()) {
+  if (config.announceSSProgression && isPlayerInArea(106, 111, 119, 122, 92, 95)) {
     const text = `party chat Current Simon Says phase: ${phase}/5`;
     setTimeout(() => ChatLib.command(`${text}`), 300);
-    showChatMessage(`Announcing -> SS Phase ${phase}`);
+    showChatMessage(`Announcing: SS Phase ${phase}/5`);
   }
 };
 
@@ -98,10 +87,10 @@ register("playerInteract", (action, pos) => {
 });
 
 registerWhen(register("tick", () => {
-  const playerClass = getCurrentClass();
+  const playerClass = getClassOf();
   const PhaseSS = getCurrentPhase();
   if (playerClass === "Archer" && PhaseSS >= 4 && !hasSentTitle) {
-    showTitle(" ", 3000, true, `${GREEN}Early enter now!`);
+    showTitle(" ", 3000, true, `&aEarly enter now!`);
     hasSentTitle = true;
     World.playSound("note.harp", 2, 1);
   }

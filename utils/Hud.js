@@ -3,7 +3,7 @@
  */
 
 ////////// HUD MANAGER //////////
-import { setRegisters } from "./Register";
+import { setRegisters } from "./Utils";
 
 class HudManager {
     constructor() {
@@ -155,7 +155,6 @@ export class Hud {
         const height = Renderer.screen.getHeight();
         this.data.x = x / width;
         this.data.y = y / height;
-        // this.data.save();
         this.saveData();
         return;
     }
@@ -176,7 +175,6 @@ export class Hud {
      */
     setScale = (scale) => {
         this.data.scale = scale;
-        // this.data.save();
         this.saveData();
         return;
     }

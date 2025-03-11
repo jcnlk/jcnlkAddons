@@ -1,7 +1,6 @@
-import { showTitle } from "../../utils/Title";
-import { showChatMessage, RED } from "../../utils/Utils";
-import { data } from "../../utils/Data.js";
-import { timeToMS } from "../../../BloomCore/utils/Utils.js";
+import { showChatMessage, showTitle } from "../../utils/Utils";
+import { timeToMS } from "../../../BloomCore/utils/Utils";
+import { data } from "../../utils/Data";
 
 const reminders = new Map();
 
@@ -52,14 +51,14 @@ function loadPersistentReminders() {
 
 register("gameLoad", loadPersistentReminders);
 
-register("tick", () => {
+register("step", () => {
   const currentTime = Date.now();
   for (const [name, reminder] of reminders.entries()) {
     if (currentTime >= reminder.triggerTime) {
       triggerReminder(name);
     }
   }
-});
+}).setFps(1);
 
 export function addReminder(name, time, callback) {
   name = name.trim();
@@ -116,7 +115,7 @@ export function triggerReminder(name) {
 }
 
 function showReminderPopup(name) {
-  showTitle(`${RED}Reminder: ${name}`, 5000, true, `${RED}JA Reminder`);
+  showTitle(`&cReminder: ${name}`, 5000, true);
   showChatMessage(`Reminder: ${name}`);
   World.playSound("random.orb", 1, 1);
 }

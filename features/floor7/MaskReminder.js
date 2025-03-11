@@ -1,9 +1,7 @@
-import config from "../../config"
-import { RED, playSound } from "../../utils/Utils";
-import { getIsInF7, getIsInM7 } from "../../utils/Dungeon";
+import { playSound, registerWhen, showTitle } from "../../utils/Utils";
 import { getSkyblockItemID } from "../../../BloomCore/utils/Utils";
-import { showTitle } from "../../utils/Title";
-import { registerWhen } from "../../utils/Register";
+import { getIsInF7, getIsInM7 } from "../../utils/Dungeon";
+import config from "../../config"
 
 let reminderShown = false;
 
@@ -14,11 +12,9 @@ registerWhen(register("chat", () => {
   const helmetId = getSkyblockItemID(Player.armor.getHelmet());
 
   if (helmetId.includes("BONZO_MASK") || helmetId.includes("SPIRIT_MASK") ) return;
-  showTitle(`${RED}⚠ MASK NOT EQUIPPED! ⚠`, 3000, true);
+  showTitle(`&c⚠ MASK NOT EQUIPPED! ⚠`, 3000, true);
   playSound("random.orb", 1, 1);
   reminderShown = true;
 }).setCriteria("[BOSS] Storm: I should have known that I stood no chance."), () => config.MaskReminder);
 
-register("worldUnload", () => {
-  reminderShown = false;
-});
+register("worldUnload", () => reminderShown = false);
