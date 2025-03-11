@@ -22,6 +22,4 @@ const defaultData = {
 
 export let data = new PogObject("jcnlkAddons/data", defaultData, "Data.json");
 
-register("gameUnload", () => {
-    data.save();
-});
+register("gameUnload", () => data.save());

@@ -1,88 +1,84 @@
-import config from "../../config";
-import { data } from "../../utils/Data";
+import { getIsInF7, getIsInM7 } from "../../utils/Dungeon";
+import { registerWhen } from "../../utils/Utils";
 import HudManager from "../../utils/Hud";
+import { data } from "../../utils/Data";
 import { Hud } from "../../utils/Hud";
-import { registerWhen } from "../../utils/Register";
-import { getIsInDungeon, getIsInF7, getIsInM7 } from "../../utils/Dungeon";
-import { WHITE, BLUE, RED, GREEN } from "../../utils/Utils";
-
-const maskTimerPlaceholder = `${BLUE}Bonzo Mask: ${GREEN}READY\n${WHITE}Spirit Mask: ${GREEN}READY\n${RED}Pheonix: ${GREEN}READY`;
-const procPlaceholder = `${BLUE}Bonzo Mask Procced!`;
-
-const maskTimerHud = new Hud("maskTimerHud", maskTimerPlaceholder, HudManager, data);
-const procHud = new Hud("procHud", procPlaceholder, HudManager, data);
+import config from "../../config";
 
 const masks = {
   bonzo: {
-    name: `${BLUE}Bonzo Mask`,
+    name: "&9Bonzo Mask",
     duration: 1800,
-    procText: `${BLUE}Bonzo Mask Procced!`,
+    procText: "&9Bonzo Mask Procced!",
     chatCriteria: [/Your (?:⚚ )?Bonzo's Mask saved your life!/]
   },
   spirit: {
-    name: `${WHITE}Spirit Mask`,
+    name: "&fSpirit Mask",
     duration: 300,
-    procText: `${WHITE}Spirit Mask Procced!`,
+    procText: "&fSpirit Mask Procced!",
     chatCriteria: ["Second Wind Activated! Your Spirit Mask saved your life!"]
   },
   phoenix: {
-    name: `${RED}Pheonix`,
+    name: "&cPheonix",
     duration: 600,
-    procText: `${RED}Pheonix Procced!`,
+    procText: "&cPheonix Procced!",
     chatCriteria: ["Your Phoenix Pet saved you from certain death!"]
   }
 };
 
 const timers = {};
-Object.keys(masks).forEach(key => {
-  timers[key] = 0;
-});
-
 let procMessage = "";
+let procTimeout;
 
-function setProcMessage(message) {
+const generateTimerPlaceholder = () => 
+  Object.values(masks).map(mask => `${mask.name}: &aREADY`).join("\n");
+
+const maskTimerHud = new Hud("maskTimerHud", generateTimerPlaceholder(), HudManager, data);
+const procHud = new Hud("procHud", masks.bonzo.procText, HudManager, data);
+
+const setProcMessage = (message) => {
   procMessage = message;
-  setTimeout(() => {
-    if (procMessage === message) {
-      procMessage = "";
-    }
+  
+  if (procTimeout) clearTimeout(procTimeout);
+  
+  procTimeout = setTimeout(() => {
+    procMessage = "";
+    procTimeout;
   }, 1500);
-}
+};
 
 registerWhen(register("step", () => {
   if (!World.isLoaded()) return;
+    
   Object.keys(timers).forEach(key => {
     if (timers[key] > 0) timers[key]--;
   });
 }).setFps(10), () => config.maskTimer);
 
-Object.keys(masks).forEach(key => {
-  masks[key].chatCriteria.forEach(criteria => {
+Object.entries(masks).forEach(([key, mask]) => {
+  mask.chatCriteria.forEach(criteria => {
     register("chat", () => {
       if (!config.maskTimer) return;
-      timers[key] = masks[key].duration;
-      setProcMessage(masks[key].procText);
+      
+      timers[key] = mask.duration;
+      setProcMessage(mask.procText);
     }).setCriteria(criteria);
   });
 });
 
 registerWhen(register("renderOverlay", () => {
-  if (!World.isLoaded() || !getIsInDungeon() || HudManager.isEditing) return;
+  if (!World.isLoaded() || HudManager.isEditing) return;
   if (!getIsInF7() && !getIsInM7()) return;
-  
-  let timerText = "";
-  Object.keys(masks).forEach(key => {
-    const time = timers[key];
-    const line = time <= 0
-      ? `${masks[key].name}: &aREADY`
-      : `${masks[key].name}: &6${(time / 10).toFixed(1)}`;
-    timerText += line + "\n";
-  });
-  timerText = timerText.trim();
-  maskTimerHud.draw(timerText);
-}), () => config.maskTimer);
 
-registerWhen(register("renderOverlay", () => {
-  if (!World.isLoaded() || !getIsInDungeon() || HudManager.isEditing) return;
+  const timerText = Object.entries(masks).map(([key, mask]) => {
+    const time = timers[key] || 0;
+    return time <= 0
+      ? `${mask.name}: &aREADY`
+      : `${mask.name}: &6${(time / 10).toFixed(1)}`;
+  }).join("\n");
+      
+  maskTimerHud.draw(timerText);
+
+  if (!procMessage) return;
   procHud.draw(procMessage);
 }), () => config.maskTimer);

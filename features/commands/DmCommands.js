@@ -1,6 +1,5 @@
+import { showChatMessage, registerWhen } from "../../utils/Utils";
 import config from "../../config";
-import { showChatMessage } from "../../utils/Utils";
-import { registerWhen } from "../../utils/Register";
 
 function handleInviteCommand(commandParts, senderName) {
   if (!commandParts || commandParts.length < 1) return;
@@ -18,7 +17,6 @@ function handleKickCommand(commandParts) {
 }
 
 registerWhen(register("chat", (rank, player, message) => {
-  if (!config.enableDmCommands) return;
   if (!message.startsWith("!")) return;
 
   let commandParts = message.split(" ");
@@ -31,4 +29,4 @@ registerWhen(register("chat", (rank, player, message) => {
   } else if ((command === "!kick" || command === "!pk") && Config.kickCommand) {
     handleKickCommand(commandParts);
   }
-}).setChatCriteria("From ${rank} ${player}: ${message}"), () => config.enableDmCommands == true);
+}).setChatCriteria("From ${rank} ${player}: ${message}"), () => config.enableDmCommands);

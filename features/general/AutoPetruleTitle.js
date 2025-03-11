@@ -1,6 +1,5 @@
+import { registerWhen, showTitle } from "../../utils/Utils";
 import config from "../../config";
-import { showTitle } from "../../utils/Title";
-import { registerWhen } from "../../utils/Register";
 
 registerWhen(register("chat", (color, pet) => {
   showTitle(`${color}${pet}`, 400, true, "§cAutopet");

@@ -1,5 +1,5 @@
 // External Modules
-import { convertToTimeString } from "../BloomCore/utils/Utils.js";
+import { convertToTimeString } from "../BloomCore/utils/Utils";
 import request from "../requestV2";
 
 // Config
@@ -16,10 +16,6 @@ import "./features/general/CustomEmotes";
 import { showChatMessage, moduleVersion } from "./utils/Utils";
 import HudManager from "./utils/Hud";
 import { data } from "./utils/Data";
-import "./utils/Register";
-import "./utils/Dungeon";
-import "./utils/Title";
-import "./utils/Area";
 
 // Dungeons
 import "./features/dungeons/HighlightDungeonLoot";
@@ -29,14 +25,12 @@ import "./features/dungeons/CryptReminder";
 import "./features/dungeons/QuizTimer";
 
 // Floor 7
-import "./features/floor7/SimonSaysPhaseTracker";
 import "./features/floor7/MaskReminder";
-import "./features/floor7/TitleAlerts";
 import "./features/floor7/MaskTimer";
+import "./features/floor7/PosTitles";
 import "./features/floor7/Posmsg";
 
 // Commands
-import "./features/commands/PartyCommands";
 import "./features/commands/DmCommands";
 
 const commands = [
@@ -235,9 +229,7 @@ register("command", (...args) => {
   }
 }).setName("ja").setAliases("jcnlkAddons");
 
-register("serverConnect", () => {
-  Client.scheduleTask(100, checkForUpdate);
-});
+register("serverConnect", () => Client.scheduleTask(100, checkForUpdate));
 
 register("gameLoad", () => {
   showChatMessage("jcnlkAddons loaded successfully!", "success");

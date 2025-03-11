@@ -1,15 +1,33 @@
-import { getCurrentArea } from "./Area";
+import Dungeon from "../../BloomCore/dungeons/Dungeon";
+import { getCurrentArea } from "./Utils";
+
 
 const BossStatus = Java.type("net.minecraft.entity.boss.BossStatus");
+const tablistClassRegex = /\[(?:.+)\] (.+) \((Berserk|Archer|Mage|Tank|Healer) ([a-zA-Z]+)\)/;
 
-export function getCurrentClass() {
-  const names = TabList?.getNames();
+export function getClassOf(name = Player.getName()) {
+  if (!TabList) return;
+  const names = TabList.getNames().map(line => line.removeFormatting());
   if (!names) return;
-  const index = names.findIndex((line) => line?.includes(Player.getName()));
+  let index = names.findIndex(line => line.includes(name));
   if (index === -1) return;
-  const match = names[index].removeFormatting().match(/.+ \((.+) .+\)/);
-  if (!match) return "EMPTY";
-  return match[1];
+  let match = names[index].match(tablistClassRegex);
+  if (!match) return "?";
+  const result = match[2];
+  if(result.includes("Healer")) return "Healer"
+  if(result.includes("Tank")) return "Tank"
+  if(result.includes("Mage")) return "Mage"
+  if(result.includes("Berserk")) return "Berserk"
+  if(result.includes("Archer")) return "Archer"
+  else return null;
+}
+
+export function getClassColor(playerName) {
+  if (getClassOf(playerName) === "Healer") return "&d";
+  if (getClassOf(playerName) === "Tank") return "&a";
+  if (getClassOf(playerName) === "Mage") return "&b";
+  if (getClassOf(playerName) === "Berserk") return "&c";
+  if (getClassOf(playerName) === "Archer") return "&6";
 }
 
 export function getCurrentFloor() {
@@ -55,38 +73,10 @@ export const getIsInM5 = createFloorFunction("M", 5);
 export const getIsInM6 = createFloorFunction("M", 6);
 export const getIsInM7 = createFloorFunction("M", 7);
 
-export function getIsInMaxor() {
+export function getIsInBoss(boss) {
   const bossName = BossStatus.field_82827_c;
   if (!bossName) return false;
-  return bossName.removeFormatting().includes("Maxor");
-}
-
-export function getIsInStorm() {
-  const bossName = BossStatus.field_82827_c;
-  if (!bossName) return false;
-  return bossName.removeFormatting().includes("Storm");
-}
-
-export function getIsInGoldor() {
-  const bossName = BossStatus.field_82827_c;
-  if (!bossName) return false;
-  return bossName.removeFormatting().includes("Goldor");
-}
-
-export function getIsInNecron() {
-  const bossName = BossStatus.field_82827_c;
-  if (!bossName) return false;
-  return bossName.removeFormatting().includes("Necron");
-}
-
-export function getIsInWitherKing() {
-  const bossName = BossStatus.field_82827_c;
-  if (!bossName) return false;
-  return bossName.removeFormatting().includes("Wither King");
-}
-
-export function getBossHealthPercent() {
-  return BossStatus.field_82828_a;
+  return bossName.removeFormatting().includes(boss);
 }
 
 export function getCrypts() {
@@ -134,4 +124,18 @@ export function getDungeonTime() {
   } catch (error) {
     return null;
   }
+}
+
+// To track the current Goldor phase (S1, S2, S3, S4)
+let currentGoldorPhase = 0;
+
+Dungeon.registerWhenInDungeon(register("chat", message => {
+  if (message === "[BOSS] Storm: I should have known that I stood no chance.") currentGoldorPhase = 1;
+  if ((message.includes("(7/7)") || message.includes("(8/8)")) && !message.includes(":")) currentGoldorPhase += 1;
+}).setCriteria("${message}"));
+
+register("worldUnload", () => currentGoldorPhase = 0);
+
+export function getCurrentGoldorPhase() {
+  return currentGoldorPhase;
 }

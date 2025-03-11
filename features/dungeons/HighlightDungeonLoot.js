@@ -1,7 +1,12 @@
+/**
+ * Yes I should actually recode this shit some day.
+ * But for not it works fine ig..
+ */
+
 import { getSkyblockItemID, highlightSlot } from "../../../BloomCore/utils/Utils";
 import { getIsInDungeon, getIsInDungeonHub } from "../../utils/Dungeon";
 import PriceUtils from "../../../BloomCore/PriceUtils";
-import { registerWhen } from "../../utils/Register";
+import { registerWhen } from "../../utils/Utils";
 import config from "../../config";
 
 const validChests = new Set(["Wood", "Gold", "Diamond", "Emerald", "Obsidian", "Bedrock"]);
@@ -142,18 +147,13 @@ function renderChest() {
   });
 }
 
-registerWhen(
-  register("guiRender", () => {
+registerWhen(register("guiRender", () => {
     const now = Date.now();
     if (now - lastUpdate >= UPDATE_INTERVAL) {
       updateChest();
       lastUpdate = now;
     }
     renderChest();
-  }),
-  () => config.dungeonChestHighlighting
-);
+  }), () => config.dungeonChestHighlighting);
 
-register("guiClosed", () => {
-  currentChest = null;
-});
+register("guiClosed", () => currentChest);
