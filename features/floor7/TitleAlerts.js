@@ -194,7 +194,7 @@ function checkPhaseMessage(message) {
 
 // Handle pre-enter phase announcements
 registerWhen(register("chat", (name, message) => {
-  if (!getIsInDungeon) return;
+  if (!getIsInDungeon()) return;
   if (isOwnMessage(name)) return; 
 
   const currentTime = Date.now();
@@ -215,7 +215,7 @@ registerWhen(register("chat", (name, message) => {
 
 // Handle i4 position announcements - Healer only
 registerWhen(register("chat", (name, message) => {
-  if (!getIsInDungeon) return;
+  if (!getIsInDungeon()) return;
   if (isOwnMessage(name)) return;
 
   const playerClass = getCurrentClass();
@@ -242,7 +242,7 @@ registerWhen(register("chat", (name, message) => {
 
 // Handle phase announcements (P2/P4/Mid/P5/SS)
 register("chat", (event) => {
-  if (getIsInDungeon) return;
+  if (!getIsInDungeon()) return;
   const message = ChatLib.removeFormatting(event);
   if (!message.startsWith("Party >")) return;
 
