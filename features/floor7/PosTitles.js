@@ -35,9 +35,9 @@ const isValidInGoldorTunnel = () => !lastLocation.InGoldorTunnel && getCurrentGo
 // At Mid
 const validAtMidMsg = ["at mid", "in mid"];
 const isValidAtMid = () => !lastLocation.AtMid && getIsInBoss("Necron");
-//At i4 Entry
+// At i4 Entry
 const validAti4EntryMsg = ["i4 entry"];
-const isValidAti4Entry = playerClass => !lastLocation.Ati4Entry && getIsInBoss("Storm") && playerClass === "Healer";
+const isValidAti4Entry = playerClass => !lastLocation.Ati4Entry && getIsInBoss("Storm") && playerClass !== "Healer";
 // At P5
 const validAtP5Msg = ["at p5", "in p5"];
 const isValidAtP5 = () => !lastLocation.AtP5 && getIsInBoss("Necron");
@@ -82,39 +82,39 @@ registerWhen(register("tick", () => {
     const playerClass = getClassOf(playerName);
     if (!playerClass) return; // not in dungeon
 
-    if (getIsInBoss("Maxor") && entity.getY() < 205 && entity.getY() > 164 && !lastLocation.AtP2 && playerClass !== "Healer") {
+    if (entity.getY() < 205 && entity.getY() > 164 && isValidP2(playerClass)) {
       lastLocation.AtP2 = true;
       showAlert(playerName, playerClass, "At P2!");
     }
-    if ((getIsInBoss("Storm") || getIsInBoss("Goldor")) && isPlayerInArea(106, 110, 118, 122, 92, 96, entity) && !lastLocation.AtSS) {
+    if (isPlayerInArea(106, 110, 118, 122, 92, 96, entity) && isValidAtSS()) {
       lastLocation.AtSS = true;
       showAlert(playerName, playerClass, "At SS!");
     }
-    if (isPlayerInArea(49, 58, 108, 115, 129, 133, entity) && !lastLocation.AtEE2 && getCurrentGoldorPhase() === 1) {
+    if (isPlayerInArea(49, 58, 108, 115, 129, 133, entity) && isValidEE2()) {
       lastLocation.AtEE2 = true;
       showAlert(playerName, playerClass, "At Pre Enter 2!");
     }
-    if (isPlayerInArea(0, 4, 108, 115, 98, 107, entity) && !lastLocation.AtEE3 && getCurrentGoldorPhase() === 2) {
+    if (isPlayerInArea(0, 4, 108, 115, 98, 107, entity) && isValidEE3()) {
       lastLocation.AtEE3 = true;
       showAlert(playerName, playerClass, "At Pre Enter 3!");
     }
-    if (isPlayerInArea(52, 56, 113, 117, 49, 53, entity) && !lastLocation.AtCore && (getCurrentGoldorPhase() === 2 || getCurrentGoldorPhase() === 3)) {
+    if (isPlayerInArea(52, 56, 113, 117, 49, 53, entity) && isValidAtCore()) {
       lastLocation.AtCore = true;
       showAlert(playerName, playerClass, "At Core!");
     }
-    if (isPlayerInArea(41, 68, 110, 150, 59, 117, entity) && !lastLocation.InGoldorTunnel && getCurrentGoldorPhase() === 4) {
+    if (isPlayerInArea(41, 68, 110, 150, 59, 117, entity) && !isValidInGoldorTunnel()) {
       lastLocation.InGoldorTunnel = true;
       showAlert(playerName, playerClass, "Inside Goldor Tunnel");
     }
-    if (getIsInBoss("Necron") && isPlayerInArea(47, 61, 64, 75, 69, 83, entity) && !lastLocation.AtMid) {
+    if (isPlayerInArea(47, 61, 64, 75, 69, 83, entity) && isValidAtMid()) {
       lastLocation.AtMid = true;
       showAlert(playerName, playerClass, "At Mid!");
     }
-    if (getIsInBoss("Necron") && entity.getY() < 50 && entity.getY() > 4 && !lastLocation.AtP5) {
+    if (entity.getY() < 50 && entity.getY() > 4 && isValidAtP5()) {
       lastLocation.AtP5 = true;
       showAlert(playerName, playerClass, "At P5!");
     }
-    if (getIsInBoss("Storm") && isPlayerInArea(91, 93, 129, 133, 44, 46, entity) && !lastLocation.Ati4Entry && playerClass !== "Healer") {
+    if (isPlayerInArea(91, 93, 129, 133, 44, 46, entity) && isValidAti4Entry(playerClass)) {
       lastLocation.Ati4Entry = true;
       showAlert(playerName, playerClass, "At i4 Entry!");
     }

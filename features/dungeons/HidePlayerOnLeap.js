@@ -20,7 +20,7 @@ registerWhen(register("renderEntity", (entity, pos, partialTicks, event) => {
     showChatMessage("Showing Players");
     hidePlayersUntil = 0;
   }
-}), () => config.enablePlayerHiding);
+}).setFilteredClass(Java.type("net.minecraft.entity.player.EntityPlayer")), () => config.enablePlayerHiding);
 
 registerWhen(register("chat", () => hideAllPlayers()).setCriteria("You have teleported to ${location}!"), () => config.enablePlayerHiding);
 
