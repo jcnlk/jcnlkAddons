@@ -1,10 +1,10 @@
 import { registerWhen, showTitle } from "../../utils/Utils";
-import { getIsInM3 } from "../../utils/Dungeon";
+import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config";
 
 registerWhen(register("chat", (key) => {
   if (!World.isLoaded()) return;
-  if (!getIsInM3()) return;
+  if (!Dungeon.inDungeon !== "M3") return;
 
   new Thread(() => {
     Thread.sleep(1000);

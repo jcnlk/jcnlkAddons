@@ -1,13 +1,13 @@
 import { playSound, registerWhen, showTitle } from "../../utils/Utils";
 import { getSkyblockItemID } from "../../../BloomCore/utils/Utils";
-import { getIsInF7, getIsInM7 } from "../../utils/Dungeon";
+import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config"
 
 let reminderShown = false;
 
 registerWhen(register("chat", () => {
   if (!World.isLoaded) return;
-  if (!getIsInF7() && !getIsInM7()) return;
+  if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7") return;
   if (reminderShown) return;
   const helmetId = getSkyblockItemID(Player.armor.getHelmet());
 

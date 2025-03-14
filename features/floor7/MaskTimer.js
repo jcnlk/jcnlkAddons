@@ -1,4 +1,4 @@
-import { getIsInF7, getIsInM7 } from "../../utils/Dungeon";
+import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import { registerWhen } from "../../utils/Utils";
 import HudManager from "../../utils/Hud";
 import { data } from "../../utils/Data";
@@ -68,7 +68,7 @@ Object.entries(masks).forEach(([key, mask]) => {
 
 registerWhen(register("renderOverlay", () => {
   if (!World.isLoaded() || HudManager.isEditing) return;
-  if (!getIsInF7() && !getIsInM7()) return;
+  if (!Dungeon.inDungeon !== "F7" || !Dungeon.inDungeon !== "M7") return;
 
   const timerText = Object.entries(masks).map(([key, mask]) => {
     const time = timers[key] || 0;

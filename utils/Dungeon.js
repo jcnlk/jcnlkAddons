@@ -1,44 +1,14 @@
+import { getCurrentArea, isPlayerInArea } from "./Utils";
 import Dungeon from "../../BloomCore/dungeons/Dungeon";
-import { getCurrentArea } from "./Utils";
 
 const BossStatus = Java.type("net.minecraft.entity.boss.BossStatus");
-const tablistClassRegex = /\[(?:.+)\] (.+) \((Berserk|Archer|Mage|Tank|Healer) ([a-zA-Z]+)\)/;
 
-export function getClassOf(name = Player.getName()) {
-  if (!TabList) return;
-  const names = TabList.getNames().map(line => line.removeFormatting());
-  if (!names) return;
-  let index = names.findIndex(line => line.includes(name));
-  if (index === -1) return;
-  let match = names[index].match(tablistClassRegex);
-  if (!match) return "?";
-  const result = match[2];
-  if(result.includes("Healer")) return "Healer"
-  if(result.includes("Tank")) return "Tank"
-  if(result.includes("Mage")) return "Mage"
-  if(result.includes("Berserk")) return "Berserk"
-  if(result.includes("Archer")) return "Archer"
-  else return null;
-}
-
-export function getClassColor(playerName) {
-  if (getClassOf(playerName) === "Healer") return "&d";
-  if (getClassOf(playerName) === "Tank") return "&a";
-  if (getClassOf(playerName) === "Mage") return "&b";
-  if (getClassOf(playerName) === "Berserk") return "&c";
-  if (getClassOf(playerName) === "Archer") return "&6";
-}
-
-export function getCurrentFloor() {
-  const area = getCurrentArea();
-  const match = area.match(/The Catacombs \((F|M)(\d+)\)/);
-  if (match) {
-    return {
-      type: match[1],
-      number: parseInt(match[2], 10),
-    };
-  }
-  return null;
+export function getClassColor(playerClass) {
+  if (playerClass === "Healer") return "&d";
+  if (playerClass === "Tank") return "&a";
+  if (playerClass === "Mage") return "&b";
+  if (playerClass === "Berserk") return "&c";
+  if (playerClass === "Archer") return "&6";
 }
 
 export function getIsInDungeon() {
@@ -49,68 +19,10 @@ export function getIsInDungeonHub() {
   return getCurrentArea().includes("Dungeon Hub");
 }
 
-function createFloorFunction(type, number) {
-  return function () {
-    const floor = getCurrentFloor();
-    return floor && floor.type === type && floor.number === number;
-  };
-}
-
-export const getIsInF7 = createFloorFunction("F", 7);
-export const getIsInM3 = createFloorFunction("M", 3);
-export const getIsInM7 = createFloorFunction("M", 7);
-
 export function getIsInBoss(boss) {
   const bossName = BossStatus.field_82827_c;
   if (!bossName) return false;
   return bossName.removeFormatting().includes(boss);
-}
-
-export function getCrypts() {
-  try {
-    const tabList = TabList.getNames();
-    if (!tabList) return 0;
-    for (let line of tabList) {
-      line = ChatLib.removeFormatting(line);
-      if (line.includes("Crypts: ")) {
-        const count = parseInt(line.split("Crypts: ")[1], 10);
-        return isNaN(count) ? 0 : count;
-      }
-    }
-  } catch (error) {
-  }
-  return 0;
-}
-
-export function getPuzzleCount() {
-  const tabList = TabList.getNames();
-  if (!tabList) return 0;
-  for (let line of tabList) {
-    line = ChatLib.removeFormatting(line);
-    if (line.includes("Puzzles: (")) {
-      const number = parseInt(line.split("Puzzles: (")[1], 10);
-      return isNaN(number) ? 0 : number;
-    }
-  }
-  return 0;
-}
-
-export function getDungeonTime() {
-  try {
-    const tabList = TabList.getNames();
-    if (!tabList || tabList.length < 46) return null;
-    const timeLine = ChatLib.removeFormatting(tabList[45]).trim();
-    if (!timeLine.startsWith("Time: ")) return null;
-    const timeMatch = timeLine.match(/Time: (?:(\d+)m )?(\d+)s/);
-    if (timeMatch) {
-      const minutes = timeMatch[1] ? parseInt(timeMatch[1], 10) : 0;
-      const seconds = parseInt(timeMatch[2], 10);
-      return minutes * 60 + seconds;
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
 }
 
 // To track the current Goldor phase (S1, S2, S3, S4)
@@ -126,3 +38,70 @@ register("worldUnload", () => currentGoldorPhase = 0);
 export function getCurrentGoldorPhase() {
   return currentGoldorPhase;
 }
+
+// Criteria for PosMsg and PosTitles
+export const positionDefinitions = [
+  {
+    id: 'AtP2',
+    messageText: 'At P2!',
+    checkCondition: (playerClass) => getIsInBoss("Maxor") && playerClass !== "Healer",
+    checkPosition: (entity) => entity.getY() < 205 && entity.getY() > 164,
+    validMessages: ["at p2", "in p2"]
+  },
+  {
+    id: 'AtSS',
+    messageText: 'At SS!',
+    checkCondition: () => getIsInBoss("Storm") || getIsInBoss("Goldor"),
+    checkPosition: (entity) => isPlayerInArea(106, 110, 118, 122, 92, 96, entity),
+    validMessages: ["at ss", "at simon says"]
+  },
+  {
+    id: 'AtEE2',
+    messageText: 'At Pre Enter 2!',
+    checkCondition: () => getCurrentGoldorPhase() === 1,
+    checkPosition: (entity) => isPlayerInArea(49, 58, 108, 115, 129, 133, entity),
+    validMessages: ["early enter 2", "pre enter 2", "at ee2", "entered 3.2"]
+  },
+  {
+    id: 'AtEE3',
+    messageText: 'At Pre Enter 3!',
+    checkCondition: () => getCurrentGoldorPhase() === 2,
+    checkPosition: (entity) => isPlayerInArea(0, 4, 108, 115, 98, 107, entity),
+    validMessages: ["early enter 3", "pre enter 3", "at ee3", "entered 3.3"]
+  },
+  {
+    id: 'AtCore',
+    messageText: 'At Core!',
+    checkCondition: () => getCurrentGoldorPhase() === 2 || getCurrentGoldorPhase() === 3,
+    checkPosition: (entity) => isPlayerInArea(52, 56, 113, 117, 49, 53, entity),
+    validMessages: ["at core", "pre enter 4", "early enter 4", "at ee4", "entered 3.4"]
+  },
+  {
+    id: 'InGoldorTunnel',
+    messageText: 'Inside Goldor Tunnel!',
+    checkCondition: () => getCurrentGoldorPhase() === 4,
+    checkPosition: (entity) => isPlayerInArea(41, 68, 110, 150, 59, 117, entity),
+    validMessages: ["in goldor tunnel", "inside goldor tunnel", "in core", "entered 3.5", "at ee5", "at pre enter 5"]
+  },
+  {
+    id: 'AtMid',
+    messageText: 'At Mid!',
+    checkCondition: () => getIsInBoss("Necron"),
+    checkPosition: (entity) => isPlayerInArea(47, 61, 64, 75, 69, 83, entity),
+    validMessages: ["at mid", "in mid"]
+  },
+  {
+    id: 'Ati4Entry',
+    messageText: 'At i4 Entry!',
+    checkCondition: (playerClass) => getIsInBoss("Storm") && playerClass !== "Healer",
+    checkPosition: (entity) => isPlayerInArea(91, 93, 129, 133, 44, 46, entity),
+    validMessages: ["i4 entry"]
+  },
+  {
+    id: 'AtP5',
+    messageText: 'At P5!',
+    checkCondition: () => getIsInBoss("Necron"),
+    checkPosition: (entity) => entity.getY() < 50 && entity.getY() > 4,
+    validMessages: ["at p5", "in p5"]
+  }
+];

@@ -1,5 +1,5 @@
 import { showChatMessage, registerWhen, showTitle } from "../../utils/Utils";
-import { getCrypts, getDungeonTime } from "../../utils/Dungeon";
+import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config";
 
 let reminderSent = false;
@@ -9,8 +9,8 @@ registerWhen(register("step", () => {
   if (!config.cryptReminderTime) return;
   if (reminderSent) return;
   
-  const cryptsFound = getCrypts();
-  const dungeonTime = getDungeonTime();
+  const cryptsFound = Dungeon.crypts;
+  const dungeonTime = Dungeon.seconds;
   const reminderTime = config.cryptReminderTime * 60;
   
   if (cryptsFound >= 5) return;
