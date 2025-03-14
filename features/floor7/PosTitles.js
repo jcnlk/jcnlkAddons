@@ -1,5 +1,5 @@
+import { registerWhen, showChatMessage, showTitleV2 } from "../../utils/Utils";
 import { getClassColor, positionDefinitions } from "../../utils/Dungeon";
-import { registerWhen, showChatMessage } from "../../utils/Utils";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config";
 
@@ -26,23 +26,9 @@ function playSound() {
   playNext();
 }
 
-function showTitle(text) {
-  const overlay = register("renderOverlay", () => {
-    const scale = 1.7;
-    const screenWidth = Renderer.screen.getWidth();
-    const screenHeight = Renderer.screen.getHeight();
-    const yPos = screenHeight * 0.25;
-    Renderer.translate(screenWidth / 2, yPos);
-    Renderer.scale(scale, scale);
-    Renderer.drawStringWithShadow(text, -Renderer.getStringWidth(text) / 2, 0);
-  });
-  playSound();
-  setTimeout(() => overlay.unregister(), 2000);
-}
-
 function showAlert(playerName, playerClass, text) {
   showChatMessage(getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`);
-  showTitle(getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`);
+  showTitleV2(getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`, 2000, 0.5, 0.25, 1.7, playSound());
 }
 
 registerWhen(register("tick", () => {

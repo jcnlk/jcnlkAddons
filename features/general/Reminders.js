@@ -1,4 +1,4 @@
-import { showChatMessage, showTitle } from "../../utils/Utils";
+import { showChatMessage, showTitleV2 } from "../../utils/Utils";
 import { timeToMS } from "../../../BloomCore/utils/Utils";
 import { data } from "../../utils/Data";
 
@@ -115,7 +115,6 @@ export function triggerReminder(name) {
 }
 
 function showReminderPopup(name) {
-  showTitle(`&cReminder: ${name}`, 5000, true);
+  showTitleV2(`&cReminder: ${name}`, 5000, 0.5, -20, 4, World.playSound("random.orb", 1, 1));
   showChatMessage(`Reminder: ${name}`);
-  World.playSound("random.orb", 1, 1);
 }

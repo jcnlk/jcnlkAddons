@@ -1,4 +1,4 @@
-import { registerWhen, showTitle } from "../../utils/Utils";
+import { registerWhen, showTitleV2 } from "../../utils/Utils";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config";
 
@@ -8,14 +8,14 @@ registerWhen(register("chat", (key) => {
 
   new Thread(() => {
     Thread.sleep(1000);
-    showTitle(`&cIn 4 sec`, 3000, true, `&eGet Ready!`);
+    showTitleV2(`&cIn 4 sec`, 3000, 0.5, -20, 4, null, `&eGet Ready!`);
 
     World.playSound("random.burp", 2, 1);
     Thread.sleep(4000);
     World.playSound("random.burp", 2, 1);
     Thread.sleep(4000);
 
-    showTitle(`&4NOW!`, 1000, true, `$&eUSE THE Fire Freeze Staff`);
+    showTitleV2(`&4NOW!`, 1000, 0.5, -20, 4, null, `&eUSE THE Fire Freeze Staff`);
     World.playSound("random.anvil_land", 2, 1);
   }).start();
 }).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?"), () => config.FireFreezeNotifier);

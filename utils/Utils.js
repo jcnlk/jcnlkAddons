@@ -19,14 +19,7 @@ function makeChatMessage(message, status = "info", isDebug = false) {
 }
 
 export function showChatMessage(message, status = "info") {
-    makeChatMessage(message, status, false);
-}
-
-// Checks if current server is hypixel
-export const isInSkyblock = () => {
-  if (Server.getIP().includes("hypixel") && ChatLib.removeFormatting(Scoreboard.getTitle()).includes("SKYBLOCK"))
-      return true;
-  return false;
+  makeChatMessage(message, status, false);
 }
 
 // Alternative to World.playSound()
@@ -67,40 +60,84 @@ register("guiClosed", (gui) => {
   if (gui instanceof SettingsGui) setRegisters();
 });
 
-/**
- * Full credit to AsuAddons: https://www.chattriggers.com/modules/v/AsuAddons
- * 
- * Draws a title on the screen cuz I don't trust the vanilla one
- * @param {String} text The title that is displayed (supports formatting)
- * @param {Number} duration The duration how long it is displayed in ms
- * @param {Boolean} shadow Add shadow to the text
- * @param {String} subtitle The subtitle that is displayed (supports formatting)
- */
-let titles = []
+// New title function
+let currentTitleOverlay = null;
 
-export function showTitle(title, duration, shadow = false, subtitle = "") {
-    if (titles.length > 0) {
-        for (let i = 0; i < titles.length; i++) {
-            if (titles[i] != undefined) titles[i].unregister()
-            titles.splice(i,1)
-        }
+export function showTitleV2(title, duration, x = 0.5, y = -20, scale = 4, callback = null, subtitle = null, subtitleScale = 2, titleXOffset = 0, titleYOffset = 4) {
+  if (currentTitleOverlay) {
+    currentTitleOverlay.unregister();
+    currentTitleOverlay = null;
+  }
+ 
+  const screenWidth = Renderer.screen.getWidth();
+  const screenHeight = Renderer.screen.getHeight();
+ 
+  let xPos, yPos;
+ 
+  if (x >= 0 && x <= 1) {
+    xPos = screenWidth * x;
+  } else {
+    xPos = screenWidth * 0.5 + x;
+  }
+ 
+  if (y >= 0 && y <= 1) {
+    yPos = screenHeight * y;
+  } else {
+    yPos = screenHeight * 0.5 + y;
+  }
+ 
+  const titleLines = Array.isArray(title) ? title : [title];
+  const subtitleLines = subtitle ? (Array.isArray(subtitle) ? subtitle : [subtitle]) : [];
+  const hasSubtitle = subtitleLines.length > 0;
+ 
+  const overlay = register("renderOverlay", () => {
+    const lineHeight = 10;
+    const titleTotalHeight = titleLines.length * lineHeight;
+    
+    GL11.glPushMatrix();
+    Renderer.translate(xPos + titleXOffset, yPos);
+    Renderer.scale(scale, scale);
+    
+    for (let i = 0; i < titleLines.length; i++) {
+      const width = Renderer.getStringWidth(titleLines[i]);
+      const lineY = -titleTotalHeight / 2 + (i * lineHeight);
+      Renderer.drawStringWithShadow(titleLines[i], -width / 2, lineY);
     }
-    let overlay = register("renderOverlay", () => {
-        Renderer.translate(Renderer.screen.getWidth()/2, Renderer.screen.getHeight()/2)
-        Renderer.scale(4,4)
-        Renderer.drawString(title, -Renderer.getStringWidth(title)/2,-10,shadow)
-
-        if (subtitle != "") {
-            Renderer.translate(Renderer.screen.getWidth()/2, Renderer.screen.getHeight()/2)
-            Renderer.scale(2,2)
-            Renderer.drawString(subtitle, -Renderer.getStringWidth(subtitle)/2,-3,shadow)
-        }
-    })
-    titles.push(overlay)
-    setTimeout(() => {
-        if (overlay != undefined) overlay.unregister()
-        titles.splice(titles.indexOf(overlay),1)
-    },duration)
+    
+    GL11.glPopMatrix();
+    
+    if (hasSubtitle) {
+      const subtitleTotalHeight = subtitleLines.length * lineHeight;
+      
+      GL11.glPushMatrix();
+      const subtitleYPos = yPos + (titleTotalHeight * scale / 2) + titleYOffset;
+      Renderer.translate(xPos, subtitleYPos);
+      Renderer.scale(subtitleScale, subtitleScale);
+      
+      for (let i = 0; i < subtitleLines.length; i++) {
+        const width = Renderer.getStringWidth(subtitleLines[i]);
+        const lineY = -subtitleTotalHeight / 2 + (i * lineHeight);
+        Renderer.drawStringWithShadow(subtitleLines[i], -width / 2, lineY);
+      }
+      
+      GL11.glPopMatrix();
+    }
+  });
+ 
+  currentTitleOverlay = overlay;
+ 
+  if (callback && typeof callback === "function") {
+    callback(overlay);
+  }
+ 
+  setTimeout(() => {
+    if (currentTitleOverlay === overlay) {
+      overlay.unregister();
+      currentTitleOverlay = null;
+    }
+  }, duration);
+ 
+  return overlay;
 }
 
 // Checks if a entity is in a specific area

@@ -1,4 +1,4 @@
-import { isInSkyblock, registerWhen } from "../../utils/Utils";
+import { registerWhen } from "../../utils/Utils";
 import config from "../../config";
 
 function renderAttributeAbbreviations(item, x, y) {
@@ -26,6 +26,6 @@ function renderAttributeAbbreviations(item, x, y) {
 }
 
 registerWhen(register("renderItemIntoGui", (item, x, y) => {
-  if (!World.isLoaded() || !isInSkyblock()) return;
+  if (!World.isLoaded()) return;
   renderAttributeAbbreviations(item, x, y);
 }), () => config.attributeAbbreviations);
