@@ -2,7 +2,7 @@
   "name":"jcnlkAddons",
   "author": "jcnlk",
   "entry": "index.js",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "cool ct module ig", 
   "requires": ["Vigilance", "PogData", "requestV2", "BloomCore"]
 }
