@@ -2,11 +2,9 @@
  * Yes I should actually recode this shit some day.
  * But for not it works fine ig..
  */
-
+import { registerWhen, getIsInDungeon, getIsInDungeonHub } from "../../utils/Utils";
 import { getSkyblockItemID, highlightSlot } from "../../../BloomCore/utils/Utils";
-import { getIsInDungeon, getIsInDungeonHub } from "../../utils/Dungeon";
 import PriceUtils from "../../../BloomCore/PriceUtils";
-import { registerWhen } from "../../utils/Utils";
 import config from "../../config";
 
 const validChests = new Set(["Wood", "Gold", "Diamond", "Emerald", "Obsidian", "Bedrock"]);

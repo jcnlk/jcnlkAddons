@@ -1,5 +1,5 @@
-import { getCurrentArea, isPlayerInArea } from "./Utils";
 import Dungeon from "../../BloomCore/dungeons/Dungeon";
+import { isPlayerInArea } from "./Utils";
 
 const BossStatus = Java.type("net.minecraft.entity.boss.BossStatus");
 
@@ -9,14 +9,6 @@ export function getClassColor(playerClass) {
   if (playerClass === "Mage") return "&b";
   if (playerClass === "Berserk") return "&c";
   if (playerClass === "Archer") return "&6";
-}
-
-export function getIsInDungeon() {
-  return getCurrentArea().includes("The Catacombs");
-}
-
-export function getIsInDungeonHub() {
-  return getCurrentArea().includes("Dungeon Hub");
 }
 
 export function getIsInBoss(boss) {
@@ -35,9 +27,7 @@ Dungeon.registerWhenInDungeon(register("chat", message => {
 
 register("worldUnload", () => currentGoldorPhase = 0);
 
-export function getCurrentGoldorPhase() {
-  return currentGoldorPhase;
-}
+export const getCurrentGoldorPhase = () => currentGoldorPhase;
 
 // Criteria for PosMsg and PosTitles
 export const positionDefinitions = [
@@ -100,7 +90,7 @@ export const positionDefinitions = [
   {
     id: 'AtP5',
     messageText: 'At P5!',
-    checkCondition: () => getIsInBoss("Necron"),
+    checkCondition: (playerClass) => getIsInBoss("Necron") && playerClass === "Healer",
     checkPosition: (entity) => entity.getY() < 50 && entity.getY() > 4,
     validMessages: ["at p5", "in p5"]
   }

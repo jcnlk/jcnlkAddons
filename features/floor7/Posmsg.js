@@ -21,11 +21,9 @@ function sendMessage(message) {
 }
 
 registerWhen(register("tick", () => {
-  if (!World.isLoaded) return;
-  
+  if (!World.isLoaded()) return;
   const playerClass = Dungeon.classes[Player.getName()];
   if (!playerClass) return; // not in dungeon
-
   positionDefinitions.forEach(position => {
     if (!lastLocation[position.id] && 
         position.checkCondition(playerClass) && 

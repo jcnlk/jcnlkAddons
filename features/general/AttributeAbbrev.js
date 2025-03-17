@@ -25,7 +25,4 @@ function renderAttributeAbbreviations(item, x, y) {
   Renderer.drawString(overlay, x * 1.25 + 1, y * 1.25 + 1);
 }
 
-registerWhen(register("renderItemIntoGui", (item, x, y) => {
-  if (!World.isLoaded()) return;
-  renderAttributeAbbreviations(item, x, y);
-}), () => config.attributeAbbreviations);
+registerWhen(register("renderItemIntoGui", (item, x, y) => renderAttributeAbbreviations(item, x, y)), () => config.attributeAbbreviations);
