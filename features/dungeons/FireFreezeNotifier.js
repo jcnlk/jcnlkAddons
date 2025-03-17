@@ -4,7 +4,7 @@ import config from "../../config";
 
 registerWhen(register("chat", (key) => {
   if (!World.isLoaded()) return;
-  if (!Dungeon.inDungeon !== "M3") return;
+  if (Dungeon.inDungeon !== "M3") return;
 
   new Thread(() => {
     Thread.sleep(1000);

@@ -1,9 +1,9 @@
 import { showChatMessage, registerWhen } from "../../utils/Utils";
+import { stripRank } from "../../../BloomCore/utils/Utils";
 import config from "../../config";
 
 function handleInviteCommand(commandParts, senderName) {
   if (!commandParts || commandParts.length < 1) return;
-
   let playerToInvite = commandParts.slice(1).join(" ") || senderName;
   ChatLib.command(`party invite ${playerToInvite}`);
   showChatMessage(`Inviting -> ${playerToInvite}`);
@@ -16,17 +16,12 @@ function handleKickCommand(commandParts) {
   showChatMessage(`Kicking -> ${playerToKick}`);
 }
 
-registerWhen(register("chat", (rank, player, message) => {
+registerWhen(register("chat", (player, message) => {
   if (!message.startsWith("!")) return;
-
-  let commandParts = message.split(" ");
-  let command = commandParts[0].toLowerCase();
-  let senderName = player.trim();
-
-
-  if (command === "!p" && config.partyCommand) {
-    handleInviteCommand(commandParts, senderName);
-  } else if ((command === "!kick" || command === "!pk") && Config.kickCommand) {
-    handleKickCommand(commandParts);
-  }
-}).setChatCriteria("From ${rank} ${player}: ${message}"), () => config.enableDmCommands);
+  const commandParts = message.split(" ");
+  const command = commandParts[0].toLowerCase();
+  const strippedPlayer = stripRank(player);
+  
+  if (command === "!p" && config.partyCommand) handleInviteCommand(commandParts, strippedPlayer);
+  if ((command === "!kick" || command === "!pk") && config.kickCommand) handleKickCommand(commandParts);
+}).setChatCriteria("From ${player}: ${message}"), () => config.enableDmCommands);

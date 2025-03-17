@@ -4,9 +4,7 @@ import { data } from "../../utils/Data";
 
 const reminders = new Map();
 
-if (!Array.isArray(data.reminders)) {
-  data.reminders = [];
-}
+if (!Array.isArray(data.reminders)) data.reminders = [];
 
 function updatePersistentReminders() {
   const reminderData = Array.from(reminders.entries()).map(([name, reminder]) => ({

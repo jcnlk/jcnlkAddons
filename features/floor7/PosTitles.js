@@ -1,5 +1,6 @@
 import { registerWhen, showChatMessage, showTitleV2 } from "../../utils/Utils";
 import { getClassColor, positionDefinitions } from "../../utils/Dungeon";
+import { stripRank } from "../../../BloomCore/utils/Utils";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config";
 
@@ -32,18 +33,16 @@ function showAlert(playerName, playerClass, text) {
 }
 
 registerWhen(register("tick", () => {
-  if (!World.isLoaded) return;
-
+  if (!World.isLoaded()) return;
   World.getAllPlayers().forEach(entity => {
     if (entity.getPing() !== 1) return; // Skip non-player entities
     const playerName = entity.getName();
     if (playerName === Player.getName()) return; // Skip player itself
     const playerClass = Dungeon.classes[playerName];
     if (!playerClass) return; // not in dungeon
-
     positionDefinitions.forEach(position => {
       if (!lastLocation[position.id] &&
-          position.checkCondition(playerClass) && 
+          position.checkCondition(playerClass) &&
           position.checkPosition(entity)) {
         lastLocation[position.id] = true;
         showAlert(playerName, playerClass, position.messageText);
@@ -53,18 +52,17 @@ registerWhen(register("tick", () => {
 }), () => config.togglePosTitles);
 
 registerWhen(register("chat", (player, message) => {
-  const name = player.replace(/\[.*?\]\s*/, ""); // remove rank
-  if (name === Player.getName()) return; // skip player itself
+  const strippedPlayer = stripRank(player);
+  if (strippedPlayer === Player.getName()) return; // skip player itself
   const msg = message.toLowerCase();
-  const playerClass = Dungeon.classes[name];
+  const playerClass = Dungeon.classes[strippedPlayer];
   if (!playerClass) return;
-
   positionDefinitions.forEach(position => {
     if (!lastLocation[position.id] &&
-        position.checkCondition(playerClass) && 
+        position.checkCondition(playerClass) &&
         position.validMessages.some(term => msg.includes(term))) {
       lastLocation[position.id] = true;
-      showAlert(name, playerClass, position.messageText);
+      showAlert(strippedPlayer, playerClass, position.messageText);
     }
   });
 }).setCriteria("Party > ${player}: ${message}"), () => config.togglePosTitles);

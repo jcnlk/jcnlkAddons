@@ -2,9 +2,7 @@ import { registerWhen } from "../../utils/Utils";
 import { data } from "../../utils/Data";
 import config from "../../config";
 
-if (typeof data.customEmotes !== "object" || data.customEmotes === null) {
-  data.customEmotes = {};
-}
+if (typeof data.customEmotes !== "object" || data.customEmotes === null) data.customEmotes = {};
 
 let nextMessage;
 

@@ -3,30 +3,17 @@ import {
     @SwitchProperty, 
     @DecimalSliderProperty, 
     @TextProperty, 
-    @SliderProperty, 
-    @SelectorProperty, 
-    @ColorProperty, 
+    @SliderProperty,  
     @ButtonProperty,    
-    @CheckboxProperty,
-    Color   } from "Vigilance";
+    @CheckboxProperty   } from "Vigilance";
 
-const GOLD = "§6";
-const GRAY = "§7";
-const DARK_GRAY = "§8";
-const GREEN = "§a";
-const AQUA = "§b";
-const RED = "§c";
-const YELLOW = "§e";
-const WHITE = "§f";
-const ITALIC = "§o";
-const RESET = "§r";
 const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
 const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
-const configHeader = `${DARK_GRAY}[${GOLD}jcnlkAddons${DARK_GRAY}]${RESET} ${YELLOW}v${moduleVersion} \nMade by ${moduleAuthor}${RESET}`
+const configHeader = `&8[&6jcnlkAddons&8] &ev${moduleVersion} \nMade by ${moduleAuthor}`
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "F7/M7", "Commands", "HUD", "WIP", "Dev Stuff"];
+        const order = ["General", "Dungeons", "F7/M7", "Commands", "HUD"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
@@ -51,7 +38,7 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Custom Emotes",
-        description: `Enable custom emotes in chat. \nAdd custom emotes with ${AQUA}/ja emote${RESET}.`,
+        description: `Enable custom emotes in chat. \nAdd custom emotes with &b/ja emote&r.`,
         category: "General",
         subcategory: "Chat"
     })
@@ -59,7 +46,7 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Reminders",
-        description: `Enable the reminder feature. \nAdd reminder with ${AQUA}/ja reminder${RESET}.`,
+        description: `Enable the reminder feature. \nAdd reminder with &b/ja reminder&r.`,
         category: "General",
         subcategory: "Reminders"
     })
@@ -84,7 +71,7 @@ class Config {
 
     @DecimalSliderProperty({
         name: "Crypt Reminder Time",
-        description: `Time in minutes to remind about missing crypts \n(0 to turn it ${RED}OFF${RESET}).`,
+        description: `Time in minutes to remind about missing crypts \n(0 to turn it &cOFF&r).`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         minF: 0.0,
@@ -95,7 +82,7 @@ class Config {
 
     @TextProperty({
         name: "Crypt Reminder Message",
-        description: `Message to send as crypt reminder. \nUse ${AQUA}{count}${RESET} for the number of needed crypts.`,
+        description: `Message to send as crypt reminder. \nUse &b{count}&r for the number of needed crypts.`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
         placeholder: "We need {count} more crypts!"
@@ -112,7 +99,7 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Dungeon Chest Highlighting",
-        description: `Highlight loot in dungeon chests. \n(${GREEN}Good Loot${RESET}, ${YELLOW}Mid Loot${RESET}, ${RED}Bad Loot${RESET}).`,
+        description: `Highlight loot in dungeon chests. \n(&aGood Loot&r, &eMid Loot&r, &cBad Loot&r).`,
         category: "Dungeons",
         subcategory: "Dungeon Loot Highlighting"
     })
@@ -175,8 +162,6 @@ class Config {
     })
     togglePosTitles = true;
 
-    
-
     //////////// Commands Settings //////////
     @SwitchProperty({
         name: "Enable DM Commands",
@@ -218,12 +203,11 @@ class Config {
         this.initialize(this);
 
         // Set category descriptions
-        this.setCategoryDescription("General", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <emote, reminder, update, help>${RESET}`);
+        this.setCategoryDescription("General", `${configHeader}\n\n&7&oRelated Commands: /ja <emote, reminder, update, help>`);
         this.setCategoryDescription("Dungeons", `${configHeader}`);
         this.setCategoryDescription("F7/M7", `${configHeader}`);
         this.setCategoryDescription("Commands", `${configHeader}`);
-        this.setCategoryDescription("HUD", `${configHeader}\n\n${GRAY}${ITALIC}Related Commands: /ja <hud>${RESET}`);
-        this.setCategoryDescription("WIP", `${configHeader}\n\n${WHITE}Just some Work In Progess Stuff.${RESET}`);
+        this.setCategoryDescription("HUD", `${configHeader}\n\n&7&oRelated Commands: /ja <hud>`);
 
         // Add dependencies for Dungeons
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");

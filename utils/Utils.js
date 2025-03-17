@@ -1,15 +1,12 @@
+import { removeUnicode, getScoreboard, getMatchFromLines, getTabList } from "../../BloomCore/utils/Utils";
+
 // Basic Stuff
 export const PREFIX = `&8[&6JA&8]`;
 export const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
 export const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
 
 // Chat Message Stuff
-const messageColors = {
-  info: `&e`,
-  success: `&a`,
-  error: `&c`,
-  warning: `&6`,
-};
+const messageColors = { info: `&e`, success: `&a`, error: `&c`, warning: `&6` };
 
 function makeChatMessage(message, status = "info", isDebug = false) {
   const prefix = isDebug ? DEBUG_PREFIX : PREFIX;
@@ -18,16 +15,10 @@ function makeChatMessage(message, status = "info", isDebug = false) {
   ChatLib.chat(`${prefix} ${color}${message}`);
 }
 
-export function showChatMessage(message, status = "info") {
-  makeChatMessage(message, status, false);
-}
+export const showChatMessage = (message, status = "info") => makeChatMessage(message, status, false);
 
 // Alternative to World.playSound()
-export function playSound(soundName, volume, pitch) {
-  try {
-      new net.minecraft.network.play.server.S29PacketSoundEffect(soundName, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection());
-  } catch (e) { }
-}
+export const playSound = (soundName, volume, pitch) => new net.minecraft.network.play.server.S29PacketSoundEffect(soundName, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection());
 
 // Registering and unregistering of triggers
 const SettingsGui = Java.type("gg.essential.vigilance.gui.SettingsGui");
@@ -155,82 +146,8 @@ export function isPlayerInArea(x1, x2, y1, y2, z1, z2, entity = Player) {
   );
 }
 
-// Skyblock location stuff
-const MAX_RETRIES = 20;
-let currentArea = "";
-let retryCount = 0;
-
-const extractZone = (zoneStr) => {
-  return zoneStr
-    .replace("⏣ ", "")
-    .replace("ф ", "")
-    .removeFormatting()
-    .replace(/[^\x00-\x7F]/g, "")
-    .trim();
-};
-
-const getZoneFromScoreboard = () => {
-  const scoreboard = Scoreboard.getLines();
-  const zoneLine = scoreboard.find((line) =>
-    line.getName().includes("⏣") || line.getName().includes("ф")
-  );
-  return zoneLine ? extractZone(zoneLine.getName()) : "";
-};
-
-export const updateCurrentArea = () => {
-  try {
-    const tabList = TabList.getNames();
-    if (!tabList) {
-      throw new Error("TabList is null");
-    }
-    
-    const areaLine = tabList.find(
-      (name) => name.includes("Area") || name.includes("Dungeon: ")
-    );
-    
-    if (areaLine) {
-      if (areaLine.includes("Dungeon: ") || areaLine.includes("Kuudra")) {
-        setTimeout(() => {
-          const zone = getZoneFromScoreboard();
-          if (zone) {
-            if (currentArea !== zone) {
-              currentArea = zone;
-              retryCount = 0;
-            }
-          } else {
-            retryCount++;
-            if (retryCount < MAX_RETRIES) {
-              setTimeout(updateCurrentArea, 1000);
-            }
-          }
-        }, 1000);
-      } else if (areaLine.includes("Area")) {
-        const area = areaLine.replace("Area: ", "").removeFormatting().trim();
-        if (currentArea !== area) {
-          currentArea = area;
-          retryCount = 0;
-        }
-      }
-    } else {
-      retryCount++;
-      if (retryCount < MAX_RETRIES) {
-        setTimeout(updateCurrentArea, 1000);
-      }
-    }
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-export const getCurrentArea = () => currentArea;
-export const getCurrentZone = getZoneFromScoreboard;
-
-register("worldLoad", () => {
-  retryCount = 0;
-  updateCurrentArea();
-});
-
-register("worldUnload", () => {
-  retryCount = 0;
-  currentArea = "";
-});
+// Loacation stuff
+export const getZone = () => (removeUnicode(getMatchFromLines(/ ⏣ (.+)/, getScoreboard(false))));
+export const getArea = () => (removeUnicode(getMatchFromLines(/Area: (.+)/, getTabList(false))));
+export const getIsInDungeon = () => getZone().includes("The Catacombs");
+export const getIsInDungeonHub = () => getArea().startsWith("Dungeon Hub");
