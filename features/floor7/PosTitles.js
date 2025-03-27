@@ -32,14 +32,13 @@ function showAlert(playerName, playerClass, text) {
   showTitleV2(getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`, 2000, 0.5, 0.25, 1.7, playSound());
 }
 
-registerWhen(register("tick", () => {
-  if (!World.isLoaded()) return;
+registerWhen(register("tick", () => { // maybe change to step
+  if (!World.isLoaded() || Dungeon.bossEntry === null) return; // Should fix alerts triggering randomly on world change
   World.getAllPlayers().forEach(entity => {
     if (entity.getPing() !== 1) return; // Skip non-player entities
     const playerName = entity.getName();
     if (playerName === Player.getName()) return; // Skip player itself
     const playerClass = Dungeon.classes[playerName];
-    if (!playerClass) return; // not in dungeon
     positionDefinitions.forEach(position => {
       if (!lastLocation[position.id] &&
           position.checkCondition(playerClass) &&

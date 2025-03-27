@@ -68,7 +68,8 @@ Object.entries(masks).forEach(([key, mask]) => {
 
 registerWhen(register("renderOverlay", () => {
   if (!World.isLoaded() || HudManager.isEditing) return;
-  if (!Dungeon.inDungeon !== "F7" || !Dungeon.inDungeon !== "M7") return;
+  if (Dungeon.inDungeon !== "F7" || Dungeon.inDungeon !== "M7") return;
+  if (Dungeon.bossEntry === null) return;
 
   const timerText = Object.entries(masks).map(([key, mask]) => {
     const time = timers[key] || 0;
