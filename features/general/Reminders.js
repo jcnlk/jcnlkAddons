@@ -6,83 +6,86 @@ const reminders = new Map();
 
 if (!Array.isArray(data.reminders)) data.reminders = [];
 
-function updatePersistentReminders() {
-  const reminderData = Array.from(reminders.entries()).map(([name, reminder]) => ({
+function saveReminders() {
+  data.reminders = Array.from(reminders.entries()).map(([name, reminder]) => ({
     name,
     triggerTime: reminder.triggerTime,
   }));
-  data.reminders = reminderData;
   data.save();
 }
 
-function loadPersistentReminders() {
+function loadReminders() {
+  reminders.clear();
   const now = Date.now();
-  let loadedCount = 0;
-  let expiredCount = 0;
+  const namesAdded = new Set();
 
-  const activeStoredReminders = data.reminders.filter(storedReminder => {
-    if (storedReminder.triggerTime > now) {
-      return true;
-    } else {
-      expiredCount++;
+  data.reminders = data.reminders.filter(item => {
+    if (!item?.name || !item?.triggerTime) return false;
+    
+    if (item.triggerTime <= now) {
+      showChatMessage(`Reminder: ${item.name}`);
+      showReminderPopup(item.name);
       return false;
     }
+    
+    if (namesAdded.has(item.name)) return false;
+    namesAdded.add(item.name);
+    
+    reminders.set(item.name, { triggerTime: item.triggerTime });
+    return true;
   });
-
-  if (expiredCount > 0) {
-    data.reminders = activeStoredReminders;
-    data.save();
-  }
-
-  activeStoredReminders.forEach(storedReminder => {
-    const callback = (name) => {
-      showChatMessage(`Reminder: ${name}`);
-      showReminderPopup(name);
-    };
-    reminders.set(storedReminder.name, {
-      triggerTime: storedReminder.triggerTime,
-      callback,
-    });
-    loadedCount++;
-  });
+  
+  data.save();
 }
 
-register("gameLoad", loadPersistentReminders);
+register("gameLoad", loadReminders);
 
 register("step", () => {
-  const currentTime = Date.now();
-  for (const [name, reminder] of reminders.entries()) {
-    if (currentTime >= reminder.triggerTime) {
-      triggerReminder(name);
+  if (!World.isLoaded()) return;
+  
+  const now = Date.now();
+  const triggered = [];
+  
+  reminders.forEach((reminder, name) => {
+    if (now >= reminder.triggerTime) {
+      triggered.push(name);
+      showChatMessage(`Reminder: ${name}`);
+      showReminderPopup(name);
     }
+  });
+  
+  if (triggered.length > 0) {
+    triggered.forEach(name => reminders.delete(name));
+    saveReminders();
   }
-}).setFps(1);
+}).setFps(2);
 
-export function addReminder(name, time, callback) {
+export function addReminder(name, time) {
   name = name.trim();
-  if (reminders.has(name)) return false;
+  if (!name || reminders.has(name)) return false;
 
   const timeInMs = timeToMS(time);
-  if (timeInMs === null) return false;
+  if (!timeInMs) return false;
 
-  const triggerTime = Date.now() + timeInMs;
-  reminders.set(name, { triggerTime, callback });
-  updatePersistentReminders();
+  reminders.set(name, { 
+    triggerTime: Date.now() + timeInMs
+  });
+  
+  saveReminders();
   return true;
 }
 
 export function removeReminder(identifier) {
   if (typeof identifier === "number") {
-    const reminderList = listReminders();
-    if (identifier > 0 && identifier <= reminderList.length) {
-      const reminderToRemove = reminderList[identifier - 1];
-      reminders.delete(reminderToRemove.name);
-      updatePersistentReminders();
+    const list = listReminders();
+    if (identifier > 0 && identifier <= list.length) {
+      reminders.delete(list[identifier - 1].name);
+      saveReminders();
       return true;
     }
   } else if (reminders.has(identifier)) {
     reminders.delete(identifier);
-    updatePersistentReminders();
+    saveReminders();
     return true;
   }
   return false;
@@ -90,29 +93,16 @@ export function removeReminder(identifier) {
 
 export function listReminders() {
   const now = Date.now();
-  const reminderList = [];
-  let index = 1;
-  for (const [name, reminder] of reminders.entries()) {
-    const remaining = Math.max(reminder.triggerTime - now, 0);
-    reminderList.push({ name, timeLeft: remaining, index: index++ });
-  }
-  return reminderList;
+  return Array.from(reminders.entries())
+    .map(([name, reminder]) => ({
+      name,
+      timeLeft: Math.max(reminder.triggerTime - now, 0)
+    }))
+    .sort((a, b) => a.timeLeft - b.timeLeft)
+    .map((reminder, idx) => ({
+      ...reminder,
+      index: idx + 1
+    }));
 }
 
-export function triggerReminder(name) {
-  const reminder = reminders.get(name);
-  if (reminder) {
-    if (reminder.callback) {
-      reminder.callback(name);
-    } else {
-      showReminderPopup(name);
-    }
-  }
-  reminders.delete(name);
-  updatePersistentReminders();
-}
-
-function showReminderPopup(name) {
-  showTitleV2(`&cReminder: ${name}`, 5000, 0.5, -20, 4, World.playSound("random.orb", 1, 1));
-  showChatMessage(`Reminder: ${name}`);
-}
+const showReminderPopup = (name) => showTitleV2(`&cReminder: ${name}`, 5000, 0.5, -20, 4, () => World.playSound("random.orb", 1, 1));
