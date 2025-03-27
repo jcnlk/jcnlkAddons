@@ -21,6 +21,14 @@ const configHeader = `&8[&6jcnlkAddons&8] &ev${moduleVersion} \nMade by ${module
 class Config {
     ////////// General Settings //////////
     @SwitchProperty({
+        name: "Check for Updates",
+        description: `Automatically checks if you run an outdated version.\nManually check for updates with &b/ja update&r.`,
+        category: "General",
+        subcategory: "Check for Updates"
+    })
+    updateChecker = true;
+
+    @SwitchProperty({
         name: "Enable Attribute Abbreviations",
         description: "Show attribute abbreviations on items in inventory.",
         category: "General",

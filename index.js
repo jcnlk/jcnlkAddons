@@ -13,7 +13,7 @@ import "./features/general/UwuAddonsHider";
 import "./features/general/CustomEmotes";
 
 // Utils
-import { showChatMessage, moduleVersion } from "./utils/Utils";
+import { showChatMessage, moduleVersion, PREFIX } from "./utils/Utils";
 import HudManager from "./utils/Hud";
 import { data } from "./utils/Data";
 
@@ -42,31 +42,20 @@ const commands = [
   {cmd: "ja emotes", options: " <add|list|remove>", description: "Create custom emotes"}
 ]
 
-const GITHUB_API_URL = "https://api.github.com/repos/jcnlk/jcnlkAddons/releases";
-const GITHUB_RELEASE_URL = "https://github.com/jcnlk/jcnlkAddons/releases/latest";
-
 function checkForUpdate() {
   showChatMessage("Checking for updates..");
-  request({
-    url: GITHUB_API_URL,
-    headers: { "User-Agent": "jcnlkAddons" },
-    json: true
-  })
+  request({url: "https://api.github.com/repos/jcnlk/jcnlkAddons/releases", json: true})
   .then(function (response) {
-    if (!response || !response.length) {
-      showChatMessage("No Release found!");
-      return;
-    }
+    if (!response || !response.length) return;
     const latest = response[0];
     const remoteVersion = latest.tag_name.replace(/^v/, '').split("-")[0];
-    const localVersion = moduleVersion.replace(/^v/, '').split("-")[0];
-    if (localVersion < remoteVersion) {
-      showChatMessage("Update available: " + localVersion + " -> " + remoteVersion);
+    if (moduleVersion < remoteVersion) {
+      showChatMessage("Update available: " + moduleVersion + " -> " + remoteVersion);
       ChatLib.chat(
-        new TextComponent("&8[&6JA&8]&r &a[Click here to go to the Github release page!]")
-          .setClick("open_url", GITHUB_RELEASE_URL)
+        new TextComponent(`${PREFIX} &a[Click here to go to the Github release page!]`)
+          .setClick("open_url", "https://github.com/jcnlk/jcnlkAddons/releases/latest")
       );
-    } else if (localVersion > remoteVersion) {
+    } else if (moduleVersion === remoteVersion) {
       showChatMessage("You are currently using the newest version!");
     } else {
       showChatMessage("You are currently using the dev version!");
@@ -229,9 +218,13 @@ register("command", (...args) => {
   }
 }).setName("ja").setAliases("jcnlkAddons");
 
-register("serverConnect", () => Client.scheduleTask(100, checkForUpdate));
+register("serverConnect", () => {
+  if (!config.updateChecker) return;
+  Client.scheduleTask(100, checkForUpdate)
+});
 
 register("gameLoad", () => {
   showChatMessage("jcnlkAddons loaded successfully!", "success");
+  if (!config.updateChecker) return;
   checkForUpdate();
 });
