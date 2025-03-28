@@ -3,7 +3,7 @@ import { convertToTimeString } from "../BloomCore/utils/Utils";
 import request from "../requestV2";
 
 // Config and Utils
-import { showChatMessage, moduleVersion, PREFIX } from "./utils/Utils";
+import { showChatMessage, moduleVersion, PREFIX, registerWhen } from "./utils/Utils";
 import HudManager from "./utils/Hud";
 import { data } from "./utils/Data";
 import config from "./config";
@@ -12,8 +12,8 @@ import config from "./config";
 import { addReminder, removeReminder, listReminders } from "./features/general/Reminders";
 import "./features/general/AutoPetruleTitle";
 import "./features/general/AttributeAbbrev";
-import "./features/general/UwuAddonsHider";
 import "./features/general/CustomEmotes";
+import "./features/general/MessageHider";
 
 // Dungeons
 import "./features/dungeons/HighlightDungeonLoot";
@@ -232,9 +232,7 @@ function checkForUpdate() {
     });
 }
 
-register("serverConnect", () => {
-  if (config.updateChecker) Client.scheduleTask(100, checkForUpdate);
-});
+registerWhen(register("serverConnect", () => Client.scheduleTask(100, checkForUpdate)), () => config.updateChecker);
 
 register("gameLoad", () => {
   showChatMessage("jcnlkAddons loaded successfully!", "success");
