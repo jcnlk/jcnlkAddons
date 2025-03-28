@@ -21,14 +21,6 @@ const configHeader = `&8[&6jcnlkAddons&8] &ev${moduleVersion} \nMade by ${module
 class Config {
     ////////// General Settings //////////
     @SwitchProperty({
-        name: "Check for Updates",
-        description: `Automatically checks if you run an outdated version.\nManually check for updates with &b/ja update&r.`,
-        category: "General",
-        subcategory: "Check for Updates"
-    })
-    updateChecker = true;
-
-    @SwitchProperty({
         name: "Enable Attribute Abbreviations",
         description: "Show attribute abbreviations on items in inventory.",
         category: "General",
@@ -53,20 +45,44 @@ class Config {
     customEmotes = true;
 
     @SwitchProperty({
+        name: "UwUAddons Hider",
+        description: "Hide messages sent by UwUAddons.",
+        category: "General",
+        subcategory: "Chat"
+    })
+    hideUwUAddons = true;
+
+    @SwitchProperty({
+        name: "Hide Non-Rank Invites",
+        description: "Hides party invites sent by player without rank.",
+        category: "General",
+        subcategory: "Chat"
+    })
+    hideNonRankInvites = true;
+
+    @SwitchProperty({
+        name: "Hide Useless Messages",
+        description: "Hides useless or spammy messages in your chat.",
+        category: "General",
+        subcategory: "Chat"
+    })
+    hideUselessMessages = true;
+
+    @SwitchProperty({
+        name: "Check for Updates",
+        description: `Automatically checks if you run an outdated version.\nManually check for updates with &b/ja update&r.`,
+        category: "General",
+        subcategory: "Check for Updates"
+    })
+    updateChecker = true;
+
+    @SwitchProperty({
         name: "Enable Reminders",
         description: `Enable the reminder feature. \nAdd reminder with &b/ja reminder&r.`,
         category: "General",
         subcategory: "Reminders"
     })
     enableReminders = true;
-
-    @SwitchProperty({
-        name: "UwUAddons Hider",
-        description: "Hide messages sent by UwUAddons.",
-        category: "General",
-        subcategory: "UwuAddons Hider"
-    })
-    hideUwUAddons = true;
 
     ////////// Dungeons Settings //////////
     @SwitchProperty({
@@ -93,7 +109,7 @@ class Config {
         description: `Message to send as crypt reminder. \nUse &b{count}&r for the number of needed crypts.`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
-        placeholder: "We need {count} more crypts!"
+        placeholder: "Crypt Reminder: We need {count} more crypts!"
     })
     cryptReminderMessage = "Crypt Reminder: We need {count} more Crypts!";
 

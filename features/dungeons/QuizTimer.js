@@ -10,7 +10,7 @@ let timerDuration = 0;
 const quizTimerHud = new Hud("quizTimerHud", `&c12s`, HudManager, data);
 
 Dungeon.registerWhenInDungeon(register("renderOverlay", () => {
-  if (!World.isLoaded() || !config.quizTimer) return;
+  if (!config.quizTimer) return;
 
   const elapsed = (Date.now() - timerStart) / 1000;
   const remaining = timerDuration - elapsed;
