@@ -5,7 +5,7 @@ import config from "../../config";
 let reminderSent = false;
 
 registerWhen(register("step", () => {
-  if (!World.isLoaded()) return;
+  if (!Dungeon.inDungeon) return; // maybe actually check if ur inside of dungeon (big brain)
   if (!config.cryptReminderTime) return;
   if (reminderSent) return;
   
