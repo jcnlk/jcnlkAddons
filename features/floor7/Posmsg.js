@@ -21,7 +21,7 @@ function sendMessage(message) {
 }
 
 registerWhen(register("tick", () => {
-  if (!World.isLoaded()) return;
+  if (!World.isLoaded() || Player.getPlayer().func_82150_aj()) return; // skip if player is invisible
   const playerClass = Dungeon.classes[Player.getName()];
   if (!playerClass) return; // not in dungeon
   positionDefinitions.forEach(position => {

@@ -3,9 +3,9 @@ import {
     @SwitchProperty, 
     @DecimalSliderProperty, 
     @TextProperty, 
-    @SliderProperty,  
-    @ButtonProperty,    
-    @CheckboxProperty   } from "Vigilance";
+    @SliderProperty, 
+    @ButtonProperty, 
+    @SelectorProperty } from "Vigilance";
 
 const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
 const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
@@ -48,15 +48,15 @@ class Config {
         name: "UwUAddons Hider",
         description: "Hide messages sent by UwUAddons.",
         category: "General",
-        subcategory: "Chat"
+        subcategory: "Chat Filters"
     })
     hideUwUAddons = true;
 
     @SwitchProperty({
         name: "Hide Non-Rank Invites",
-        description: "Hides party invites sent by player without rank.",
+        description: "Hides party invites sent by players without a rank.",
         category: "General",
-        subcategory: "Chat"
+        subcategory: "Chat Filters"
     })
     hideNonRankInvites = true;
 
@@ -64,21 +64,21 @@ class Config {
         name: "Hide Useless Messages",
         description: "Hides useless or spammy messages in your chat.",
         category: "General",
-        subcategory: "Chat"
+        subcategory: "Chat Filters"
     })
     hideUselessMessages = true;
 
     @SwitchProperty({
         name: "Check for Updates",
-        description: `Automatically checks if you run an outdated version.\nManually check for updates with &b/ja update&r.`,
+        description: `Automatically checks if you are running an outdated version.\nManually check for updates with &b/ja update&r.`,
         category: "General",
-        subcategory: "Check for Updates"
+        subcategory: "Updates"
     })
     updateChecker = true;
 
     @SwitchProperty({
         name: "Enable Reminders",
-        description: `Enable the reminder feature. \nAdd reminder with &b/ja reminder&r.`,
+        description: `Enable the reminder feature. \nAdd reminders with &b/ja reminder&r.`,
         category: "General",
         subcategory: "Reminders"
     })
@@ -113,9 +113,9 @@ class Config {
     })
     cryptReminderMessage = "Crypt Reminder: We need {count} more Crypts!";
 
-    @CheckboxProperty({
+    @SwitchProperty({
         name: "Enable Crypt Reminder Popup",
-        description: "Show a popup for crypt reminder.",
+        description: "Show a popup for crypt reminder in addition to the party chat message.",
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
@@ -123,35 +123,45 @@ class Config {
 
     @SwitchProperty({
         name: "Enable Dungeon Chest Highlighting",
-        description: `Highlight loot in dungeon chests. \n(&aGood Loot&r, &eMid Loot&r, &cBad Loot&r).`,
+        description: `Highlight loot in dungeon chests based on profit. \n(&aGood Loot&r, &eMid Loot&r, &cBad Loot&r).`,
         category: "Dungeons",
-        subcategory: "Dungeon Loot Highlighting"
+        subcategory: "Chest Highlighting"
     })
     dungeonChestHighlighting = true;
 
     @SwitchProperty({
         name: "Fire Freeze Notification",
-        description: "Tells you when to Fire Freeze in M3.",
+        description: "Shows a notification for when to use Fire Freeze Staff in M3.",
         category: "Dungeons",
-        subcategory: "M3"
+        subcategory: "M3 Features"
     })
     FireFreezeNotifier = true
 
     @SwitchProperty({
         name: "Quiz Timer",
-        description: "Show a timer indicating how long you have to wait before you can answer.",
+        description: "Show a timer indicating how long you need to wait before you can answer the quiz.",
         category: "Dungeons",
-        subcategory: "Quiz Timer"
+        subcategory: "Puzzles"
     })
     quizTimer = true;
 
     @SwitchProperty({
         name: "Hide Players After Leap",
-        description: "Hide nearby players after leaping.",
+        description: "Hide nearby players after using a Spirit Leap for better visibility.",
         category: "Dungeons",
         subcategory: "Spirit Leap"
     })
     enablePlayerHiding = true;
+
+    @SliderProperty({
+        name: "Player Hide Duration",
+        description: "Time in seconds to hide players for after leaping.",
+        category: "Dungeons",
+        subcategory: "Spirit Leap",
+        min: 1,
+        max: 10,
+    })
+    hidePlayerTime = 3;
 
     ////////// F7/M7 Settings //////////
     @SwitchProperty({
@@ -172,9 +182,9 @@ class Config {
 
     @SwitchProperty({
         name: "Toggle Positional Messages",
-        description: "Announce your position at specific spots (P2, EE2, EE3, At Core, In Core, At Mid, At P5).",
+        description: "Announce your position to party chat at specific spots (P2, EE2, EE3, At Core, In Core, At Mid, At P5).",
         category: "F7/M7",
-        subcategory: "Positional Messages"
+        subcategory: "General"
     })
     togglePosMsg = true;
 
@@ -182,14 +192,14 @@ class Config {
         name: "Toggle Positional Titles",
         description: "Show a title when your team is at a specific spots (P2, EE2, EE3, At Core, In Core, At Mid, At P5).",
         category: "F7/M7",
-        subcategory: "Positional Titles"
+        subcategory: "General"
     })
     togglePosTitles = true;
 
     //////////// Commands Settings //////////
     @SwitchProperty({
         name: "Enable DM Commands",
-        description: "Enable or disable all DM commands.",
+        description: "Enable or disable all Direct Message commands.",
         category: "Commands",
         subcategory: "DM Commands"
     })
@@ -197,7 +207,7 @@ class Config {
 
     @SwitchProperty({
         name: "Invite Command (DMs) &3!p&r",
-        description: "Enable the invite command in direct messages.",
+        description: "Enable the party invite command in direct messages.",
         category: "Commands",
         subcategory: "DM Commands"
     })
@@ -205,7 +215,7 @@ class Config {
 
     @SwitchProperty({
         name: "Kick Command (DMs) &3!kick&r",
-        description: "Enable the kick Command command in direct messages.",
+        description: "Enable the party kick command in direct messages.",
         category: "Commands",
         subcategory: "DM Commands"
     })
@@ -213,11 +223,11 @@ class Config {
 
     ////////// HUD Settings //////////
     @ButtonProperty({
-        name: "Move HUD",
-        description: "You can customize your HUD here.",
-        placeholder: "Click Me!",
+        name: "Edit HUD Positions",
+        description: "Open the HUD editor to customize position and scale of all HUD elements.",
+        placeholder: "Open Editor",
         category: "HUD",
-        subcategory: "HUD"
+        subcategory: "HUD Settings"
     })
     openHudGui() {
         ChatLib.command("ja hud", true);
@@ -237,6 +247,7 @@ class Config {
         this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
         this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
         this.addDependency("Enable Crypt Reminder Popup", "Enable Crypt Reminder");
+        this.addDependency("Player Hide Duration", "Hide Players After Leap");
     
         // Add dependencies for DM Commands
         this.addDependency("Invite Command (DMs) &3!p&r", "Enable DM Commands");
