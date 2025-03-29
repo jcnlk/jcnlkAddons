@@ -64,6 +64,7 @@ const hideGeneralMessages = [
   /Your Kill Combo has expired! You reached a .+ Kill Combo!/,
   /This creature is immune to this kind of magic!/,
   /Error initializing players: undefined(?: Hidden)?/,
+  /YouTube Premier .+/
 ];
 
 const hideDungeonMessages = [ // only hide inside of dungeon
@@ -94,7 +95,6 @@ const hideDungeonMessages = [ // only hide inside of dungeon
   /RIGHT CLICK on .+ to open it. .+/,
   /The .+ Trap hit you for .+ damage!/,
   /FISHING FESTIVAL The festival is now underway! Break out your fishing rods and watch out for sharks!/,
-  /Goldor's (?:TNT Trap|Greatsword) hit you for [\d,\.]+ (?:true )?damage\./,
   /The BLOOD DOOR has been opened!/,
   /Giga Lightning.+/,
   /⚠ Storm is enraged! ⚠/,
@@ -108,6 +108,10 @@ const hideDungeonMessages = [ // only hide inside of dungeon
   /You cannot hit the silverfish while it's moving!/,
   /(?:\[SKULL\]|\[STATUE\]).+/,
   /(?:.*)?(?:Also )?Granted you.+/,
+  /Maxor's (?:Wither TNT|Frenzy|Shadow Wave) hit you for [\d,\.]+ damage\./,
+  /Storm's (?:Lightning Fireball|Static Field) hit you for [\d,\.]+ (?:true )?damage\./,
+  /Goldor's (?:TNT Trap|Greatsword|Frenzy) hit you for [\d,\.]+ (?:true )?damage\./,
+  /You hear something open\.\.\./
 ];
 
 hideGeneralMessages.forEach((msg) => {
