@@ -9,7 +9,7 @@ const hideGeneralMessages = [
   /.*Skytils-SC.*/,
   /Warping you to your SkyBlock island.../,
   /You earned .+ Event EXP from playing SkyBlock!/,
-  /Warping.../,
+  /Warping\.\.\./,
   /Watchdog has banned .+ players in the last 7 days./,
   /You are playing on profile\: .+/,
   /Profile ID\:.+/,
@@ -64,7 +64,9 @@ const hideGeneralMessages = [
   /Your Kill Combo has expired! You reached a .+ Kill Combo!/,
   /This creature is immune to this kind of magic!/,
   /Error initializing players: undefined(?: Hidden)?/,
-  /YouTube Premier .+/
+  /.*?YouTube Premier .+ https:\/\/youtu.be\/.+/,
+  /Your radio lost signal\. There's too many enjoyers on this channel\./,
+  /Your radio signal is strong!/
 ];
 
 const hideDungeonMessages = [ // only hide inside of dungeon
@@ -126,4 +128,4 @@ registerWhen(register("chat", (event) => cancel(event)).setCriteria("UwUaddons Â
 registerWhen(register("chat", (player, event) => {
   if (player.includes("[")) return;
   cancel(event);
-}).setCriteria("${*}${player} has invited you to join their party!\nYou have 60 seconds to accept. Click here to join!${*}"), () => config.hideNonRankInvites);
+}).setCriteria("${player} has invited you to join their party!\nYou have 60 seconds to accept. Click here to join!${*}"), () => config.hideNonRankInvites);
