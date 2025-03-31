@@ -1,7 +1,6 @@
 import { 
     @Vigilant, 
     @SwitchProperty, 
-    @DecimalSliderProperty, 
     @TextProperty, 
     @SliderProperty, 
     @ButtonProperty, 
@@ -26,7 +25,7 @@ class Config {
         category: "General",
         subcategory: "Attributes"
     })
-    attributeAbbreviations = true;
+    attributeAbbreviations = false;
 
     @SwitchProperty({
         name: "Show Autopet Rule Title",
@@ -34,7 +33,7 @@ class Config {
         category: "General",
         subcategory: "Autopet Rule Title"
     })
-    autopetRuleTitle = true
+    autopetRuleTitle = false;
 
     @SwitchProperty({
         name: "Enable Custom Emotes",
@@ -42,7 +41,7 @@ class Config {
         category: "General",
         subcategory: "Chat"
     })
-    customEmotes = true;
+    customEmotes = false;
 
     @SwitchProperty({
         name: "UwUAddons Hider",
@@ -50,7 +49,7 @@ class Config {
         category: "General",
         subcategory: "Chat Filters"
     })
-    hideUwUAddons = true;
+    hideUwUAddons = false;
 
     @SwitchProperty({
         name: "Hide Non-Rank Invites",
@@ -58,7 +57,7 @@ class Config {
         category: "General",
         subcategory: "Chat Filters"
     })
-    hideNonRankInvites = true;
+    hideNonRankInvites = false;
 
     @SwitchProperty({
         name: "Hide Useless Messages",
@@ -66,7 +65,7 @@ class Config {
         category: "General",
         subcategory: "Chat Filters"
     })
-    hideUselessMessages = true;
+    hideUselessMessages = false;
 
     @SwitchProperty({
         name: "Check for Updates",
@@ -82,7 +81,7 @@ class Config {
         category: "General",
         subcategory: "Reminders"
     })
-    enableReminders = true;
+    enableReminders = false;
 
     ////////// Dungeons Settings //////////
     @SwitchProperty({
@@ -91,7 +90,7 @@ class Config {
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
-    cryptReminder = true;
+    cryptReminder = false;
 
     @SliderProperty({
         name: "Trigger Time",
@@ -125,7 +124,7 @@ class Config {
         category: "Dungeons",
         subcategory: "Chest Highlighting"
     })
-    dungeonChestHighlighting = true;
+    dungeonChestHighlighting = false;
 
     @SwitchProperty({
         name: "Fire Freeze Notification",
@@ -133,7 +132,7 @@ class Config {
         category: "Dungeons",
         subcategory: "M3 Features"
     })
-    FireFreezeNotifier = true
+    FireFreezeNotifier = false;
 
     @SwitchProperty({
         name: "Quiz Timer",
@@ -166,7 +165,7 @@ class Config {
         category: "Dungeons",
         subcategory: "Leaping"
     })
-    enablePlayerHiding = true;
+    enablePlayerHiding = false;
 
     @SliderProperty({
         name: "Player Hide Duration",
@@ -185,7 +184,7 @@ class Config {
         category: "F7/M7",
         subcategory: "General"
     })
-    maskTimer = true;
+    maskTimer = false;
 
     @SwitchProperty({
         name: "Mask Reminder",
@@ -193,7 +192,7 @@ class Config {
         category: "F7/M7",
         subcategory: "General"
     })
-    MaskReminder = true;
+    MaskReminder = false;
 
     @SwitchProperty({
         name: "Toggle Positional Messages",
@@ -201,7 +200,7 @@ class Config {
         category: "F7/M7",
         subcategory: "General"
     })
-    togglePosMsg = true;
+    togglePosMsg = false;
 
     @SwitchProperty({
         name: "Toggle Positional Titles",
@@ -209,7 +208,7 @@ class Config {
         category: "F7/M7",
         subcategory: "General"
     })
-    togglePosTitles = true;
+    togglePosTitles = false;
 
     //////////// Commands Settings //////////
     @SwitchProperty({
@@ -226,7 +225,7 @@ class Config {
         category: "Commands",
         subcategory: "DM Commands"
     })
-    partyCommand = false;
+    partyCommand = true;
 
     @SwitchProperty({
         name: "Kick Command (DMs) &3!kick&r",
@@ -234,7 +233,7 @@ class Config {
         category: "Commands",
         subcategory: "DM Commands"
     })
-    kickCommand = false;
+    kickCommand = true;
 
     ////////// HUD Settings //////////
     @ButtonProperty({

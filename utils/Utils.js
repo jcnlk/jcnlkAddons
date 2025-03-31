@@ -1,5 +1,3 @@
-import { removeUnicode, getScoreboard, getMatchFromLines, getTabList } from "../../BloomCore/utils/Utils";
-
 // Basic Stuff
 export const PREFIX = `&8[&6JA&8]`;
 export const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
@@ -145,9 +143,3 @@ export function isPlayerInArea(x1, x2, y1, y2, z1, z2, entity = Player) {
     z <= Math.max(z1, z2)
   );
 }
-
-// Loacation stuff
-export const getZone = () => (removeUnicode(getMatchFromLines(/ ⏣ (.+)/, getScoreboard(false))));
-export const getArea = () => (removeUnicode(getMatchFromLines(/Area: (.+)/, getTabList(false))));
-export const getIsInDungeon = () => getZone().includes("The Catacombs");
-export const getIsInDungeonHub = () => getArea().startsWith("Dungeon Hub");
