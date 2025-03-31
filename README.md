@@ -10,6 +10,8 @@
 - **Custom Emotes** – Integrates personalized emotes into chat (`/ja emotes`).
 - **Reminders** – Sets up in-game reminders for essential tasks (`/ja reminder`).
 - **UwUAddons Hider** - Hides messages sent by UwUAddons.
+- **Hide Non-Rank Invites** - Hides party invites sent by players without rank.
+- **Hide Useless Messages** - Hides useless or spammy messages in your chat.
 
 ### 🏰 Dungeons
 - **Crypt Reminder** – Alerts when not enough crypts are killed.
