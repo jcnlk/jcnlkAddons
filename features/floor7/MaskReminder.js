@@ -1,7 +1,7 @@
 import { playSound, registerWhen, showTitleV2 } from "../../utils/Utils";
 import { getSkyblockItemID } from "../../../BloomCore/utils/Utils";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
-import config from "../../config"
+import config from "../../config";
 
 let reminderShown = false;
 

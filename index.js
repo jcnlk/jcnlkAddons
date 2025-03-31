@@ -1,6 +1,7 @@
 // External Modules
+import { CommandHandler } from "../tska/command/CommandHandler";
 import { convertToTimeString } from "../BloomCore/utils/Utils";
-import request from "../requestV2";
+import { fetch } from "../tska/polyfill/fetch";
 
 // Config and Utils
 import { showChatMessage, moduleVersion, PREFIX, registerWhen } from "./utils/Utils";
@@ -31,76 +32,51 @@ import "./features/floor7/Posmsg";
 // Commands
 import "./features/commands/DmCommands";
 
-const commands = [
-  {cmd: "ja", options: "", description: "Open the settings"},
-  {cmd: "ja help", options: "", description: "Show this message"},
-  {cmd: "ja hud", options: "", description: "Open the HUDs and move them arround"},
-  {cmd: "ja update", options: "", description: "Check if there is a newer version on Github"},
-  {cmd: "ja reminder", options: " <add|list|remove>", description: "Create reminder"},
-  {cmd: "ja emotes", options: " <add|list|remove>", description: "Create custom emotes"}
-];
+// Ja command
+const commandHandler = new CommandHandler("jcnlkAddons")
+  .setTitleFormat(`${PREFIX} &eCommands:`)
+  .setCommandFormat("&8• &a/ja ${name} &7- &e${description}")
+  .setAliasFormat("") // Empty alias format cuz we don't want to spam the chat
+  .setName("ja", (args) => {
+    if (args === undefined || args.length === 0) {
+      config.openGUI();
+      return 1;
+    }
+  });
 
-register("command", (...args) => {
-  if (args === undefined) {
-    config.openGUI();
+commandHandler
+  .pushWithAlias("hud", ["edit"], "Open the HUDs editor", () => {
+    HudManager.openGui();
+  })
+  .push("update", "Check for updates", () => {
+    checkForUpdate();
+  });
+
+// Reminder subcommand
+commandHandler.push("reminder", "Manage reminders", (action, ...args) => {
+  if (!config.enableReminders) {
+    showChatMessage("Reminders are currently disabled in the settings.", "error");
     return;
   }
-  const subCommand = args[0].toLowerCase();
-  switch (subCommand) {
-    case "settings":
-    case "setting":
-      config.openGUI();
-      break;
-    case "hud":
-    case "edit":
-      HudManager.openGui();
-      break;
-    case "help":
-      showChatMessage("Commands:");
-      commands.forEach(({ cmd, options, description }) => {
-        new TextComponent(`&7> &a/${cmd}${options} &7- &e${description}`)
-          .setClick("run_command", `/${cmd}`)
-          .setHover("show_text", `&7Click to run &a/${cmd}`)
-          .chat();
-      });
-      break;  
-    case "reminder":
-    case "reminders":
-      handleReminderCommand(args);
-      break; 
-    case "emote":
-    case "emotes":
-      handleEmoteCommand(args);
-      break; 
-    case "update":
-    case "updates":
-      checkForUpdate();
-      break; 
-    default:
-      showChatMessage("Unknown command. Use '/ja help' for a list of commands.");
-  }
-}).setName("ja").setAliases("jcnlkAddons");
-
-function handleReminderCommand(args) {
-  if (!config.enableReminders) return;
-  if (args.length < 2) {
+  
+  if (!action) {
     showChatMessage("Usage: /ja reminder [add|list|remove] [name] [time]");
     showChatMessage("Time can be in format: 2h 30m 15s, 1d 12h, 90m, etc.");
     return;
   }
-  const action = args[1].toLowerCase();
-  switch (action) {
+  
+  switch (action.toLowerCase()) {
     case "add":
-      if (args.length < 4) {
+      if (args.length < 2) {
         showChatMessage("Usage: /ja reminder add [name] [time]");
         showChatMessage("Example: /ja reminder add Check auction 2h 30m");
         return;
       }
-
-      let timeIndex = args.findIndex((arg, i) => i > 1 && /\d+[dhms]/.test(arg));
+      
+      let timeIndex = args.findIndex((arg, i) => /\d+[dhms]/.test(arg));
       if (timeIndex === -1) timeIndex = args.length - 1;
       
-      const name = args.slice(2, timeIndex).join(" ");
+      const name = args.slice(0, timeIndex).join(" ");
       const timeArg = args.slice(timeIndex).join(" ");
       
       if (!name) {
@@ -117,24 +93,8 @@ function handleReminderCommand(args) {
       );
       
       if (!success) showChatMessage("Valid time formats: 2h 30m 15s, 1d 12h, 90m, etc.");
-      break; 
-    case "remove":
-      if (args.length < 3) {
-        showChatMessage("Usage: /ja reminder remove [name|index]");
-        return;
-      }
+      break;
       
-      const identifier = args[2];
-      const index = parseInt(identifier);
-      const removed = removeReminder(isNaN(index) ? identifier : index);
-      
-      showChatMessage(
-        removed 
-          ? `Reminder '${identifier}' removed` 
-          : `No reminder found with identifier '${identifier}'`,
-        removed ? "success" : "error"
-      );
-      break; 
     case "list":
       const reminderList = listReminders();
       if (reminderList.length > 0) {
@@ -146,16 +106,36 @@ function handleReminderCommand(args) {
         showChatMessage("No active reminders");
       }
       break;
+      
+    case "remove":
+      if (args.length < 1) {
+        showChatMessage("Usage: /ja reminder remove [name|index]");
+        return;
+      }
+      
+      const identifier = args[0];
+      const index = parseInt(identifier);
+      const removed = removeReminder(isNaN(index) ? identifier : index);
+      
+      showChatMessage(
+        removed 
+          ? `Reminder '${identifier}' removed` 
+          : `No reminder found with identifier '${identifier}'`,
+        removed ? "success" : "error"
+      );
+      break;
+      
     default:
       showChatMessage("Usage: /ja reminder [add|list|remove] [name] [time]");
       showChatMessage("Time can be in format: 2h 30m 15s, 1d 12h, 90m, etc.");
   }
-}
+});
 
-function handleEmoteCommand(args) {
-  const action = args.length >= 2 ? args[1].toLowerCase() : "list";
+// Emote subcommand
+commandHandler.pushWithAlias("emotes", ["emote"], "Manage custom emotes", (action, ...args) => {
+  if (!action) action = "list";
   
-  switch (action) {
+  switch (action.toLowerCase()) {
     case "list":
       const emotes = Object.keys(data.customEmotes);
       if (emotes.length === 0) {
@@ -165,15 +145,16 @@ function handleEmoteCommand(args) {
       
       showChatMessage("Custom Emotes:");
       emotes.forEach(key => showChatMessage(`${key} -> ${data.customEmotes[key]}`));
-      break; 
+      break;
+      
     case "add":
-      if (args.length < 3) {
+      if (args.length < 2) {
         showChatMessage("Usage: /ja emote add [emotename] [emote]");
         return;
       }
       
-      const emoteName = args[2];
-      const emote = args.slice(3).join(" ");
+      const emoteName = args[0];
+      const emote = args.slice(1).join(" ");
       
       if (data.customEmotes[emoteName]) {
         showChatMessage(`Emote "${emoteName}" already exists. Remove it first to update it.`);
@@ -183,15 +164,16 @@ function handleEmoteCommand(args) {
       data.customEmotes[emoteName] = emote;
       data.save();
       showChatMessage(`Added: ${emoteName} -> ${emote}`);
-      break; 
+      break;
+      
     case "remove":
     case "delete":
-      if (args.length < 3) {
+      if (args.length < 1) {
         showChatMessage("Usage: /ja emote remove [emotename]");
         return;
       }
       
-      const name = args[2];
+      const name = args[0];
       if (!data.customEmotes[name]) {
         showChatMessage(`Emote "${name}" not found.`);
         return;
@@ -200,15 +182,16 @@ function handleEmoteCommand(args) {
       delete data.customEmotes[name];
       data.save();
       showChatMessage(`Removed: ${name}`);
-      break;  
+      break;
+      
     default:
       showChatMessage("Usage: /ja emote [list|add|remove]");
   }
-}
+});
 
 function checkForUpdate() {
   showChatMessage("Checking for updates..");
-  request({url: "https://api.github.com/repos/jcnlk/jcnlkAddons/releases", json: true})
+  fetch("https://api.github.com/repos/jcnlk/jcnlkAddons/releases", {json: true})
     .then(response => {
       if (!response || !response.length) return;
       
