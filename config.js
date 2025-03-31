@@ -144,10 +144,27 @@ class Config {
     quizTimer = true;
 
     @SwitchProperty({
+        name: "Leap Announce",
+        description: "Announce in party chat who you are leaping to.",
+        category: "Dungeons",
+        subcategory: "Leaping"
+    })
+    leapAnnounce = false;
+
+    @SelectorProperty({
+        name: "Hide Leap Messages",
+        description: "Hides leap messages when:",
+        category: "Dungeons",
+        subcategory: "Leaping",
+        options: ["Never", "Hide Own", "Doesn't include self", "Always"]
+    })
+    hideLeapMessage = 0;
+
+    @SwitchProperty({
         name: "Hide Players After Leap",
         description: "Hide nearby players after using a Spirit Leap for better visibility.",
         category: "Dungeons",
-        subcategory: "Spirit Leap"
+        subcategory: "Leaping"
     })
     enablePlayerHiding = true;
 
@@ -155,7 +172,7 @@ class Config {
         name: "Player Hide Duration",
         description: "Time in seconds to hide players for after leaping.",
         category: "Dungeons",
-        subcategory: "Spirit Leap",
+        subcategory: "Leaping",
         min: 1,
         max: 10,
     })
