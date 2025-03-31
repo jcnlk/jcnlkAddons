@@ -35,26 +35,25 @@ import "./features/commands/DmCommands";
 // Ja command
 const commandHandler = new CommandHandler("jcnlkAddons")
   .setTitleFormat(`${PREFIX} &eCommands:`)
-  .setCommandFormat("&7> &a/${name}${options} &7- &e${description}")
-  .setAliasFormat("\n  &7└ &6${name}")
+  .setCommandFormat("&8• &a/ja ${name} &7- &e${description}")
+  .setAliasFormat("") // Empty alias format cuz we don't want to spam the chat
   .setName("ja", (args) => {
     if (args === undefined || args.length === 0) {
       config.openGUI();
       return 1;
     }
-  })
-  .pushWithAlias("settings", ["setting"], "Open the settings", () => {
-    config.openGUI();
-  })
-  .pushWithAlias("hud", ["edit"], "Open the HUDs and move them around", () => {
+  });
+
+commandHandler
+  .pushWithAlias("hud", ["edit"], "Open the HUDs editor", () => {
     HudManager.openGui();
   })
-  .push("update", "Check if there is a newer version on Github", () => {
+  .push("update", "Check for updates", () => {
     checkForUpdate();
   });
 
 // Reminder subcommand
-commandHandler.push("reminder", "Create reminder", (action, ...args) => {
+commandHandler.push("reminder", "Manage reminders", (action, ...args) => {
   if (!config.enableReminders) {
     showChatMessage("Reminders are currently disabled in the settings.", "error");
     return;
@@ -133,7 +132,7 @@ commandHandler.push("reminder", "Create reminder", (action, ...args) => {
 });
 
 // Emote subcommand
-commandHandler.pushWithAlias("emotes", ["emote"], "Create custom emotes", (action, ...args) => {
+commandHandler.pushWithAlias("emotes", ["emote"], "Manage custom emotes", (action, ...args) => {
   if (!action) action = "list";
   
   switch (action.toLowerCase()) {
