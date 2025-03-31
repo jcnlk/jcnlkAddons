@@ -1,4 +1,4 @@
-import PogObject from "../../PogData";
+import { LocalStore } from "../../tska/storage/LocalStore";
 
 const defaultData = {
     maskTimerHud: {
@@ -20,6 +20,4 @@ const defaultData = {
     customEmotes: {}
 };
 
-export let data = new PogObject("jcnlkAddons/data", defaultData, "Data.json");
-
-register("gameUnload", () => data.save());
+export const data = new LocalStore("jcnlkAddons/data", defaultData, "Data.json");
