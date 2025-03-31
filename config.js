@@ -86,36 +86,34 @@ class Config {
 
     ////////// Dungeons Settings //////////
     @SwitchProperty({
-        name: "Enable Crypt Reminder",
+        name: "Crypt Reminder",
         description: "Enable the crypt reminder feature in dungeons.",
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
     cryptReminder = true;
 
-    @DecimalSliderProperty({
-        name: "Crypt Reminder Time",
-        description: `Time in minutes to remind about missing crypts \n(0 to turn it &cOFF&r).`,
+    @SliderProperty({
+        name: "Trigger Time",
+        description: `Time in seconds to remind about missing crypts \n(0 to turn it &cOFF&r).`,
         category: "Dungeons",
         subcategory: "Crypt Reminder",
-        minF: 0.0,
-        maxF: 3.0,
-        decimalPlaces: 1
+        min: 0,
+        max: 120,
     })
-    cryptReminderTime = 1.0;
-
-    @TextProperty({
-        name: "Crypt Reminder Message",
-        description: `Message to send as crypt reminder. \nUse &b{count}&r for the number of needed crypts.`,
-        category: "Dungeons",
-        subcategory: "Crypt Reminder",
-        placeholder: "Crypt Reminder: We need {count} more crypts!"
-    })
-    cryptReminderMessage = "Crypt Reminder: We need {count} more Crypts!";
+    cryptReminderTime = 60;
 
     @SwitchProperty({
-        name: "Enable Crypt Reminder Popup",
-        description: "Show a popup for crypt reminder in addition to the party chat message.",
+        name: "Announce Crypts",
+        description: "Announce the amount of missing crypts in party chat.",
+        category: "Dungeons",
+        subcategory: "Crypt Reminder",
+    })
+    cryptReminderAnnounce = true;
+
+    @SwitchProperty({
+        name: "Missing Crypts Title",
+        description: "Show a title with the amount of missing crypts.",
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
@@ -244,9 +242,9 @@ class Config {
         this.setCategoryDescription("HUD", `${configHeader}\n\n&7&oRelated Commands: /ja <hud>`);
 
         // Add dependencies for Dungeons
-        this.addDependency("Crypt Reminder Time", "Enable Crypt Reminder");
-        this.addDependency("Crypt Reminder Message", "Enable Crypt Reminder");
-        this.addDependency("Enable Crypt Reminder Popup", "Enable Crypt Reminder");
+        this.addDependency("Trigger Time", "Crypt Reminder");
+        this.addDependency("Announce Crypts", "Crypt Reminder");
+        this.addDependency("Missing Crypts Title", "Crypt Reminder");
         this.addDependency("Player Hide Duration", "Hide Players After Leap");
     
         // Add dependencies for DM Commands

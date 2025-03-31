@@ -5,13 +5,13 @@ import config from "../../config";
 let reminderSent = false;
 
 registerWhen(register("step", () => {
-  if (!Dungeon.inDungeon) return; // maybe actually check if ur inside of dungeon (big brain)
+  if (!Dungeon.inDungeon) return;
   if (!config.cryptReminderTime) return;
   if (reminderSent) return;
   
   const cryptsFound = Dungeon.crypts;
   const dungeonTime = Dungeon.seconds;
-  const reminderTime = config.cryptReminderTime * 60;
+  const reminderTime = config.cryptReminderTime;
   
   if (cryptsFound >= 5) return;
   if (dungeonTime < reminderTime) return;
@@ -19,13 +19,12 @@ registerWhen(register("step", () => {
  
   const cryptsNeeded = 5 - cryptsFound;
   
-  if (config.cryptReminderMessage) {
-    const message = config.cryptReminderMessage.replace("{count}", cryptsNeeded);
-    ChatLib.command(`party chat ${message}`);
+  if (config.cryptReminderAnnounce) {
+    ChatLib.command(`party chat Crypt Reminder: We need ${cryptsFound} more Crypts!`);
     showChatMessage(`Announcing -> Crypt Reminder`);
   }
   
-  if (config.cryptReminderPopup) () => showTitleV2(`&cNeed ${cryptsNeeded} more crypts!`, 5000, 0.5, -20, 4, World.playSound("random.orb", 0.5, 1));
+  if (config.cryptReminderPopup) showTitleV2(`&cNeed ${cryptsNeeded} more crypts!`, 5000, 0.5, -20, 4, World.playSound("random.orb", 0.5, 1));
   
   reminderSent = true;
 }).setFps(1), () => config.cryptReminder);
