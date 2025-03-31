@@ -2,9 +2,11 @@
  * Yes I should actually recode this shit some day.
  * But for not it works fine ig..
  */
-import { registerWhen, getIsInDungeon, getIsInDungeonHub } from "../../utils/Utils";
 import { getSkyblockItemID, highlightSlot } from "../../../BloomCore/utils/Utils";
+import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import Location from "../../../tska/skyblock/Location";
 import PriceUtils from "../../../BloomCore/PriceUtils";
+import { registerWhen } from "../../utils/Utils";
 import config from "../../config";
 
 const validChests = new Set(["Wood", "Gold", "Diamond", "Emerald", "Obsidian", "Bedrock"]);
@@ -36,7 +38,7 @@ const worthless = new Set([
 ]);
 
 function isInDungeonArea() {
-  return getIsInDungeon() || getIsInDungeonHub();
+  return Dungeon.inDungeon || Location.inArea("Dungeon Hub");
 }
 
 function createChestItem(item, slot) {
