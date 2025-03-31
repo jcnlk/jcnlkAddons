@@ -17,7 +17,7 @@ const hideGeneralMessages = [
   /Woah slow down, you're doing that too fast!/,
   /Command Failed: This command is on cooldown! Try again in about a second!/,
   /Someone has already activated this lever!/,
-  /A mystical force in this room prevents you from using that ability!/,
+  /A mystical force in this room prevents you from (?:using that ability|doing that)!/,
   /It isn't your turn!/,
   /That chest is locked!/,
   /Don't move diagonally! Bad!/,
@@ -111,7 +111,7 @@ const hideDungeonMessages = [ // only hide inside of dungeon
   /(?:\[SKULL\]|\[STATUE\]).+/,
   /(?:.*)?(?:Also )?Granted you.+/,
   /Maxor's (?:Wither TNT|Frenzy|Shadow Wave) hit you for [\d,\.]+ damage\./,
-  /Storm's (?:Lightning Fireball|Static Field) hit you for [\d,\.]+ (?:true )?damage\./,
+  /Storm's (?:Lightning Fireball|Static Field|Frenzy) hit you for [\d,\.]+ (?:true )?damage\./,
   /Goldor's (?:TNT Trap|Greatsword|Frenzy) hit you for [\d,\.]+ (?:true )?damage\./,
   /You hear something open\.\.\./
 ];
