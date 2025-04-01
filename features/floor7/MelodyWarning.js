@@ -20,7 +20,6 @@ function resetMelody() {
 }
 
 registerWhen(register("tick", () => {
-  // Check for phase changes to reset melody
   const currentPhase = getCurrentGoldorPhase();
   if (currentPhase !== lastPhase) {
     resetMelody();
@@ -29,7 +28,6 @@ registerWhen(register("tick", () => {
 }), () => config.melodyWarning);
 
 registerWhen(register("chat", (message) => {
-  // Only process messages during Goldor terminal phases (1-4)
   const currentPhase = getCurrentGoldorPhase();
   if (currentPhase < 1 || currentPhase > 4) return;
   
@@ -37,20 +35,18 @@ registerWhen(register("chat", (message) => {
   
   if (melodyMatch) {
     const playerMatched = melodyMatch[1];
-    if (playerMatched === Player.getName()) return;
     
-    // Add to tracking list if not already there
-    if (!playersStackingMelody.includes(playerMatched)) {
+    if (!playersStackingMelody.includes(playerMatched) && playerMatched !== Player.getName()) {
       playersStackingMelody.push(playerMatched);
     }
     
+    if (playerMatched === Player.getName()) return;
+    
     let progress = melodyMatch[2];
-    // Convert percentage to fraction if needed
     if (parseInt(progress) >= 25) {
       progress = Math.floor(parseInt(progress) / 25) + "/4";
     }
     
-    // Check if this is the furthest along progress
     if (progress > furthestAlongMelody || furthestAlongMelody === 0) {
       playerName = playerMatched;
       furthestAlongMelody = progress;
@@ -60,7 +56,6 @@ registerWhen(register("chat", (message) => {
     return;
   }
 
-  // If the person who sent melody message completes a terminal then reset just that player
   const terminalMatch = message.match(/^(\w+) activated a terminal! \(\d\/\d\)$/);
   if (terminalMatch && playersStackingMelody.includes(terminalMatch[1])) {
     const index = playersStackingMelody.indexOf(terminalMatch[1]);
@@ -68,7 +63,6 @@ registerWhen(register("chat", (message) => {
       playersStackingMelody.splice(index, 1);
     }
     
-    // If it was the player we were showing, reset display
     if (terminalMatch[1] === playerName) {
       resetMelody();
     }
@@ -76,7 +70,6 @@ registerWhen(register("chat", (message) => {
 }).setCriteria("${message}"), () => config.melodyWarning);
 
 registerWhen(register("renderOverlay", () => {
-  // Only display during Goldor terminal phases (1-4)
   const currentPhase = getCurrentGoldorPhase();
   if (!melodyProgress || currentPhase < 0 || currentPhase > 5 || HudManager.isEditing) return;
   
