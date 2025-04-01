@@ -52,8 +52,10 @@ export class Hud {
    * @param {boolean} [isCustom=false]
    * @param {boolean} [background=false]
    * @param {any} [color=null]
+   * @param {string} [hAlign="center"] - Horizontal alignment: "left", "center", or "right"
+   * @param {string} [vAlign="center"] - Vertical alignment: "top", "center", or "bottom"
    */
-  constructor(name, defaultText, hudManager, data, isCustom = false, background = false, color = null) {
+  constructor(name, defaultText, hudManager, data, isCustom = false, background = false, color = null, hAlign = "center", vAlign = "center") {
     this.name = name;
     this.defaultText = defaultText;
     this.hudManager = hudManager;
@@ -67,6 +69,8 @@ export class Hud {
     }
     this.background = background;
     this.color = color;
+    this.hAlign = hAlign;
+    this.vAlign = vAlign;
     this.currentText = new Text(defaultText).setShadow(true);
     this.editBox = new Rectangle(0x9696964d, 0, 0, 0, 0);
     this.dragTrigger = register("dragged", (dx, dy) => {
@@ -81,7 +85,10 @@ export class Hud {
       const [current_x, current_y] = this.getCoords();
       const width = this.currentText.getWidth();
       const height = this.currentText.getHeight();
-      if (x >= current_x - 3 && x <= current_x + width + 3 && y >= current_y - 3 && y <= current_y + height + 3) {
+      
+      const [adjustedX, adjustedY] = this.getAdjustedPosition(current_x, current_y, width, height);
+      
+      if (x >= adjustedX - 3 && x <= adjustedX + width + 3 && y >= adjustedY - 3 && y <= adjustedY + height + 3) {
         const scale = this.getScale();
         if (d === 1 && scale < 10) this.setScale(scale + 0.1);
         else if (scale > 0.5) this.setScale(scale - 0.1);
@@ -91,17 +98,26 @@ export class Hud {
       if (!this.hudManager.isEditing) return;
       const [current_x, current_y] = this.getCoords();
       const scale = this.getScale();
+      
+      this.currentText.setScale(scale);
       const width = this.currentText.getWidth();
       const height = this.currentText.getHeight();
-      this.editBox.setX(current_x - 3).setY(current_y - 3).setWidth(width + 3).setHeight(height + 3).draw();
-      this.currentText.setX(current_x).setY(current_y).setScale(scale).draw();
+      
+      const [adjustedX, adjustedY] = this.getAdjustedPosition(current_x, current_y, width, height);
+      
+      this.editBox.setX(adjustedX - 3).setY(adjustedY - 3).setWidth(width + 6).setHeight(height + 6).draw();
+      this.currentText.setX(adjustedX).setY(adjustedY).draw();
     });
     this.clickTrigger = register("clicked", (x, y, b, isDown) => {
       if (!this.hudManager.isEditing) return;
       const [current_x, current_y] = this.getCoords();
+      
       const width = this.currentText.getWidth();
       const height = this.currentText.getHeight();
-      if (x >= current_x - 3 && x <= current_x + width + 3 && y >= current_y - 3 && y <= current_y + height + 3) {
+      
+      const [adjustedX, adjustedY] = this.getAdjustedPosition(current_x, current_y, width, height);
+      
+      if (x >= adjustedX - 3 && x <= adjustedX + width + 3 && y >= adjustedY - 3 && y <= adjustedY + height + 3) {
         if (isDown && hudManager.selectedHudName === "") {
           hudManager.selectHud(this.name);
         } else {
@@ -113,6 +129,33 @@ export class Hud {
       }
     });
   }
+
+  /**
+   * Adjusts the drawing position based on alignment settings
+   * @param {number} x - Original X coordinate
+   * @param {number} y - Original Y coordinate
+   * @param {number} width - Content width
+   * @param {number} height - Content height
+   * @returns {Array} [adjustedX, adjustedY]
+   */
+  getAdjustedPosition = (x, y, width, height) => {
+    let adjustedX = x;
+    let adjustedY = y;
+    
+    if (this.hAlign === "center") {
+      adjustedX = x - (width / 2);
+    } else if (this.hAlign === "right") {
+      adjustedX = x - width;
+    }
+    
+    if (this.vAlign === "center") {
+      adjustedY = y - (height / 2);
+    } else if (this.vAlign === "bottom") {
+      adjustedY = y - height;
+    }
+    
+    return [adjustedX, adjustedY];
+  };
 
   /**
    * Remove this hud.
@@ -194,16 +237,24 @@ export class Hud {
       GlStateManager.func_179147_l();
       const [x, y] = this.getCoords();
       const scale = this.getScale();
+      
+      this.currentText.setString(text).setScale(scale);
+      const width = this.currentText.getWidth();
+      const height = this.currentText.getHeight();
+      
+      const [drawX, drawY] = this.getAdjustedPosition(x, y, width, height);
+      
       if (this.background) {
         Renderer.drawRect(
           this.color,
-          x - 3,
-          y - 3,
-          this.currentText.getWidth() + 3,
-          this.currentText.getHeight() + 3
+          drawX - 3,
+          drawY - 3,
+          width + 6,
+          height + 6
         );
       }
-      this.currentText.setString(text).setX(x).setY(y).setScale(scale).draw();
+      
+      this.currentText.setX(drawX).setY(drawY).draw();
       GlStateManager.func_179084_k();
     }
   };
