@@ -195,6 +195,14 @@ class Config {
     MaskReminder = false;
 
     @SwitchProperty({
+        name: "Melody Warning",
+        description: "Displays a warning when a player has Melody terminal in Goldor phase.",
+        category: "F7/M7",
+        subcategory: "General"
+    })
+    melodyWarning = false;
+
+    @SwitchProperty({
         name: "Toggle Positional Messages",
         description: "Announce your position to party chat at specific spots (P2, EE2, EE3, At Core, In Core, At Mid, At P5).",
         category: "F7/M7",

@@ -22,6 +22,7 @@ import "./features/dungeons/FireFreezeNotifier";
 import "./features/dungeons/HidePlayerOnLeap";
 import "./features/dungeons/CryptReminder";
 import "./features/dungeons/LeapAnnounce";
+import "./features/floor7/MelodyWarning";
 import "./features/dungeons/QuizTimer";
 
 // Floor 7

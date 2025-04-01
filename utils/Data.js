@@ -16,6 +16,11 @@ const defaultData = {
         y: 0.35,
         scale: 1.5
     },
+    melodyWarningHud: {
+        x: 0.42,
+        y: 0.25,
+        scale: 1.5
+    },
     reminders: [],
     customEmotes: {}
 };
