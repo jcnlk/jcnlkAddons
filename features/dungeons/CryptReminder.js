@@ -20,7 +20,7 @@ registerWhen(register("step", () => {
   const cryptsNeeded = 5 - cryptsFound;
   
   if (config.cryptReminderAnnounce) {
-    ChatLib.command(`party chat Crypt Reminder: We need ${cryptsFound} more Crypts!`);
+    ChatLib.command(`party chat Crypt Reminder: We need ${cryptsNeeded} more Crypts!`);
     showChatMessage(`Announcing -> Crypt Reminder`);
   }
   
