@@ -7,7 +7,7 @@ import config from "../../config";
 let timerStart = 0;
 let timerDuration = 0;
 
-const quizTimerHud = new Hud("quizTimerHud", `&c12s`, HudManager, data);
+const quizTimerHud = new Hud("quizTimerHud", `&bQuiz: &c12s`, HudManager, data);
 
 Dungeon.registerWhenInDungeon(register("renderOverlay", () => {
   if (!config.quizTimer) return;
