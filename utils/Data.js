@@ -18,9 +18,14 @@ const defaultData = {
     },
     melodyWarningHud: {
         x: 0.42,
-        y: 0.25,
+        y: 0.20,
         scale: 1.5
     },
+    posTitlesHud: {
+        x: 0.42,
+        y: 0.30,
+        scale: 1.7
+      },
     reminders: [],
     customEmotes: {}
 };

@@ -1,8 +1,13 @@
-import { registerWhen, showChatMessage, showTitleV2 } from "../../utils/Utils";
 import { getClassColor, positionDefinitions } from "../../utils/Dungeon";
+import { registerWhen, showChatMessage } from "../../utils/Utils";
 import { stripRank } from "../../../BloomCore/utils/Utils";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import HudManager from "../../utils/Hud";
+import { data } from "../../utils/Data";
+import { Hud } from "../../utils/Hud";
 import config from "../../config";
+
+const posTitlesHud = new Hud("posTitlesHud", "&aTest Player (T) &eAt Mid!", HudManager, data);
 
 const lastLocation = {
   AtP2: false,
@@ -15,6 +20,9 @@ const lastLocation = {
   Ati4Entry: false,
   AtP5: false
 };
+
+let currentHudMessage = "";
+let hudDisplayTimeout = null;
 
 function playSound() {
   let count = 0;
@@ -29,18 +37,29 @@ function playSound() {
 
 function showAlert(playerName, playerClass, text) {
   showChatMessage(getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`);
-  showTitleV2(getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`, 2000, 0.5, 0.25, 1.7, playSound());
+  
+  currentHudMessage = getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`;
+  
+  if (hudDisplayTimeout) clearTimeout(hudDisplayTimeout);
+  
+  playSound();
+  
+  hudDisplayTimeout = setTimeout(() => currentHudMessage = "", 2000);
 }
 
 registerWhen(register("tick", () => {
   if (!World.isLoaded() || !Dungeon.inDungeon) return;
+  
   World.getAllPlayers().forEach(entity => {
-    if (Dungeon.bossEntry === null) return; // not in boss
+    if (Dungeon.bossEntry === null) return;
     if (entity.getPing() !== 1 || entity.isInvisible()) return;
+    
     const playerName = entity.getName();
     if (playerName === Player.getName()) return;
+    
     const playerClass = Dungeon.classes[playerName];
     if (!playerClass) return;
+    
     positionDefinitions.forEach(position => {
       if (!lastLocation[position.id] &&
           position.checkCondition(playerClass) &&
@@ -55,9 +74,11 @@ registerWhen(register("tick", () => {
 registerWhen(register("chat", (player, message) => {
   const strippedPlayer = stripRank(player);
   if (strippedPlayer === Player.getName()) return;
+  
   const msg = message.toLowerCase();
   const playerClass = Dungeon.classes[strippedPlayer];
   if (!playerClass) return;
+  
   positionDefinitions.forEach(position => {
     if (!lastLocation[position.id] &&
         position.checkCondition(playerClass) &&
@@ -68,4 +89,17 @@ registerWhen(register("chat", (player, message) => {
   });
 }).setCriteria("Party > ${player}: ${message}"), () => config.togglePosTitles);
 
-register("worldUnload", () => Object.keys(lastLocation).forEach(key => lastLocation[key] = false));
+registerWhen(register("renderOverlay", () => {
+  if (!currentHudMessage || HudManager.isEditing) return;
+  
+  posTitlesHud.draw(currentHudMessage);
+}), () => config.togglePosTitles);
+
+register("worldUnload", () => {
+  Object.keys(lastLocation).forEach(key => lastLocation[key] = false);
+  currentHudMessage = "";
+  if (hudDisplayTimeout) {
+    clearTimeout(hudDisplayTimeout);
+    hudDisplayTimeout = null;
+  }
+});
