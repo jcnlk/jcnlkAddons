@@ -1,4 +1,5 @@
-import { getCurrentGoldorPhase } from "../../utils/Dungeon";
+import { getCurrentGoldorPhase, getClassColor } from "../../utils/Dungeon";
+import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import { registerWhen } from "../../utils/Utils";
 import HudManager from "../../utils/Hud";
 import { data } from "../../utils/Data";
@@ -14,18 +15,19 @@ let lastPhase = 0;
 const melodyWarningHud = new Hud("melodyWarningHud", "&cPlayer has Melody! 3/4", HudManager, data);
 
 function resetMelody() {
-  while (playersStackingMelody.length) playersStackingMelody.pop();
+  playersStackingMelody.length = 0;
   melodyProgress = "";
   furthestAlongMelody = 0;
+  playerName = "";
 }
 
-registerWhen(register("tick", () => {
+registerWhen(register("step", () => {
   const currentPhase = getCurrentGoldorPhase();
   if (currentPhase !== lastPhase) {
     resetMelody();
     lastPhase = currentPhase;
   }
-}), () => config.melodyWarning);
+}).setFps(1), () => config.melodyWarning);
 
 registerWhen(register("chat", (message) => {
   const currentPhase = getCurrentGoldorPhase();
@@ -43,8 +45,11 @@ registerWhen(register("chat", (message) => {
     if (playerMatched === Player.getName()) return;
     
     let progress = melodyMatch[2];
-    if (parseInt(progress) >= 25) {
-      progress = Math.floor(parseInt(progress) / 25) + "/4";
+    if (progress.includes("%")) {
+      const percentage = parseInt(progress);
+      if (!isNaN(percentage) && percentage >= 25) {
+        progress = Math.floor(percentage / 25) + "/4";
+      }
     }
     
     if (progress > furthestAlongMelody || furthestAlongMelody === 0) {
@@ -56,24 +61,25 @@ registerWhen(register("chat", (message) => {
     return;
   }
 
-  const terminalMatch = message.match(/^(\w+) activated a terminal! \(\d\/\d\)$/);
-  if (terminalMatch && playersStackingMelody.includes(terminalMatch[1])) {
-    const index = playersStackingMelody.indexOf(terminalMatch[1]);
-    if (index > -1) {
-      playersStackingMelody.splice(index, 1);
-    }
+  const terminalMatch = message.match(/^(\w+) activated a terminal! \(\d+\/\d+\)$/);
+  if (terminalMatch) {
+    const completedPlayer = terminalMatch[1];
     
-    if (terminalMatch[1] === playerName) {
-      resetMelody();
-    }
+    const index = playersStackingMelody.indexOf(completedPlayer);
+    if (index > -1) playersStackingMelody.splice(index, 1);
+    if (completedPlayer === playerName) resetMelody();
   }
 }).setCriteria("${message}"), () => config.melodyWarning);
 
 registerWhen(register("renderOverlay", () => {
   const currentPhase = getCurrentGoldorPhase();
-  if (!melodyProgress || currentPhase < 0 || currentPhase > 5 || HudManager.isEditing) return;
   
-  const displayMessage = `&c${playerName} has Melody! ${melodyProgress}`;
+  if (!melodyProgress || currentPhase < 1 || currentPhase > 4 || HudManager.isEditing) return;
+  
+  const playerClass = Dungeon.classes[playerName];
+  if (!playerClass) return;
+  
+  const displayMessage = getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &ehas Melody! ${melodyProgress}`;
   melodyWarningHud.draw(displayMessage);
 }), () => config.melodyWarning);
 
