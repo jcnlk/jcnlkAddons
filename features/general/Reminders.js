@@ -1,5 +1,6 @@
-import { showChatMessage, showTitleV2 } from "../../utils/Utils";
+import { Render2D } from "../../../tska/rendering/Render2D";
 import { timeToMS } from "../../../BloomCore/utils/Utils";
+import { showChatMessage, } from "../../utils/Utils";
 import { data } from "../../utils/Data";
 
 const reminders = new Map();
@@ -34,8 +35,6 @@ function loadReminders() {
     reminders.set(item.name, { triggerTime: item.triggerTime });
     return true;
   });
-  
-  data.save();
 }
 
 register("gameLoad", loadReminders);
@@ -104,5 +103,7 @@ export function listReminders() {
       index: idx + 1
     }));
 }
-
-const showReminderPopup = (name) => showTitleV2(`&cReminder: ${name}`, 5000, 0.5, -20, 4, () => World.playSound("random.orb", 1, 1));
+function showReminderPopup(name) { 
+  Render2D.showTitle(`&cReminder: ${name}`, null, 5000);
+  World.playSound("random.orb", 1, 1);
+}

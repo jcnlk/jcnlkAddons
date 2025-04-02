@@ -1,5 +1,6 @@
-import { playSound, registerWhen, showTitleV2 } from "../../utils/Utils";
 import { getSkyblockItemID } from "../../../BloomCore/utils/Utils";
+import { Render2D } from "../../../tska/rendering/Render2D";
+import { playSound, registerWhen } from "../../utils/Utils";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config";
 
@@ -12,8 +13,8 @@ registerWhen(register("chat", () => {
   const helmetId = getSkyblockItemID(Player.armor.getHelmet());
 
   if (helmetId.includes("BONZO_MASK") || helmetId.includes("SPIRIT_MASK") ) return;
-  showTitleV2(`&c⚠ MASK NOT EQUIPPED! ⚠`, 3000);
-  playSound("random.orb", 1, 1);
+  Render2D.showTitle(`&c⚠ MASK NOT EQUIPPED! ⚠`, null, 3000);
+  playSound("random.orb", 1, 1); 
   reminderShown = true;
 }).setCriteria("[BOSS] Storm: I should have known that I stood no chance."), () => config.MaskReminder);
 

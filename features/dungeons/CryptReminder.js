@@ -1,4 +1,5 @@
-import { showChatMessage, registerWhen, showTitleV2 } from "../../utils/Utils";
+import { showChatMessage, registerWhen } from "../../utils/Utils";
+import { Render2D } from "../../../tska/rendering/Render2D";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config";
 
@@ -24,7 +25,10 @@ registerWhen(register("step", () => {
     showChatMessage(`Announcing -> Crypt Reminder`);
   }
   
-  if (config.cryptReminderPopup) showTitleV2(`&cNeed ${cryptsNeeded} more crypts!`, 5000, 0.5, -20, 4, World.playSound("random.orb", 0.5, 1));
+  if (config.cryptReminderPopup) {
+    Render2D.showTitle(`&cNeed ${cryptsNeeded} more crypts!`, null, 5000);
+    World.playSound("random.orb", 1, 1);
+  }
   
   reminderSent = true;
 }).setFps(1), () => config.cryptReminder);

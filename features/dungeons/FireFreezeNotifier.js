@@ -1,5 +1,6 @@
-import { registerWhen, showTitleV2 } from "../../utils/Utils";
+import { Render2D } from "../../../tska/rendering/Render2D";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import { registerWhen } from "../../utils/Utils";
 import config from "../../config";
 
 registerWhen(register("chat", (key) => {
@@ -8,14 +9,14 @@ registerWhen(register("chat", (key) => {
 
   new Thread(() => {
     Thread.sleep(1000);
-    showTitleV2(`&cIn 4 sec`, 3000, 0.5, -20, 4, null, `&eGet Ready!`);
+    Render2D.showTitle(`&cIn 4 sec`, `&eGet Ready!`, 3000);
 
     World.playSound("random.burp", 2, 1);
     Thread.sleep(4000);
     World.playSound("random.burp", 2, 1);
     Thread.sleep(4000);
 
-    showTitleV2(`&4NOW!`, 1000, 0.5, -20, 4, null, `&eUSE THE Fire Freeze Staff`);
+    Render2D.showTitle(`&4NOW!`, `&eUSE THE Fire Freeze Staff`, 1000)
     World.playSound("random.anvil_land", 2, 1);
   }).start();
 }).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?"), () => config.FireFreezeNotifier);
