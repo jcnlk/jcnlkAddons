@@ -12,7 +12,7 @@ let melodyProgress = "";
 let furthestAlongMelody = 0;
 let lastPhase = 0;
 
-const melodyWarningHud = new Hud("melodyWarningHud", "&cPlayer has Melody! 3/4", HudManager, data);
+const melodyWarningHud = new Hud("melodyWarningHud", "&cPlayer (B) has Melody! 3/4", HudManager, data);
 
 function resetMelody() {
   playersStackingMelody.length = 0;
