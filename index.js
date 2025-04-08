@@ -23,12 +23,11 @@ import "./features/dungeons/HidePlayerOnLeap";
 import "./features/dungeons/CryptReminder";
 import "./features/dungeons/LeapAnnounce";
 import "./features/floor7/MelodyWarning";
-import "./features/dungeons/QuizTimer";
-
-// Floor 7
 import "./features/floor7/MaskReminder";
+import "./features/dungeons/QuizTimer";
 import "./features/floor7/MaskTimer";
 import "./features/floor7/PosTitles";
+import "./features/floor7/CoreTimes";
 import "./features/floor7/Posmsg";
 
 // Ja command
@@ -36,7 +35,10 @@ const commandHandler = new CommandHandler("jcnlkAddons")
   .setTitleFormat(`${PREFIX} &eCommands:`)
   .setCommandFormat("&8• &a/ja ${name} &7- &e${description}")
   .setAliasFormat("") // Empty alias format cuz we don't want to spam the chat
-  .setName("ja", () => config.openGUI());
+  .setName("ja", (args) => {
+    if (args !== undefined) return;
+    config.openGUI();
+  });
 
 commandHandler
   .pushWithAlias("hud", ["edit"], "Open the HUDs editor", () => HudManager.openGui())
@@ -44,10 +46,7 @@ commandHandler
 
 // Reminder subcommand
 commandHandler.push("reminder", "Manage reminders", (action, ...args) => {
-  if (!config.enableReminders) {
-    showChatMessage("Reminders are currently disabled in the settings.", "error");
-    return;
-  }
+  if (!config.enableReminders) return;
   
   if (!action) {
     showChatMessage("Usage: /ja reminder [add|list|remove] [name] [time]");
@@ -121,8 +120,6 @@ commandHandler.push("reminder", "Manage reminders", (action, ...args) => {
 
 // Emote subcommand
 commandHandler.pushWithAlias("emotes", ["emote"], "Manage custom emotes", (action, ...args) => {
-  if (!action) action = "list";
-  
   switch (action.toLowerCase()) {
     case "list":
       const emotes = Object.keys(data.customEmotes);

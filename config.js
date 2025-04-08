@@ -1,3 +1,4 @@
+import { configHeader } from "./utils/Utils";
 import { 
     @Vigilant, 
     @SwitchProperty, 
@@ -5,10 +6,6 @@ import {
     @SliderProperty, 
     @ButtonProperty, 
     @SelectorProperty } from "Vigilance";
-
-const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
-const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
-const configHeader = `&8[&6jcnlkAddons&8] &ev${moduleVersion} \nMade by ${moduleAuthor}`;
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
@@ -217,6 +214,22 @@ class Config {
         subcategory: "General"
     })
     togglePosTitles = false;
+
+    @SwitchProperty({
+        name: "Core Entrance Tracker",
+        description: "Track and announce when players enter the core area in F7/M7.",
+        category: "F7/M7",
+        subcategory: "Core Tracker"
+    })
+    coreTracker = false;
+    
+    @SwitchProperty({
+        name: "Only Announce at End",
+        description: "Only announce core entry data when the phase ends.",
+        category: "F7/M7", 
+        subcategory: "Core Tracker"
+    })
+    coreAnnounceAtEnd = true;
 
     ////////// HUD Settings //////////
     @ButtonProperty({

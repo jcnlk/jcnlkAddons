@@ -47,9 +47,7 @@ registerWhen(register("chat", (message) => {
     let progress = melodyMatch[2];
     if (progress.includes("%")) {
       const percentage = parseInt(progress);
-      if (!isNaN(percentage) && percentage >= 25) {
-        progress = Math.floor(percentage / 25) + "/4";
-      }
+      if (!isNaN(percentage) && percentage >= 25) progress = Math.floor(percentage / 25) + "/4";
     }
     
     if (progress > furthestAlongMelody || furthestAlongMelody === 0) {
