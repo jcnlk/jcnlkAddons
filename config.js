@@ -177,12 +177,28 @@ class Config {
     ////////// F7/M7 Settings //////////
     @SwitchProperty({
         name: "Core Times",
-        description: "Track the time players needed to enter core",
+        description: "Track the time players needed to enter core.",
         category: "F7/M7",
-        subcategory: "General"
+        subcategory: "Core"
     })
-    coreTimes= false;
+    coreTimes = false;
     
+    @SwitchProperty({
+        name: "Announce Core Times To Party",
+        description: "Announce the core times in party chat.",
+        category: "F7/M7",
+        subcategory: "Core"
+    })
+    coreTimesAnnounce = false;
+    
+    @SwitchProperty({
+        name: "Show Core Times in Chat",
+        description: "Shows the core times in your chat.",
+        category: "F7/M7",
+        subcategory: "Core"
+    })
+    coreTimesChat = false;
+
     @SwitchProperty({
         name: "Mask Timer",
         description: "Displays a HUD with Masks/Phoenix cooldowns.",
@@ -238,17 +254,17 @@ class Config {
     constructor() {
         this.initialize(this);
 
-        // Set category descriptions
         this.setCategoryDescription("General", `${configHeader}\n\n&7&oRelated Commands: /ja <emote, reminder, update, help>`);
         this.setCategoryDescription("Dungeons", `${configHeader}`);
         this.setCategoryDescription("F7/M7", `${configHeader}`);
         this.setCategoryDescription("HUD", `${configHeader}\n\n&7&oRelated Commands: /ja <hud>`);
 
-        // Add dependencies for Dungeons
         this.addDependency("Trigger Time", "Crypt Reminder");
         this.addDependency("Announce Crypts", "Crypt Reminder");
         this.addDependency("Missing Crypts Title", "Crypt Reminder");
         this.addDependency("Player Hide Duration", "Hide Players After Leap");
+        this.addDependency("Announce Core Times To Party", "Core Times");
+        this.addDependency("Show Core Times in Chat", "Core Times");
     }
 }
 
