@@ -2,18 +2,15 @@
 export const PREFIX = `&8[&6JA&8]`;
 export const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
 export const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
+export const configHeader = `&8[&6jcnlkAddons&8] &ev${moduleVersion} \nMade by ${moduleAuthor}`;
 
 // Chat Message Stuff
 const messageColors = { info: `&e`, success: `&a`, error: `&c`, warning: `&6` };
 
-function makeChatMessage(message, status = "info", isDebug = false) {
-  const prefix = isDebug ? DEBUG_PREFIX : PREFIX;
+export const showChatMessage = (message, status = "info") => { 
   const color = messageColors[status] || messageColors.info;
-
-  ChatLib.chat(`${prefix} ${color}${message}`);
+  ChatLib.chat(`${PREFIX} ${color}${message}`);
 }
-
-export const showChatMessage = (message, status = "info") => makeChatMessage(message, status, false);
 
 // Alternative to World.playSound()
 export const playSound = (soundName, volume, pitch) => new net.minecraft.network.play.server.S29PacketSoundEffect(soundName, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection());
@@ -43,7 +40,7 @@ export const setRegisters = () => {
   });
 };
 
-register("gameLoad", () => setRegisters()); // idk if i need this one but whatever
+register("gameLoad", () => setRegisters());
 
 register("guiClosed", (gui) => {
   if (gui instanceof SettingsGui) setRegisters();
