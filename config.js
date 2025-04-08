@@ -176,6 +176,14 @@ class Config {
 
     ////////// F7/M7 Settings //////////
     @SwitchProperty({
+        name: "Core Times",
+        description: "Track the time players needed to enter core",
+        category: "F7/M7",
+        subcategory: "General"
+    })
+    coreTimes= false;
+    
+    @SwitchProperty({
         name: "Mask Timer",
         description: "Displays a HUD with Masks/Phoenix cooldowns.",
         category: "F7/M7",
@@ -214,22 +222,6 @@ class Config {
         subcategory: "General"
     })
     togglePosTitles = false;
-
-    @SwitchProperty({
-        name: "Core Entrance Tracker",
-        description: "Track and announce when players enter the core area in F7/M7.",
-        category: "F7/M7",
-        subcategory: "Core Tracker"
-    })
-    coreTracker = false;
-    
-    @SwitchProperty({
-        name: "Only Announce at End",
-        description: "Only announce core entry data when the phase ends.",
-        category: "F7/M7", 
-        subcategory: "Core Tracker"
-    })
-    coreAnnounceAtEnd = true;
 
     ////////// HUD Settings //////////
     @ButtonProperty({
