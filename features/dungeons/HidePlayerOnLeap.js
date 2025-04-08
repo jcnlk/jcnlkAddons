@@ -14,9 +14,8 @@ registerWhen(register("renderEntity", (entity, pos, partialTicks, event) => {
   const player = World.getPlayerByName(entity.getName());
   if (!player || player.getPing() !== 1) return;
     
-  if (Date.now() < hidePlayersUntil) {
-    cancel(event);
-  } else if (hidePlayersUntil > 0) {
+  if (Date.now() < hidePlayersUntil) cancel(event);
+  if (hidePlayersUntil > 0) {
     showChatMessage("Showing Players");
     hidePlayersUntil = 0;
   }

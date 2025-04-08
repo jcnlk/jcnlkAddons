@@ -57,9 +57,7 @@ function createChestItem(item, slot) {
   let name = rawName;
   if (itemID.startsWith("ENCHANTMENT")) {
     const lore = item.getLore();
-    if (lore && lore.length >= 2) {
-      name = lore[1];
-    }
+    if (lore && lore.length >= 2) name = lore[1];
   }
 
   let value = 0;
@@ -68,12 +66,9 @@ function createChestItem(item, slot) {
     if (sellInfo) {
       let [price, source] = sellInfo;
       value = price * quantity;
-      if (item.getRegistryName() === "minecraft:enchanted_book") {
-        value = PriceUtils.getBookPriceWhenCrafted(item);
-      }
-      if (source === PriceUtils.locations.AUCTION) {
-        value = PriceUtils.getBINPriceAfterTax(value);
-      } else {
+      if (item.getRegistryName() === "minecraft:enchanted_book") value = PriceUtils.getBookPriceWhenCrafted(item);
+      if (source === PriceUtils.locations.AUCTION) value = PriceUtils.getBINPriceAfterTax(value);
+      else {
         const TAX_RATE = 0.0125;
         value *= (1 - TAX_RATE);
       }
@@ -107,17 +102,13 @@ function updateChest() {
   if (lore && lore.length >= 7) {
     const costLine = lore[7].removeFormatting();
     const costMatch = costLine.match(/^([\d,]+) Coins$/);
-    if (costMatch) {
-      chest.cost = parseInt(costMatch[1].replace(/,/g, ""), 10);
-    }
+    if (costMatch) chest.cost = parseInt(costMatch[1].replace(/,/g, ""), 10);
   }
 
   const lootItems = [];
   for (let i = 9; i < 18; i++) {
     const stack = container.getStackInSlot(i);
-    if (stack && stack.getID() !== 160) {
-      lootItems.push({ slot: i, item: stack });
-    }
+    if (stack && stack.getID() !== 160) lootItems.push({ slot: i, item: stack });
   }
 
   chest.items = lootItems.map(({ slot, item }) => createChestItem(item, slot));
@@ -135,15 +126,10 @@ function renderChest() {
 
   const gui = Client.currentGui.get();
   currentChest.items.forEach(item => {
-    if (alwaysBuy.has(item.itemID)) {
-      highlightSlot(gui, item.slot, 0, 1, 0, 0.5, true);
-    } else if (item.profit < LOW_PROFIT_THRESHOLD) {
-      highlightSlot(gui, item.slot, 1, 0, 0, 0.5, true);
-    } else if (item.profit < MEDIUM_PROFIT_THRESHOLD) {
-      highlightSlot(gui, item.slot, 1, 1, 0, 0.5, true);
-    } else {
-      highlightSlot(gui, item.slot, 0, 1, 0, 0.5, true);
-    }
+    if (alwaysBuy.has(item.itemID)) highlightSlot(gui, item.slot, 0, 1, 0, 0.5, true);
+    if (item.profit < LOW_PROFIT_THRESHOLD) highlightSlot(gui, item.slot, 1, 0, 0, 0.5, true);
+    if (item.profit < MEDIUM_PROFIT_THRESHOLD) highlightSlot(gui, item.slot, 1, 1, 0, 0.5, true);
+    else highlightSlot(gui, item.slot, 0, 1, 0, 0.5, true);
   });
 }
 

@@ -20,13 +20,9 @@ Dungeon.registerWhenInDungeon(register("renderOverlay", () => {
 
   const fraction = remaining / timerDuration;
   let color;
-  if (fraction > 0.5) {
-    color = `&c`;
-  } else if (fraction > 0.25) {
-    color = `&e`;
-  } else {
-    color = `&a`;
-  }
+  if (fraction > 0.5) color = `&c`;
+  if (fraction > 0.25) color = `&e`;
+  else color = `&a`;
 
   quizTimerHud.draw(`${color}${formattedTime}s`);
 }));

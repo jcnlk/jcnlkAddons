@@ -8,11 +8,11 @@ import {
 
 const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
 const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
-const configHeader = `&8[&6jcnlkAddons&8] &ev${moduleVersion} \nMade by ${moduleAuthor}`
+const configHeader = `&8[&6jcnlkAddons&8] &ev${moduleVersion} \nMade by ${moduleAuthor}`;
 
 @Vigilant("jcnlkAddons", "jcnlkAddons", {
     getCategoryComparator: () => (a, b) => {
-        const order = ["General", "Dungeons", "F7/M7", "Commands", "HUD"];
+        const order = ["General", "Dungeons", "F7/M7", "HUD"];
         return order.indexOf(a.name) - order.indexOf(b.name);
     }
 })
@@ -218,31 +218,6 @@ class Config {
     })
     togglePosTitles = false;
 
-    //////////// Commands Settings //////////
-    @SwitchProperty({
-        name: "Enable DM Commands",
-        description: "Enable or disable all Direct Message commands.",
-        category: "Commands",
-        subcategory: "DM Commands"
-    })
-    enableDmCommands = false;
-
-    @SwitchProperty({
-        name: "Invite Command (DMs) &3!p&r",
-        description: "Enable the party invite command in direct messages.",
-        category: "Commands",
-        subcategory: "DM Commands"
-    })
-    partyCommand = true;
-
-    @SwitchProperty({
-        name: "Kick Command (DMs) &3!kick&r",
-        description: "Enable the party kick command in direct messages.",
-        category: "Commands",
-        subcategory: "DM Commands"
-    })
-    kickCommand = true;
-
     ////////// HUD Settings //////////
     @ButtonProperty({
         name: "Edit HUD Positions",
@@ -262,7 +237,6 @@ class Config {
         this.setCategoryDescription("General", `${configHeader}\n\n&7&oRelated Commands: /ja <emote, reminder, update, help>`);
         this.setCategoryDescription("Dungeons", `${configHeader}`);
         this.setCategoryDescription("F7/M7", `${configHeader}`);
-        this.setCategoryDescription("Commands", `${configHeader}`);
         this.setCategoryDescription("HUD", `${configHeader}\n\n&7&oRelated Commands: /ja <hud>`);
 
         // Add dependencies for Dungeons
@@ -270,10 +244,6 @@ class Config {
         this.addDependency("Announce Crypts", "Crypt Reminder");
         this.addDependency("Missing Crypts Title", "Crypt Reminder");
         this.addDependency("Player Hide Duration", "Hide Players After Leap");
-    
-        // Add dependencies for DM Commands
-        this.addDependency("Invite Command (DMs) &3!p&r", "Enable DM Commands");
-        this.addDependency("Kick Command (DMs) &3!kick&r", "Enable DM Commands");
     }
 }
 

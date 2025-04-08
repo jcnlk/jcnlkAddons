@@ -31,28 +31,16 @@ import "./features/floor7/MaskTimer";
 import "./features/floor7/PosTitles";
 import "./features/floor7/Posmsg";
 
-// Commands
-import "./features/commands/DmCommands";
-
 // Ja command
 const commandHandler = new CommandHandler("jcnlkAddons")
   .setTitleFormat(`${PREFIX} &eCommands:`)
   .setCommandFormat("&8• &a/ja ${name} &7- &e${description}")
   .setAliasFormat("") // Empty alias format cuz we don't want to spam the chat
-  .setName("ja", (args) => {
-    if (args === undefined || args.length === 0) {
-      config.openGUI();
-      return 1;
-    }
-  });
+  .setName("ja", () => config.openGUI());
 
 commandHandler
-  .pushWithAlias("hud", ["edit"], "Open the HUDs editor", () => {
-    HudManager.openGui();
-  })
-  .push("update", "Check for updates", () => {
-    checkForUpdate();
-  });
+  .pushWithAlias("hud", ["edit"], "Open the HUDs editor", () => HudManager.openGui())
+  .push("update", "Check for updates", () => checkForUpdate());
 
 // Reminder subcommand
 commandHandler.push("reminder", "Manage reminders", (action, ...args) => {
@@ -104,9 +92,7 @@ commandHandler.push("reminder", "Manage reminders", (action, ...args) => {
         reminderList.forEach(reminder => {
           showChatMessage(`${reminder.index}. ${reminder.name} - Time left: ${convertToTimeString(reminder.timeLeft).replace(/\.\d+s/, 's')}`);
         });
-      } else {
-        showChatMessage("No active reminders");
-      }
+      } else showChatMessage("No active reminders");
       break;
       
     case "remove":
@@ -164,7 +150,6 @@ commandHandler.pushWithAlias("emotes", ["emote"], "Manage custom emotes", (actio
       }
       
       data.customEmotes[emoteName] = emote;
-      data.save();
       showChatMessage(`Added: ${emoteName} -> ${emote}`);
       break;
       
@@ -182,7 +167,6 @@ commandHandler.pushWithAlias("emotes", ["emote"], "Manage custom emotes", (actio
       }
       
       delete data.customEmotes[name];
-      data.save();
       showChatMessage(`Removed: ${name}`);
       break;
       
@@ -205,11 +189,9 @@ function checkForUpdate() {
         new TextComponent(`${PREFIX} &a[Click here to go to the Github release page!]`)
           .setClick("open_url", "https://github.com/jcnlk/jcnlkAddons/releases/latest")
           .chat();
-      } else if (moduleVersion === remoteVersion) {
-        showChatMessage("You are currently using the newest version!");
-      } else {
-        showChatMessage("You are currently using the dev version!");
-      }
+      } 
+      if (moduleVersion === remoteVersion) showChatMessage("You are currently using the newest version!");
+      else showChatMessage("You are currently using the dev version!");
     })
     .catch(error => {
       showChatMessage("Failed to check for update!");
