@@ -60,13 +60,12 @@ registerWhen(register("chat", (message) => {
   }
 
   const terminalMatch = message.match(/^(\w+) activated a terminal! \(\d+\/\d+\)$/);
-  if (terminalMatch) {
-    const completedPlayer = terminalMatch[1];
+  if (!terminalMatch) return;
+  const completedPlayer = terminalMatch[1];
     
-    const index = playersStackingMelody.indexOf(completedPlayer);
-    if (index > -1) playersStackingMelody.splice(index, 1);
-    if (completedPlayer === playerName) resetMelody();
-  }
+  const index = playersStackingMelody.indexOf(completedPlayer);
+  if (index > -1) playersStackingMelody.splice(index, 1);
+  if (completedPlayer === playerName) resetMelody();
 }).setCriteria("${message}"), () => config.melodyWarning);
 
 registerWhen(register("renderOverlay", () => {

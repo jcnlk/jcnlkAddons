@@ -5,14 +5,11 @@ import { data } from "../../utils/Data";
 
 const reminders = new Map();
 
-if (!Array.isArray(data.reminders)) data.reminders = [];
-
 function saveReminders() {
   data.reminders = Array.from(reminders.entries()).map(([name, reminder]) => ({
     name,
     triggerTime: reminder.triggerTime,
   }));
-  data.save();
 }
 
 function loadReminders() {
@@ -82,7 +79,7 @@ export function removeReminder(identifier) {
       saveReminders();
       return true;
     }
-  } else if (reminders.has(identifier)) {
+  } if (reminders.has(identifier)) {
     reminders.delete(identifier);
     saveReminders();
     return true;

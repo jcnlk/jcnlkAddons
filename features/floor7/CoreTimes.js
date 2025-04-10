@@ -58,8 +58,6 @@ function announceCore() {
 }
 
 registerWhen(register("chat", () => {
-  if (!World.isLoaded()) return;
-
   resetTracker();
   coreEntranceOpenTime = Date.now();
 }).setCriteria("The Core entrance is opening!"), () => config.coreTimes);

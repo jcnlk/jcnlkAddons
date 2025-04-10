@@ -7,12 +7,11 @@ import config from "../../config";
 let reminderShown = false;
 
 registerWhen(register("chat", () => {
-  if (!World.isLoaded()) return;
   if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7") return;
   if (reminderShown) return;
   const helmetId = getSkyblockItemID(Player.armor.getHelmet());
 
-  if (helmetId.includes("BONZO_MASK") || helmetId.includes("SPIRIT_MASK") ) return;
+  if (helmetId.includes("BONZO_MASK") || helmetId.includes("SPIRIT_MASK")) return;
   Render2D.showTitle(`&c⚠ MASK NOT EQUIPPED! ⚠`, null, 3000);
   playSound("random.orb", 1, 1); 
   reminderShown = true;

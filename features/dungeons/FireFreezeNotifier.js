@@ -9,7 +9,7 @@ const fireFreezeTHud = new Hud("fireFreezeHud", "&bFire Freeze: &c8.0s", HudMana
 let timerEndTime = 0;
 
 registerWhen(register("chat", () => {
-  if (!World.isLoaded() || Dungeon.inDungeon !== "M3") return;
+  if (Dungeon.inDungeon !== "M3") return;
   
   timerEndTime = Date.now() + 8000;
   World.playSound("random.burp", 2, 1);
