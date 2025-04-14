@@ -26,14 +26,10 @@
 - **Mask Timer** – Tracks the cooldown of masks/phoenix.
 - **Mask Reminder** – Reminds to equip a mask before P3 starts.
 - **Melody Warning** - Displays a warning when a player has Melody terminal in Goldor phase.
+- **Core Times** - Tracks the time players need to enter core.
 - **Position Features**
   - **Positional Titles** – Displays a title for specific positions (At P2, At SS, EE2, EE3, At Core, Inside Goldor Tunnel, At Mid, At i4 Entry, At P5).
   - **Positional Messages** – Announces your location at specific positions (At P2, At SS, EE2, EE3, At Core, Inside Goldor Tunnel, At Mid, At i4 Entry, At P5).
-
-
-### ⚡ Commands
-- **!invite (DMs)** – Sends an invite via DM.
-- **!kick (DMs)** – Kicks a player via DM.
 
 ## ⚙️ Commands
 
