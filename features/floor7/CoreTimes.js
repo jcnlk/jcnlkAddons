@@ -39,7 +39,7 @@ function showTimesInChat() {
   if (playersInCore.size === 0) return;
   
   getPlayerCoreTimes().forEach(({ playerName, timeToEnter }) => {
-    showChatMessage(`&7${playerName} has entered core in &b${timeToEnter}s`);
+    showChatMessage(`&b${playerName} &bhas entered core in &b${timeToEnter}s`);
   });
 }
 

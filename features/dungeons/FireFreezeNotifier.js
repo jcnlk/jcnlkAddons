@@ -5,30 +5,29 @@ import { data } from "../../utils/Data";
 import { Hud } from "../../utils/Hud";
 import config from "../../config";
 
-const fireFreezeTHud = new Hud("fireFreezeHud", "&bFire Freeze: &c8.0s", HudManager, data);
-let timerEndTime = 0;
+const fireFreezeHud = new Hud("fireFreezeHud", "&bFire Freeze: &c4.0s", HudManager, data);
+let timerStart = 0;
 
 registerWhen(register("chat", () => {
-  if (Dungeon.inDungeon !== "M3") return;
+  if (Dungeon.floor !== "M3") return;
   
-  timerEndTime = Date.now() + 8000;
-  World.playSound("random.burp", 2, 1);
+  timerStart = Date.now();
   
-  setTimeout(() => World.playSound("random.burp", 2, 1), 4000);
-  setTimeout(() => World.playSound("random.anvil_land", 2, 1), 8000);
+  setTimeout(() => World.playSound("random.burp", 2, 1), 1000);
+  setTimeout(() => World.playSound("random.anvil_land", 2, 1), 5000);
 }).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?"), () => config.FireFreezeNotifier);
 
 registerWhen(register("renderOverlay", () => {
-  if (!World.isLoaded() || HudManager.isEditing) return;
+  if (!World.isLoaded() || HudManager.isEditing || timerStart === 0) return;
   
-  const now = Date.now();
-  const remaining = (timerEndTime - now) / 1000;
+  const elapsed = (Date.now() - timerStart) / 1000;
   
-  if (remaining <= 0 && remaining > -2) fireFreezeTHud.draw("&bFire Freeze: &aNOW!");
-  if (remaining > 0) {
-    const color = remaining > 6 ? "&c" : remaining > 4 ? "&6" : remaining > 2 ? "&e" : "&a";
-    fireFreezeTHud.draw(`&bFire Freeze: ${color}${remaining.toFixed(1)}s`);
-  }
+  if (elapsed > 1 && elapsed < 5) {
+    const remaining = 5 - elapsed;
+    const color = remaining > 3.35 ? "&c" : remaining > 1.7 ? "&6" : "&e";
+    fireFreezeHud.draw(`&bFire Freeze: ${color}In ${remaining.toFixed(1)}s`);
+  } 
+  if (elapsed >= 5 && elapsed < 6.5) fireFreezeHud.draw("&bFire Freeze: &aNOW!");
 }), () => config.FireFreezeNotifier);
 
-register("worldUnload", () => timerEndTime = 0);
+register("worldUnload", () => timerStart = 0);
