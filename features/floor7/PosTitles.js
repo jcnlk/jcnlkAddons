@@ -37,18 +37,14 @@ function playSound() {
 
 function showAlert(playerName, playerClass, text) {
   showChatMessage(getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`);
-  
   currentHudMessage = getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &e${text}`;
-  
   if (hudDisplayTimeout) clearTimeout(hudDisplayTimeout);
-  
   playSound();
-  
   hudDisplayTimeout = setTimeout(() => currentHudMessage = "", 2000);
 }
 
 registerWhen(register("tick", () => {
-  if (!World.isLoaded() || !Dungeon.inDungeon) return;
+  if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7") return;
   
   World.getAllPlayers().forEach(entity => {
     if (Dungeon.bossEntry === null) return;
@@ -91,7 +87,6 @@ registerWhen(register("chat", (player, message) => {
 
 registerWhen(register("renderOverlay", () => {
   if (!currentHudMessage || HudManager.isEditing) return;
-  
   posTitlesHud.draw(currentHudMessage);
 }), () => config.togglePosTitles);
 

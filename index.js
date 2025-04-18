@@ -34,11 +34,9 @@ import "./features/floor7/Posmsg";
 const commandHandler = new CommandHandler("jcnlkAddons")
   .setTitleFormat(`${PREFIX} &eCommands:`)
   .setCommandFormat("&8• &a/ja ${name} &7- &e${description}")
-  .setAliasFormat("") // Empty alias format cuz we don't want to spam the chat
-  .setName("ja", (args) => {
-    if (args !== undefined) return;
-    config.openGUI();
-  });
+  .setAliasFormat("")
+  .setName("ja", (args) => {if (args === undefined) config.openGUI()})
+  .setAlias("jcnlkAddons");
 
 commandHandler
   .pushWithAlias("hud", ["edit"], "Open the HUDs editor", () => HudManager.openGui())
