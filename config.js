@@ -124,6 +124,14 @@ class Config {
     dungeonChestHighlighting = false;
 
     @SwitchProperty({
+        name: "Auto Open Potionbag On Start",
+        description: "Auto opens potionbag on dungeon start. ",
+        category: "Dungeons",
+        subcategory: "General"
+    })
+    autoOpenPotionbag = false;
+
+    @SwitchProperty({
         name: "Fire Freeze Notification",
         description: "Shows a notification for when to use Fire Freeze Staff in M3.",
         category: "Dungeons",
