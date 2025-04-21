@@ -19,6 +19,7 @@ import "./features/general/MessageHider";
 // Dungeons
 import "./features/dungeons/HighlightDungeonLoot";
 import "./features/dungeons/FireFreezeNotifier";
+import "./features/dungeons/AutoOpenPotionbag";
 import "./features/dungeons/HidePlayerOnLeap";
 import "./features/dungeons/CryptReminder";
 import "./features/dungeons/LeapAnnounce";
