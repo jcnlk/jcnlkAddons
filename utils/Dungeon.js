@@ -1,8 +1,6 @@
 import Dungeon from "../../BloomCore/dungeons/Dungeon";
 import { isPlayerInArea } from "./Utils";
 
-const BossStatus = Java.type("net.minecraft.entity.boss.BossStatus");
-
 export function getClassColor(playerClass) {
   if (playerClass === "Healer") return "&d";
   if (playerClass === "Tank") return "&a";
@@ -12,6 +10,7 @@ export function getClassColor(playerClass) {
 }
 
 export function getIsInBoss(boss) {
+  const BossStatus = Java.type("net.minecraft.entity.boss.BossStatus");
   const bossName = BossStatus.field_82827_c;
   if (!bossName) return false;
   return bossName.removeFormatting().includes(boss);

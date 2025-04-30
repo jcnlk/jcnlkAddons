@@ -1,15 +1,13 @@
-import { showChatMessage, registerWhen } from "../../utils/Utils";
 import { Render2D } from "../../../tska/rendering/Render2D";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import { showChatMessage } from "../../utils/Utils";
 import config from "../../config";
 
 let reminderSent = false;
 
-registerWhen(register("step", () => {
-  if (!Dungeon.inDungeon) return;
-  if (!config.cryptReminderTime) return;
-  if (reminderSent) return;
-  
+Dungeon.registerWhenInDungeon(register("step", () => {
+  if (!config.cryptReminder || !config.cryptReminderTime || reminderSent) return;
+
   const cryptsFound = Dungeon.crypts;
   const dungeonTime = Dungeon.seconds;
   const reminderTime = config.cryptReminderTime;
@@ -31,6 +29,6 @@ registerWhen(register("step", () => {
   }
   
   reminderSent = true;
-}).setFps(1), () => config.cryptReminder);
+}).setFps(1));
 
 register("worldUnload", () => reminderSent = false);

@@ -7,8 +7,7 @@ import config from "../../config";
 let reminderShown = false;
 
 registerWhen(register("chat", () => {
-  if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7") return;
-  if (reminderShown) return;
+  if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7" || reminderShown) return;
   const helmetId = getSkyblockItemID(Player.armor.getHelmet());
 
   if (helmetId.includes("BONZO_MASK") || helmetId.includes("SPIRIT_MASK")) return;

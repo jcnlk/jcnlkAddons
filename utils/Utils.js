@@ -1,13 +1,13 @@
 // Basic Stuff
 export const PREFIX = `&8[&6JA&8]`;
-export const moduleVersion = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).version;
-export const moduleAuthor = JSON.parse(FileLib.read("jcnlkAddons", "metadata.json")).author;
+const metadata = FileLib.read("jcnlkAddons", "metadata.json");
+export const moduleVersion = JSON.parse(metadata).version;
+export const moduleAuthor = JSON.parse(metadata).author;
 export const configHeader = `&8[&6jcnlkAddons&8] &ev${moduleVersion} \nMade by ${moduleAuthor}`;
 
 // Chat Message Stuff
-const messageColors = { info: `&e`, success: `&a`, error: `&c`, warning: `&6` };
-
-export const showChatMessage = (message, status = "info") => { 
+export const showChatMessage = (message, status = "info") => {
+  const messageColors = { info: `&e`, success: `&a`, error: `&c`, warning: `&6` };
   const color = messageColors[status] || messageColors.info;
   ChatLib.chat(`${PREFIX} ${color}${message}`);
 }
@@ -16,7 +16,6 @@ export const showChatMessage = (message, status = "info") => {
 export const playSound = (soundName, volume, pitch) => new net.minecraft.network.play.server.S29PacketSoundEffect(soundName, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection());
 
 // Registering and unregistering of triggers
-const SettingsGui = Java.type("gg.essential.vigilance.gui.SettingsGui");
 const registers = [];
 
 export const registerWhen = (trigger, dependency) => {
@@ -41,10 +40,7 @@ export const setRegisters = () => {
 };
 
 register("gameLoad", () => setRegisters());
-
-register("guiClosed", (gui) => {
-  if (gui instanceof SettingsGui) setRegisters();
-});
+register("guiClosed", (gui) => { if (gui instanceof Java.type("gg.essential.vigilance.gui.SettingsGui")) setRegisters() });
 
 // Checks if a entity is in a specific area
 export function isPlayerInArea(x1, x2, y1, y2, z1, z2, entity = Player) {
@@ -52,11 +48,8 @@ export function isPlayerInArea(x1, x2, y1, y2, z1, z2, entity = Player) {
   const y = entity.getY();
   const z = entity.getZ();
   return (
-    x >= Math.min(x1, x2) &&
-    x <= Math.max(x1, x2) &&
-    y >= Math.min(y1, y2) &&
-    y <= Math.max(y1, y2) &&
-    z >= Math.min(z1, z2) &&
-    z <= Math.max(z1, z2)
+    x >= Math.min(x1, x2) && x <= Math.max(x1, x2) &&
+    y >= Math.min(y1, y2) && y <= Math.max(y1, y2) &&
+    z >= Math.min(z1, z2) && z <= Math.max(z1, z2)
   );
 }

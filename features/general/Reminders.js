@@ -100,6 +100,7 @@ export function listReminders() {
       index: idx + 1
     }));
 }
+
 function showReminderPopup(name) { 
   Render2D.showTitle(`&cReminder: ${name}`, null, 5000);
   World.playSound("random.orb", 1, 1);

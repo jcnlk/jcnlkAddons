@@ -3,6 +3,7 @@ import { timeToMS } from "../../../BloomCore/utils/Utils";
 import config from "../../config";
 
 let hidePlayersUntil = 0;
+
 function hideAllPlayers() {
   hidePlayersUntil = Date.now() + timeToMS(config.hidePlayerTime + "s");
   showChatMessage("Hiding Players");
