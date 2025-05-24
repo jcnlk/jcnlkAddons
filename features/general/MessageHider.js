@@ -121,6 +121,7 @@ hideGeneralMessages.forEach((msg) => {
 });
 
 hideDungeonMessages.forEach((msg) => {
+  if (!config.hideUselessMessages) return;
   Dungeon.registerWhenInDungeon(register("chat", (event) => cancel(event)).setCriteria(msg));
 });
 
