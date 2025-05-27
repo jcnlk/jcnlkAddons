@@ -80,11 +80,11 @@ export const positionDefinitions = [
     validMessages: ["at mid", "in mid"]
   },
   {
-    id: 'Ati4Entry',
-    messageText: 'At i4 Entry!',
+    id: 'AtPre4Entry',
+    messageText: 'At Pre4 Entry!',
     checkCondition: (playerClass) => getIsInBoss("Storm") && playerClass !== "Healer",
     checkPosition: (entity) => isPlayerInArea(91, 93, 129, 133, 44, 46, entity),
-    validMessages: ["i4 entry"]
+    validMessages: ["i4 entry", "pre4 entry"]
   },
   {
     id: 'AtP5',
