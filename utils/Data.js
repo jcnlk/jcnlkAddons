@@ -6,11 +6,6 @@ const defaultData = {
         y: 0.5,
         scale: 1.25
     },
-    quizTimerHud: {
-        x: 0.5,
-        y: 0.525,
-        scale: 0.85
-    },
     procHud: {
         x: 0.5,
         y: 0.35,

@@ -1,11 +1,11 @@
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import Dungeon from "../../../tska/skyblock/dungeon/Dungeon";
 import { showChatMessage } from "../../utils/Utils";
 import { registerWhen } from "../../utils/Utils";
 import config from "../../config";
 
 registerWhen(register("chat", (name, event) => {
   cancel(event); 
-  if (Dungeon.bossEntry === null) return;
+  if (!Dungeon.inBoss()) return;
   ChatLib.command(`pc Leaped to ${name}!`);
   showChatMessage(`Announcing -> Leaped to ${name}`); 
 }).setCriteria("You have teleported to ${name}!"), () => config.leapAnnounce);

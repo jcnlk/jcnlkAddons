@@ -89,16 +89,6 @@ class Config {
     })
     cryptReminder = false;
 
-    @SliderProperty({
-        name: "Trigger Time",
-        description: `Time in seconds to remind about missing crypts \n(0 to turn it &cOFF&r).`,
-        category: "Dungeons",
-        subcategory: "Crypt Reminder",
-        min: 0,
-        max: 120,
-    })
-    cryptReminderTime = 60;
-
     @SwitchProperty({
         name: "Announce Crypts",
         description: "Announce the amount of missing crypts in party chat.",
@@ -138,14 +128,6 @@ class Config {
         subcategory: "M3 Features"
     })
     FireFreezeNotifier = false;
-
-    @SwitchProperty({
-        name: "Quiz Timer",
-        description: "Show a timer indicating how long you need to wait before you can answer the quiz.",
-        category: "Dungeons",
-        subcategory: "Puzzles"
-    })
-    quizTimer = true;
 
     @SwitchProperty({
         name: "Leap Announce",
@@ -267,7 +249,6 @@ class Config {
         this.setCategoryDescription("F7/M7", `${configHeader}`);
         this.setCategoryDescription("HUD", `${configHeader}\n\n&7&oRelated Commands: /ja <hud>`);
 
-        this.addDependency("Trigger Time", "Crypt Reminder");
         this.addDependency("Announce Crypts", "Crypt Reminder");
         this.addDependency("Missing Crypts Title", "Crypt Reminder");
         this.addDependency("Player Hide Duration", "Hide Players After Leap");

@@ -1,4 +1,4 @@
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import Dungeon from "../../../tska/skyblock/dungeon/Dungeon";
 import { registerWhen } from "../../utils/Utils";
 import HudManager from "../../utils/Hud";
 import { data } from "../../utils/Data";
@@ -9,7 +9,7 @@ const fireFreezeHud = new Hud("fireFreezeHud", "&bFire Freeze: &c4.0s", HudManag
 let timerStart = 0;
 
 registerWhen(register("chat", () => {
-  if (Dungeon.floor !== "M3") return;
+  if (!Dungeon.inBoss()) return;
   
   timerStart = Date.now();
   
@@ -18,7 +18,7 @@ registerWhen(register("chat", () => {
 }).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?"), () => config.FireFreezeNotifier);
 
 registerWhen(register("renderOverlay", () => {
-  if (!World.isLoaded() || HudManager.isEditing || timerStart === 0) return;
+  if (!Dungeon.inBoss() || HudManager.isEditing || timerStart === 0) return;
   
   const elapsed = (Date.now() - timerStart) / 1000;
   

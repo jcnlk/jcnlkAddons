@@ -1,13 +1,7 @@
 import { showChatMessage, registerWhen } from "../../utils/Utils";
-import { timeToMS } from "../../../BloomCore/utils/Utils";
 import config from "../../config";
 
 let hidePlayersUntil = 0;
-
-function hideAllPlayers() {
-  hidePlayersUntil = Date.now() + timeToMS(config.hidePlayerTime + "s");
-  showChatMessage("Hiding Players");
-}
 
 registerWhen(register("renderEntity", (entity, pos, partialTicks, event) => {
   if (entity.getName() === Player.getName()) return;
@@ -22,5 +16,9 @@ registerWhen(register("renderEntity", (entity, pos, partialTicks, event) => {
   }
 }).setFilteredClass(Java.type("net.minecraft.entity.player.EntityPlayer")), () => config.enablePlayerHiding);
 
-registerWhen(register("chat", () => hideAllPlayers()).setCriteria("You have teleported to ${location}!"), () => config.enablePlayerHiding);
+registerWhen(register("chat", () => {
+  hidePlayersUntil = Date.now() + (config.hidePlayerTime * 1000);
+  showChatMessage("Hiding Players");
+}).setCriteria("You have teleported to ${location}!"), () => config.enablePlayerHiding);
+
 register("worldUnload", () => hidePlayersUntil = 0);

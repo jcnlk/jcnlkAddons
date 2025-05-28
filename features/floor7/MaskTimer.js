@@ -30,10 +30,7 @@ const timers = {};
 let procMessage = "";
 let procTimeout;
 
-const generateTimerPlaceholder = () => 
-  Object.values(masks).map(mask => `${mask.name}: &aREADY`).join("\n");
-
-const maskTimerHud = new Hud("maskTimerHud", generateTimerPlaceholder(), HudManager, data);
+const maskTimerHud = new Hud("maskTimerHud", Object.values(masks).map(mask => `${mask.name}: &aREADY`).join("\n"), HudManager, data);
 const procHud = new Hud("procHud", masks.bonzo.procText, HudManager, data);
 
 const setProcMessage = (message) => {

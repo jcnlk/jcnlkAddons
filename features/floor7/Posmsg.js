@@ -1,5 +1,5 @@
 import { registerWhen, showChatMessage } from "../../utils/Utils";
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import Dungeon from "../../../tska/skyblock/dungeon/Dungeon";
 import { positionDefinitions } from "../../utils/Dungeon";
 import config from "../../config";
 
@@ -16,17 +16,15 @@ const lastLocation = {
 };
 
 function sendMessage(message) {
-  setTimeout(() => ChatLib.command(`party chat ${message}`), 200);
+  setTimeout(() => ChatLib.command(`party chat ${message}`), 300);
   showChatMessage("Announcing -> " + message);
 }
 
 registerWhen(register("tick", () => {
-  if (!World.isLoaded() || Player.getPlayer().func_82150_aj()) return; // skip if player is invisible
-  const playerClass = Dungeon.classes[Player.getName()];
-  if (!playerClass) return; // not in dungeon
+  if (!Dungeon.inBoss() || Player.getPlayer().func_82150_aj()) return;
   positionDefinitions.forEach(position => {
     if (!lastLocation[position.id] && 
-        position.checkCondition(playerClass) && 
+        position.checkCondition(Dungeon.getCurrentClass()) && 
         position.checkPosition(Player)) {
       lastLocation[position.id] = true;
       sendMessage(position.messageText);

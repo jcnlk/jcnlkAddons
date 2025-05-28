@@ -1,34 +1,28 @@
+import Dungeon from "../../../tska/skyblock/dungeon/Dungeon";
 import { Render2D } from "../../../tska/rendering/Render2D";
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import { showChatMessage } from "../../utils/Utils";
 import config from "../../config";
 
 let reminderSent = false;
 
-Dungeon.registerWhenInDungeon(register("step", () => {
-  if (!config.cryptReminder || !config.cryptReminderTime || reminderSent) return;
+Dungeon.on270Score(() => {
+  if (!config.cryptReminder || reminderSent || Dungeon.inBoss()) return;
 
-  const cryptsFound = Dungeon.crypts;
-  const dungeonTime = Dungeon.seconds;
-  const reminderTime = config.cryptReminderTime;
-  
-  if (cryptsFound >= 5) return;
-  if (dungeonTime < reminderTime) return;
-  if (dungeonTime > reminderTime + 10) return;
- 
-  const cryptsNeeded = 5 - cryptsFound;
-  
-  if (config.cryptReminderAnnounce) {
-    ChatLib.command(`party chat Crypt Reminder: We need ${cryptsNeeded} more Crypts!`);
-    showChatMessage(`Announcing -> Crypt Reminder`);
-  }
-  
+  const cryptsNeeded = 5 - Dungeon.getCrypts();
+
+  if (cryptsNeeded <= 0) return;
+
   if (config.cryptReminderPopup) {
     Render2D.showTitle(`&cNeed ${cryptsNeeded} more crypts!`, null, 5000);
     World.playSound("random.orb", 1, 1);
   }
-  
+
+  if (config.cryptReminderAnnounce) {
+    setTimeout(() => ChatLib.command(`party chat Crypt Reminder: We need ${cryptsNeeded} more Crypts!`), 1000);
+    showChatMessage(`Announcing -> Crypt Reminder`);
+  }
+
   reminderSent = true;
-}).setFps(1));
+});
 
 register("worldUnload", () => reminderSent = false);
