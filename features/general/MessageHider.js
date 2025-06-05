@@ -1,4 +1,4 @@
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import Location from "../../../tska/skyblock/Location";
 import { registerWhen } from "../../utils/Utils";
 import config from "../../config";
 
@@ -121,12 +121,13 @@ hideGeneralMessages.forEach((msg) => {
 });
 
 hideDungeonMessages.forEach((msg) => {
-  if (!config.hideUselessMessages) return;
-  Dungeon.registerWhenInDungeon(register("chat", (event) => cancel(event)).setCriteria(msg));
+  registerWhen(register("chat", (event) => {
+    if (Location.inWorld("Catacombs")) cancel(event)
+  }).setCriteria(msg), () => config.hideUselessMessages);
 });
 
 registerWhen(register("chat", (event) => cancel(event)).setCriteria("UwUaddons »").setContains(), () => config.hideUwUAddons);
+
 registerWhen(register("chat", (player, event) => {
-  if (player.includes("[")) return;
-  cancel(event);
+  if (!player.includes("[")) cancel(event);
 }).setCriteria("${player} has invited you to join their party!\nYou have 60 seconds to accept. Click here to join!${*}"), () => config.hideNonRankInvites);

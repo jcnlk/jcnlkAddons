@@ -17,7 +17,7 @@ import "./features/general/CustomEmotes";
 import "./features/general/MessageHider";
 
 // Dungeons
-import "./features/dungeons/HighlightDungeonLoot";
+//import "./features/dungeons/HighlightDungeonLoot";
 import "./features/dungeons/FireFreezeNotifier";
 import "./features/dungeons/AutoOpenPotionbag";
 import "./features/dungeons/HidePlayerOnLeap";
@@ -26,7 +26,7 @@ import "./features/dungeons/LeapAnnounce";
 import "./features/floor7/MelodyWarning";
 import "./features/floor7/MaskReminder";
 import "./features/floor7/MaskTimer";
-import "./features/floor7/PosTitles";
+import "./features/floor7/Postitles";
 import "./features/floor7/CoreTimes";
 import "./features/floor7/Posmsg";
 

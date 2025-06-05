@@ -1,5 +1,6 @@
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import Dungeon from "../../../tska/skyblock/dungeon/Dungeon";
 import { registerWhen } from "../../utils/Utils";
+import { inFloor } from "../../utils/Dungeon";
 import HudManager from "../../utils/Hud";
 import { data } from "../../utils/Data";
 import { Hud } from "../../utils/Hud";
@@ -65,8 +66,7 @@ Object.entries(masks).forEach(([key, mask]) => {
 
 registerWhen(register("renderOverlay", () => {
   if (!World.isLoaded() || HudManager.isEditing) return;
-  if (Dungeon.inDungeon !== "F7" && Dungeon.inDungeon !== "M7") return;
-  if (Dungeon.bossEntry === null) return;
+  if (!Dungeon.inBoss() || (!inFloor("F7") && !inFloor("M7"))) return;
 
   const timerText = Object.entries(masks).map(([key, mask]) => {
     const time = timers[key] || 0;

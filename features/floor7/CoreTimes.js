@@ -1,6 +1,6 @@
 import { registerWhen, showChatMessage, isPlayerInArea } from "../../utils/Utils";
 import Dungeon from "../../../tska/skyblock/dungeon/Dungeon";
-import { getCurrentGoldorPhase } from "../../utils/Dungeon";
+import { inStage } from "../../utils/Dungeon";
 import config from "../../config";
 
 let coreEntranceOpenTime = 0;
@@ -64,7 +64,7 @@ registerWhen(register("chat", () => {
 }).setCriteria("The Core entrance is opening!"), () => config.coreTimes);
 
 registerWhen(register("tick", () => {
-  if (!Dungeon.inBoss() || !coreEntranceOpenTime || getCurrentGoldorPhase() !== 5) return;
+  if (!Dungeon.inBoss() || !coreEntranceOpenTime || !inStage(5)) return;
 
   World.getAllPlayers().forEach((entity) => {
     if (entity.getPing() !== 1 || entity.isInvisible() || playersInCore.has(entity.getName())) return;
@@ -77,4 +77,4 @@ registerWhen(register("tick", () => {
 }), () => config.coreTimes);
 
 registerWhen(register("chat", () => announceCore()).setCriteria("[BOSS] Goldor: Necron, forgive me."), () => config.coreTimes);
-register("worldUnload", resetTracker);
+register("worldUnload", resetTracker());

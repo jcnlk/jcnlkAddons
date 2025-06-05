@@ -1,9 +1,22 @@
 import { Render2D } from "../../../tska/rendering/Render2D";
-import { timeToMS } from "../../../BloomCore/utils/Utils";
 import { showChatMessage, } from "../../utils/Utils";
 import { data } from "../../utils/Data";
 
 const reminders = new Map();
+
+function parseTimeToMs(str) {
+  let totalMs = 0
+
+  const hourMatch = str.match(/(\d+)\s*h/)
+  const minuteMatch = str.match(/(\d+)\s*m/)
+  const secondMatch = str.match(/(\d+)\s*s/)
+
+  if (hourMatch) totalMs += parseInt(hourMatch[1]) * 3600 * 1000
+  if (minuteMatch) totalMs += parseInt(minuteMatch[1]) * 60 * 1000
+  if (secondMatch) totalMs += parseInt(secondMatch[1]) * 1000
+
+  return totalMs
+}
 
 function saveReminders() {
   data.reminders = Array.from(reminders.entries()).map(([name, reminder]) => ({
@@ -60,7 +73,7 @@ export function addReminder(name, time) {
   name = name.trim();
   if (!name || reminders.has(name)) return false;
 
-  const timeInMs = timeToMS(time);
+  const timeInMs = parseTimeToMs(time);
   if (!timeInMs) return false;
 
   reminders.set(name, { 

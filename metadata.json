@@ -4,5 +4,5 @@
   "entry": "index.js",
   "version": "1.1.7",
   "description": "cool ct module ig", 
-  "requires": ["Vigilance", "BloomCore", "tska"]
+  "requires": ["Vigilance", "tska"]
 }

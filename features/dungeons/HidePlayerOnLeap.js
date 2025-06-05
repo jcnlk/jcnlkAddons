@@ -19,6 +19,6 @@ registerWhen(register("renderEntity", (entity, pos, partialTicks, event) => {
 registerWhen(register("chat", () => {
   hidePlayersUntil = Date.now() + (config.hidePlayerTime * 1000);
   showChatMessage("Hiding Players");
-}).setCriteria("You have teleported to ${location}!"), () => config.enablePlayerHiding);
+}).setCriteria(/You have teleported to .+!/), () => config.enablePlayerHiding);
 
 register("worldUnload", () => hidePlayersUntil = 0);

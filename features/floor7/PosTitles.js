@@ -1,7 +1,7 @@
-import { getClassColor, positionDefinitions } from "../../utils/Dungeon";
+import { getClassColor, positionDefinitions, inFloor } from "../../utils/Dungeon";
 import { registerWhen, showChatMessage } from "../../utils/Utils";
+import Dungeon from "../../../tska/skyblock/dungeon/Dungeon";
 import { stripRank } from "../../../BloomCore/utils/Utils";
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import HudManager from "../../utils/Hud";
 import { data } from "../../utils/Data";
 import { Hud } from "../../utils/Hud";
@@ -44,16 +44,15 @@ function showAlert(playerName, playerClass, text) {
 }
 
 registerWhen(register("tick", () => {
-  if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7") return;
+  if (!Dungeon.inBoss() || (!inFloor("F7") && !inFloor("M7"))) return;
   
   World.getAllPlayers().forEach(entity => {
-    if (Dungeon.bossEntry === null) return;
     if (entity.getPing() !== 1 || entity.isInvisible()) return;
     
     const playerName = entity.getName();
     if (playerName === Player.getName()) return;
     
-    const playerClass = Dungeon.classes[playerName];
+    const playerClass = Dungeon.getByName(playerName).className;
     if (!playerClass) return;
     
     positionDefinitions.forEach(position => {
@@ -72,7 +71,7 @@ registerWhen(register("chat", (player, message) => {
   if (strippedPlayer === Player.getName()) return;
   
   const msg = message.toLowerCase();
-  const playerClass = Dungeon.classes[strippedPlayer];
+  const playerClass = Dungeon.getByName(strippedPlayer).className;
   if (!playerClass) return;
   
   positionDefinitions.forEach(position => {
