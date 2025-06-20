@@ -16,7 +16,7 @@ const lastLocation = {
 };
 
 function sendMessage(message) {
-  setTimeout(() => ChatLib.command(`party chat ${message}`), 200);
+  Client.scheduleTask(5, () => ChatLib.command(`party chat ${message}`));
   showChatMessage("Announcing -> " + message);
 }
 

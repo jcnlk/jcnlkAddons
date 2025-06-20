@@ -1,4 +1,4 @@
-import { getCurrentGoldorPhase, getClassColor } from "../../utils/Dungeon";
+import { getStage, inStage, getClassColor } from "../../utils/Dungeon";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import { registerWhen } from "../../utils/Utils";
 import HudManager from "../../utils/Hud";
@@ -22,7 +22,7 @@ function resetMelody() {
 }
 
 registerWhen(register("step", () => {
-  const currentPhase = getCurrentGoldorPhase();
+  const currentPhase = getStage();
   if (currentPhase !== lastPhase) {
     resetMelody();
     lastPhase = currentPhase;
@@ -30,8 +30,7 @@ registerWhen(register("step", () => {
 }).setFps(1), () => config.melodyWarning);
 
 registerWhen(register("chat", (message) => {
-  const currentPhase = getCurrentGoldorPhase();
-  if (currentPhase < 1 || currentPhase > 4) return;
+  if (!inStage([1,2,3,4])) return;
   
   const melodyMatch = message.match(/^Party >[\s\[\w+\]]* (\w+): .*(\d\/\d|\d\d%)$/);
   
@@ -69,13 +68,8 @@ registerWhen(register("chat", (message) => {
 }).setCriteria("${message}"), () => config.melodyWarning);
 
 registerWhen(register("renderOverlay", () => {
-  const currentPhase = getCurrentGoldorPhase();
-  
-  if (!melodyProgress || currentPhase < 1 || currentPhase > 4 || HudManager.isEditing) return;
-  
+  if (!melodyProgress || !inStage([1,2,3,4]) || HudManager.isEditing) return;
   const playerClass = Dungeon.classes[playerName];
-  if (!playerClass) return;
-  
   const displayMessage = getClassColor(playerClass) + `${playerName} (${playerClass[0]}) &ehas Melody! ${melodyProgress}`;
   melodyWarningHud.draw(displayMessage);
 }), () => config.melodyWarning);

@@ -1,5 +1,5 @@
 import { registerWhen, showChatMessage, isPlayerInArea } from "../../utils/Utils";
-import { getCurrentGoldorPhase } from "../../utils/Dungeon";
+import { inStage } from "../../utils/Dungeon";
 import config from "../../config";
 
 let coreEntranceOpenTime = 0;
@@ -63,8 +63,7 @@ registerWhen(register("chat", () => {
 }).setCriteria("The Core entrance is opening!"), () => config.coreTimes);
 
 registerWhen(register("tick", () => {
-  if (!World.isLoaded() || coreEntranceOpenTime === 0) return;
-  if (getCurrentGoldorPhase() !== 5) return;
+  if (!World.isLoaded() || coreEntranceOpenTime === 0 || !inStage(5)) return;
 
   World.getAllPlayers().forEach((entity) => {
     if (entity.getPing() !== 1 || entity.isInvisible() || playersInCore.has(entity.getName())) return;

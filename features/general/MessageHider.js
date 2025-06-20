@@ -90,7 +90,7 @@ const hideDungeonMessages = [ // only hide inside of dungeon
   /The Flamethrower hit you for .+ damage!/,
   /Throwing Axe is now available!/,
   /Used Throwing Axe!/,
-  /A (?:Blood|Wither) Key was picked up/,
+  /A (?:Blood|Wither) Key was picked up!/,
   /You do not have the key for this door!/,
   /The Stormy .+ struck you for .+ damage!/,
   /.+ Mort: .+/,

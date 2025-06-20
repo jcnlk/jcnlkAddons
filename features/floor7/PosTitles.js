@@ -44,10 +44,9 @@ function showAlert(playerName, playerClass, text) {
 }
 
 registerWhen(register("tick", () => {
-  if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7") return;
+  if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7" || Date.now() - Dungeon.bossEntry > 1000) return;
   
   World.getAllPlayers().forEach(entity => {
-    if (Dungeon.bossEntry === null) return;
     if (entity.getPing() !== 1 || entity.isInvisible()) return;
     
     const playerName = entity.getName();

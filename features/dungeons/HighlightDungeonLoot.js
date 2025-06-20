@@ -134,12 +134,12 @@ function renderChest() {
 }
 
 registerWhen(register("guiRender", () => {
-    const now = Date.now();
-    if (now - lastUpdate >= UPDATE_INTERVAL) {
-      updateChest();
-      lastUpdate = now;
-    }
-    renderChest();
-  }), () => config.dungeonChestHighlighting);
+  const now = Date.now();
+  if (now - lastUpdate >= UPDATE_INTERVAL) {
+    updateChest();
+    lastUpdate = now;
+  }
+  renderChest();
+}), () => config.dungeonChestHighlighting);
 
 register("guiClosed", () => currentChest);
