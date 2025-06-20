@@ -25,6 +25,7 @@ import "./features/dungeons/CryptReminder";
 import "./features/dungeons/LeapAnnounce";
 import "./features/floor7/MelodyWarning";
 import "./features/floor7/MaskReminder";
+import "./features/floor7/LeapNotifier";
 import "./features/dungeons/QuizTimer";
 import "./features/floor7/MaskTimer";
 import "./features/floor7/PosTitles";

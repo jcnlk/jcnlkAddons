@@ -1,4 +1,4 @@
-import { registerWhen, showChatMessage, isPlayerInArea } from "../../utils/Utils";
+import { registerWhen, showChatMessage, isInBox } from "../../utils/Utils";
 import { inStage } from "../../utils/Dungeon";
 import config from "../../config";
 
@@ -67,7 +67,7 @@ registerWhen(register("tick", () => {
 
   World.getAllPlayers().forEach((entity) => {
     if (entity.getPing() !== 1 || entity.isInvisible() || playersInCore.has(entity.getName())) return;
-    if (isPlayerInArea(39, 71, 112, 155.5, 54, 118, entity)) {
+    if (isInBox(39, 71, 112, 155.5, 54, 118, entity)) {
       const playerName = entity.getName();
       const entranceTime = Date.now();
       playersInCore.set(playerName, entranceTime);

@@ -43,7 +43,7 @@ register("gameLoad", () => setRegisters());
 register("guiClosed", (gui) => { if (gui instanceof Java.type("gg.essential.vigilance.gui.SettingsGui")) setRegisters() });
 
 // Checks if a entity is in a specific area
-export function isPlayerInArea(x1, x2, y1, y2, z1, z2, entity = Player) {
+export function isInBox(x1, x2, y1, y2, z1, z2, entity = Player) {
   const x = entity.getX();
   const y = entity.getY();
   const z = entity.getZ();

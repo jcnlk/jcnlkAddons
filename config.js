@@ -247,6 +247,30 @@ class Config {
     })
     togglePosTitles = false;
 
+    @SwitchProperty({
+    name: "Leap Notifier",
+    description: "Show how many players have leaped and notify when everyone has leaped.",
+    category: "F7/M7",
+    subcategory: "Leaping"
+    })
+    leapNotifier = false;
+
+    @SwitchProperty({
+        name: "Show Title When All Leaped",
+        description: "Display a title when everyone has leaped.",
+        category: "F7/M7",
+        subcategory: "Leaping"
+    })
+    leapNotifierTitle = true;
+
+    @SwitchProperty({
+        name: "Announce To Party",
+        description: "Announce to party chat when everyone has leaped.",
+        category: "F7/M7",
+        subcategory: "Leaping"
+    })
+    leapNotifierAnnounce = false;
+
     ////////// HUD Settings //////////
     @ButtonProperty({
         name: "Edit HUD Positions",
@@ -273,6 +297,8 @@ class Config {
         this.addDependency("Player Hide Duration", "Hide Players After Leap");
         this.addDependency("Announce Core Times To Party", "Core Times");
         this.addDependency("Show Core Times in Chat", "Core Times");
+        this.addDependency("Show Title When All Leaped", "Leap Notifier");
+        this.addDependency("Announce To Party", "Leap Notifier");
     }
 }
 

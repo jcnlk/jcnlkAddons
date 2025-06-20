@@ -31,6 +31,11 @@ const defaultData = {
         y: 0.4,
         scale: 1.5
     },
+    leapNotifierHud: {
+        x: 0.5,
+        y: 0.45,
+        scale: 1.25
+    },
     reminders: [],
     customEmotes: {}
 };
