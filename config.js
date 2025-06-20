@@ -105,7 +105,7 @@ class Config {
         category: "Dungeons",
         subcategory: "Crypt Reminder",
     })
-    cryptReminderAnnounce = true;
+    cryptReminderAnnounce = false;
 
     @SwitchProperty({
         name: "Missing Crypts Title",
@@ -113,7 +113,7 @@ class Config {
         category: "Dungeons",
         subcategory: "Crypt Reminder"
     })
-    cryptReminderPopup = true;
+    cryptReminderPopup = false;
 
     @SwitchProperty({
         name: "Enable Dungeon Chest Highlighting",
@@ -145,7 +145,7 @@ class Config {
         category: "Dungeons",
         subcategory: "Puzzles"
     })
-    quizTimer = true;
+    quizTimer = false;
 
     @SwitchProperty({
         name: "Leap Announce",
