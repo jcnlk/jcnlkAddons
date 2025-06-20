@@ -1,4 +1,4 @@
-import { isInBox, isInBox, registerWhen, showChatMessage } from "../../utils/Utils";
+import { isInBox, registerWhen, showChatMessage } from "../../utils/Utils";
 import { Render2D } from "../../../tska/rendering/Render2D";
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import { getStage } from "../../utils/Dungeon";
@@ -7,10 +7,12 @@ import { data } from "../../utils/Data";
 import { Hud } from "../../utils/Hud";
 import config from "../../config";
 
-const leapNotifierHud = new Hud("leapNotifierHud", "&eLeaped: &b3/5", HudManager, data);
+const leapNotifierHud = new Hud("leapNotifierHud", "&eLeaped: &b3/4", HudManager, data);
 
 let notified = false;
 let lastLeapedCount = 0;
+let shouldShowLeapCounter = false;
+let wasBalanced = false;
 
 function getSection(entity) {
   let section = 0;
@@ -35,10 +37,24 @@ registerWhen(register("renderOverlay", () => {
 
   const currentStage = getStage();
   const currentSection = getSection(Player);
+
+  if (!currentStage) return;
   
-  if (!currentSection || currentSection <= currentStage) return;
+  if (currentSection && currentSection > currentStage) {
+    shouldShowLeapCounter = true;
+    wasBalanced = false;
+  }
   
-  const partyMembers = [...Dungeon.party];
+  if (currentSection && currentSection === currentStage && shouldShowLeapCounter) wasBalanced = true;
+  
+  if (wasBalanced && currentSection && currentSection !== currentStage) {
+    shouldShowLeapCounter = false;
+    wasBalanced = false;
+  }
+  
+  if (!shouldShowLeapCounter) return;
+  
+  const partyMembers = [...Dungeon.party].filter(member => member !== Player.getName());
   const leapedPlayers = [];
   const waitingPlayers = [];
   
@@ -56,7 +72,7 @@ registerWhen(register("renderOverlay", () => {
   const leapedCount = leapedPlayers.length;
   const totalPlayers = partyMembers.length;
   
-  if (leapedCount > 0) {
+  if (leapedCount >= 0) {
     const hudText = `&eLeaped: &b${leapedCount}/${totalPlayers}`;
     leapNotifierHud.draw(hudText);
   }
@@ -65,6 +81,8 @@ registerWhen(register("renderOverlay", () => {
   
   if (allLeaped && !notified) {
     notified = true;
+    shouldShowLeapCounter = false;
+    wasBalanced = false;
     playLeapSound();
     
     if (config.leapNotifierTitle) Render2D.showTitle("&aEveryone leaped!", null, 30)
@@ -85,4 +103,6 @@ registerWhen(register("renderOverlay", () => {
 register("worldUnload", () => {
   notified = false;
   lastLeapedCount = 0;
+  shouldShowLeapCounter = false;
+  wasBalanced = false;
 });
