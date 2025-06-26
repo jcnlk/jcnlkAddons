@@ -43,28 +43,28 @@ export const positionDefinitions = [
   {
     id: "AtEE2",
     messageText: "At Pre Enter 2!",
-    checkCondition: () => getCurrentGoldorPhase() === 1,
+    checkCondition: () => inStage(1),
     checkPosition: (entity) => isInBox(49, 58, 108, 115, 129, 133, entity),
     validMessages: ["early enter 2", "pre enter 2", "at ee2", "entered 3.2"]
   },
   {
     id: "AtEE3",
     messageText: "At Pre Enter 3!",
-    checkCondition: () => getCurrentGoldorPhase() === 2,
+    checkCondition: () => inStage(2),
     checkPosition: (entity) => isInBox(0, 4, 108, 115, 98, 107, entity),
     validMessages: ["early enter 3", "pre enter 3", "at ee3", "entered 3.3"]
   },
   {
     id: "AtCore",
     messageText: "At Core!",
-    checkCondition: () => getCurrentGoldorPhase() === 2 || getCurrentGoldorPhase() === 3,
+    checkCondition: () => inStage(2,3),
     checkPosition: (entity) => isInBox(52, 56, 113, 117, 49, 53, entity),
     validMessages: ["at core", "pre enter 4", "early enter 4", "at ee4", "entered 3.4"]
   },
   {
     id: "InGoldorTunnel",
     messageText: "Inside Goldor Tunnel!",
-    checkCondition: () => getCurrentGoldorPhase() === 4,
+    checkCondition: () => inStage(4),
     checkPosition: (entity) => isInBox(41, 68, 110, 150, 59, 117, entity),
     validMessages: ["in goldor tunnel", "inside goldor tunnel", "in core", "entered 3.5", "at ee5", "at pre enter 5"]
   },
