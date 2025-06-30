@@ -13,6 +13,7 @@
   - **Hide Useless Messages** - Hides useless or spammy messages in your chat.
 
 ### 🏰 Dungeons
+- **Auto Open Potionbag** – Automatically opens potionbag on dungeon start.
 - **Crypt Reminder** – Alerts when not enough crypts are killed.
 - **Dungeon Chest Highlighting** – Highlights dungeon chests based on their profit.
 - **Fire Freeze Notification** – Notifies when to use Fire Freeze Staff in M3.
@@ -27,6 +28,7 @@
 - **Mask Reminder** – Reminds to equip a mask before P3 starts.
 - **Melody Warning** - Displays a warning when a player has Melody terminal in Goldor phase.
 - **Core Times** - Tracks the time players need to enter core.
+- **Leap Notifier** - Shows how many players have leaped and notifies when everyone has leaped.
 - **Position Features**
   - **Positional Titles** – Displays a title for specific positions (At P2, At SS, EE2, EE3, At Core, Inside Goldor Tunnel, At Mid, At i4 Entry, At P5).
   - **Positional Messages** – Announces your location at specific positions (At P2, At SS, EE2, EE3, At Core, Inside Goldor Tunnel, At Mid, At i4 Entry, At P5).
