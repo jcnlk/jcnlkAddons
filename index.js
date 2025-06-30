@@ -12,7 +12,6 @@ import config from "./config";
 // General
 import { addReminder, removeReminder, listReminders } from "./features/general/Reminders";
 import "./features/general/AutoPetruleTitle";
-import "./features/general/AttributeAbbrev";
 import "./features/general/CustomEmotes";
 import "./features/general/MessageHider";
 

@@ -17,14 +17,6 @@ import {
 class Config {
     ////////// General Settings //////////
     @SwitchProperty({
-        name: "Enable Attribute Abbreviations",
-        description: "Show attribute abbreviations on items in inventory.",
-        category: "General",
-        subcategory: "Attributes"
-    })
-    attributeAbbreviations = false;
-
-    @SwitchProperty({
         name: "Show Autopet Rule Title",
         description: "Show a title when an Autopet Rule gets triggered.",
         category: "General",
