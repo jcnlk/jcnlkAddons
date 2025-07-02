@@ -32,7 +32,7 @@ Dungeon.registerWhenInDungeon(register("chat", (name, event) => {
   if (name === "Goldor") currentPhase = 3;
   if (name === "Necron") currentPhase = 4;
   if (name === "Wither King") currentPhase = 5;
-}).setCriteria("[BOSS] ${name} ${*}"));
+}).setCriteria("[BOSS] ${name}: ${*}"));
 
 register("worldLoad", () => currentPhase = 0);
 
