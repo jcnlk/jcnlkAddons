@@ -11,7 +11,6 @@ export function getClassColor(playerClass) {
 
 // To track the current Goldor phase (S1, S2, S3, S4)
 let currentStage = 0;
-const bossName = Java.type("net.minecraft.entity.boss.BossStatus").field_82827_c;
 
 Dungeon.registerWhenInDungeon(register("chat", message => {
   if (message === "[BOSS] Storm: I should have known that I stood no chance.") currentStage = 1;
@@ -22,21 +21,35 @@ register("worldUnload", () => currentStage = 0);
 
 export const getStage = () => currentStage;
 export const inStage = (stage) => Array.isArray(stage) ? stage.includes(currentStage) : currentStage === stage;
-export const inPhase = (name) => !!(name && bossName?.removeFormatting()?.toLowerCase().includes(name.toLowerCase()));
+
+// To Trach the current Phase (P1, P2, P3, P4, P5)
+let currentPhase = 0;
+
+Dungeon.registerWhenInDungeon(register("chat", (name, event) => {
+  name = name.removeFormatting();
+  if (name === "Maxor") currentPhase = 1;
+  if (name === "Storm") currentPhase = 2;
+  if (name === "Goldor") currentPhase = 3;
+  if (name === "Necron") currentPhase = 4;
+  if (name === "Wither King") currentPhase = 5;
+}).setCriteria("[BOSS] ${name} ${*}"));
+
+export const getPhase = () => currentPhase;
+export const inPhase = (phase) => Array.isArray(phase) ? phase.includes(currentPhase) : currentPhase === phase;
 
 // Criteria for PosMsg and PosTitles
 export const positionDefinitions = [
   {
     id: "AtP2",
     messageText: "At P2!",
-    checkCondition: (playerClass) => inPhase("Maxor") && playerClass !== "Healer",
+    checkCondition: (playerClass) => inPhase(1) && playerClass !== "Healer",
     checkPosition: (entity) => entity.getY() < 205 && entity.getY() > 164,
     validMessages: ["at p2", "in p2"]
   },
   {
     id: "AtSS",
     messageText: "At SS!",
-    checkCondition: () => inPhase("Storm") || inPhase("Goldor"),
+    checkCondition: () => inPhase([2,3]),
     checkPosition: (entity) => isInBox(106, 110, 118, 122, 92, 96, entity),
     validMessages: ["at ss", "at simon says"]
   },
@@ -71,21 +84,21 @@ export const positionDefinitions = [
   {
     id: "AtMid",
     messageText: "At Mid!",
-    checkCondition: () => inPhase("Necron"),
+    checkCondition: () => inPhase(4),
     checkPosition: (entity) => isInBox(47, 61, 64, 75, 69, 83, entity),
     validMessages: ["at mid", "in mid"]
   },
   {
     id: "AtPre4Entry",
     messageText: "At Pre4 Entry!",
-    checkCondition: (playerClass) => inPhase("Storm") && playerClass !== "Healer",
+    checkCondition: (playerClass) => inPhase(2) && playerClass !== "Healer",
     checkPosition: (entity) => isInBox(91, 93, 129, 133, 44, 46, entity),
     validMessages: ["i4 entry", "pre4 entry"]
   },
   {
     id: "AtP5",
     messageText: "At P5!",
-    checkCondition: (playerClass) => inPhase("Necron") && playerClass === "Healer",
+    checkCondition: (playerClass) => inPhase(4) && playerClass === "Healer",
     checkPosition: (entity) => entity.getY() < 50 && entity.getY() > 4,
     validMessages: ["at p5", "in p5"]
   }
