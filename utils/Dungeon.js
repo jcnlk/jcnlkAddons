@@ -72,7 +72,7 @@ export const positionDefinitions = [
   {
     id: "AtCore",
     messageText: "At Core!",
-    checkCondition: () => inStage(2,3),
+    checkCondition: () => inStage([2,3]),
     checkPosition: (entity) => isInBox(52, 56, 113, 117, 49, 53, entity),
     validMessages: ["at core", "pre enter 4", "early enter 4", "at ee4", "entered 3.4"]
   },
