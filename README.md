@@ -3,7 +3,6 @@
 ## 📌 Features
 
 ### 🔹 General
-- **Attribute Abbreviations** – Displays shortened forms of item attributes.
 - **Autopet Rule Title** – Adds custom titles to Autopet rules.
 - **Custom Emotes** – Integrates personalized emotes into chat (`/ja emotes`).
 - **Reminders** – Sets up in-game reminders for essential tasks (`/ja reminder`).
