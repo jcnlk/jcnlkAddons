@@ -1,7 +1,7 @@
 // External Modules
 import { CommandHandler } from "../tska/command/CommandHandler";
 import { convertToTimeString } from "../BloomCore/utils/Utils";
-import { fetch } from "../tska/polyfill/fetch";
+import { fetch } from "../tska/polyfill/Fetch";
 
 // Config and Utils
 import { showChatMessage, moduleVersion, PREFIX, registerWhen } from "./utils/Utils";
