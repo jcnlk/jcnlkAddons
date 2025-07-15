@@ -53,7 +53,7 @@ export const positionDefinitions = [
     messageText: "At SS!",
     checkCondition: () => inPhase([2,3]),
     checkPosition: (entity) => isInBox(106, 110, 118, 122, 92, 96, entity),
-    validMessages: ["at ss", "at simon says"]
+    validMessages: ["at ss", "at simon says", "at ssc"]
   },
   {
     id: "AtEE2",
@@ -81,7 +81,7 @@ export const positionDefinitions = [
     messageText: "Inside Goldor Tunnel!",
     checkCondition: () => inStage(4),
     checkPosition: (entity) => isInBox(41, 68, 110, 150, 59, 117, entity),
-    validMessages: ["in goldor tunnel", "inside goldor tunnel", "in core", "entered 3.5", "at ee5", "at pre enter 5"]
+    validMessages: ["in goldor tunnel", "inside goldor tunnel", "in core", "entered 3.5", "at ee5", "pre enter 5"]
   },
   {
     id: "AtMid",
