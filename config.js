@@ -255,14 +255,6 @@ class Config {
     })
     leapNotifierTitle = true;
 
-    @SwitchProperty({
-        name: "Announce To Party",
-        description: "Announce to party chat when everyone has leaped.",
-        category: "F7/M7",
-        subcategory: "Leaping"
-    })
-    leapNotifierAnnounce = false;
-
     ////////// HUD Settings //////////
     @ButtonProperty({
         name: "Edit HUD Positions",
@@ -290,7 +282,6 @@ class Config {
         this.addDependency("Announce Core Times To Party", "Core Times");
         this.addDependency("Show Core Times in Chat", "Core Times");
         this.addDependency("Show Title When All Leaped", "Leap Notifier");
-        this.addDependency("Announce To Party", "Leap Notifier");
     }
 }
 

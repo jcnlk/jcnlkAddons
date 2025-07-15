@@ -88,11 +88,6 @@ registerWhen(register("renderOverlay", () => {
     if (config.leapNotifierTitle) Render2D.showTitle("&aEveryone leaped!", null, 30)
     
     showChatMessage("&aEveryone leaped!");
-    
-    if (config.leapNotifierAnnounce) {
-      ChatLib.command("party chat Everyone leaped!");
-      showChatMessage("Announcing -> Everyone leaped!");
-    }
   }
   
   if (!allLeaped) notified = false;
