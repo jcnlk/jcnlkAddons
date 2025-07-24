@@ -17,7 +17,7 @@ const lastLocation = {
   AtCore: false,
   InGoldorTunnel: false,
   AtMid: false,
-  Ati4Entry: false,
+  AtPre4Entry: false,
   AtP5: false
 };
 
