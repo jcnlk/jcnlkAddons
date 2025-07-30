@@ -142,4 +142,4 @@ registerWhen(register("guiRender", () => {
   renderChest();
 }), () => config.dungeonChestHighlighting);
 
-register("guiClosed", () => currentChest);
+register("guiClosed", () => currentChest = null);

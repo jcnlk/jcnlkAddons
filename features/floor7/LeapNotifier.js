@@ -38,7 +38,7 @@ registerWhen(register("renderOverlay", () => {
   const currentStage = getStage();
   const currentSection = getSection(Player);
 
-  if (!currentStage) return;
+  if (!currentStage || (currentSection === 4 && currentStage === 1)) return; // don't render during pre4
   
   if (currentSection && currentSection > currentStage) {
     shouldShowLeapCounter = true;
@@ -57,6 +57,7 @@ registerWhen(register("renderOverlay", () => {
   const partyMembers = [...Dungeon.party].filter(member => member !== Player.getName());
   const leapedPlayers = [];
   const waitingPlayers = [];
+  const ignoredPlayer = [];
   
   partyMembers.forEach((member) => {
     const player = World.getPlayerByName(member);
@@ -66,13 +67,14 @@ registerWhen(register("renderOverlay", () => {
     if (!section) return;
     
     if (section === currentSection) leapedPlayers.push(member);
+    else if (isInBox(41, 68, 110, 150, 49, 117, member)) ignoredPlayer.push(member); // ignore core and goldor tunnel
     else waitingPlayers.push(member);
   });
   
   const leapedCount = leapedPlayers.length;
-  const totalPlayers = partyMembers.length;
+  const totalPlayers = partyMembers.length - ignoredPlayer.length;
   
-  if (leapedCount >= 0) {
+  if (leapedCount >= 0 && totalPlayers > 0) {
     const hudText = `&eLeaped: &b${leapedCount}/${totalPlayers}`;
     leapNotifierHud.draw(hudText);
   }
