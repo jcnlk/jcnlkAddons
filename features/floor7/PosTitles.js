@@ -59,6 +59,9 @@ registerWhen(register("tick", () => {
       if (!lastLocation[position.id] &&
           position.checkCondition(playerClass) &&
           position.checkPosition(entity)) {
+        
+        if (position.checkPosition(Player)) return;
+        
         lastLocation[position.id] = true;
         showAlert(playerName, playerClass, position.messageText);
       }
@@ -78,6 +81,9 @@ registerWhen(register("chat", (player, message) => {
     if (!lastLocation[position.id] &&
         position.checkCondition(playerClass) &&
         position.validMessages.some(term => msg.includes(term))) {
+      
+      if (position.checkPosition(Player)) return;
+      
       lastLocation[position.id] = true;
       showAlert(strippedPlayer, playerClass, position.messageText);
     }
