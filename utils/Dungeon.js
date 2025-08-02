@@ -53,7 +53,7 @@ export const positionDefinitions = [
     messageText: "At SS!",
     checkCondition: () => inPhase([2,3]),
     checkPosition: (entity) => isInBox(106, 110, 118, 122, 92, 96, entity),
-    validMessages: ["at ss", "at simon says", "at ssc"]
+    validMessages: ["at ss", "at simon says", "at ssc", "at simon says camp"]
   },
   {
     id: "AtEE2",
@@ -63,11 +63,32 @@ export const positionDefinitions = [
     validMessages: ["early enter 2", "pre enter 2", "at ee2", "entered 3.2"]
   },
   {
+    id: "AtEE2High",
+    messageText: "At Pre Enter 2 (High)!",
+    checkCondition: () => inStage(1),
+    checkPosition: (entity) => isInBox(62, 59, 132, 135, 143, 138, entity),
+    validMessages: ["high pre enter 2", "high ee2", "ee2 high", "early enter high", "high early enter", "pre enter 2 (high)"],
+  },
+  {
+    id: "AtSafespot2",
+    messageText: "At Safespot 2!",
+    checkCondition: () => inStage(1),
+    checkPosition: (entity) => isInBox(46, 49, 109, 109, 121.987, 121.988, entity),
+    validMessages: ["2 safespot", "safespot 2"]
+  },
+  {
     id: "AtEE3",
     messageText: "At Pre Enter 3!",
     checkCondition: () => inStage(2),
     checkPosition: (entity) => isInBox(0, 4, 108, 115, 98, 107, entity),
     validMessages: ["early enter 3", "pre enter 3", "at ee3", "entered 3.3"]
+  },
+  {
+    id: "AtSafespot3",
+    messageText: "At Safespot 3!",
+    checkCondition: () => inStage(2),
+    checkPosition: (entity) => isInBox(19, 18, 121.5, 125, 91, 100, entity),
+    validMessages: ["safespot 3", "3 safespot"]
   },
   {
     id: "AtCore",

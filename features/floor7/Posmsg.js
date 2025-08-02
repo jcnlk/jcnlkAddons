@@ -3,17 +3,8 @@ import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import { positionDefinitions } from "../../utils/Dungeon";
 import config from "../../config";
 
-const lastLocation = {
-  AtP2: false,
-  AtSS: false,
-  AtEE2: false,
-  AtEE3: false,
-  AtCore: false,
-  InGoldorTunnel: false,
-  AtMid: false,
-  Ati4Entry: false,
-  AtP5: false
-};
+const lastLocation = {};
+positionDefinitions.forEach(pos => lastLocation[pos.id] = false);
 
 function sendMessage(message) {
   Client.scheduleTask(5, () => ChatLib.command(`party chat ${message}`));
@@ -34,4 +25,4 @@ registerWhen(register("tick", () => {
   });
 }), () => config.togglePosMsg);
 
-register("worldUnload", () => Object.keys(lastLocation).forEach(key => lastLocation[key] = false));
+register("worldUnload", () => positionDefinitions.forEach(pos => lastLocation[pos.id] = false));

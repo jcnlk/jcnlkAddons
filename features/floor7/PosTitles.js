@@ -9,17 +9,8 @@ import config from "../../config";
 
 const posTitlesHud = new Hud("posTitlesHud", "&aTest Player (T) &eAt Mid!", HudManager, data);
 
-const lastLocation = {
-  AtP2: false,
-  AtSS: false,
-  AtEE2: false,
-  AtEE3: false,
-  AtCore: false,
-  InGoldorTunnel: false,
-  AtMid: false,
-  AtPre4Entry: false,
-  AtP5: false
-};
+const lastLocation = {};
+positionDefinitions.forEach(pos => lastLocation[pos.id] = false);
 
 let currentHudMessage = "";
 let hudDisplayTimeout = null;
@@ -96,7 +87,7 @@ registerWhen(register("renderOverlay", () => {
 }), () => config.togglePosTitles);
 
 register("worldUnload", () => {
-  Object.keys(lastLocation).forEach(key => lastLocation[key] = false);
+  positionDefinitions.forEach(pos => lastLocation[pos.id] = false);
   currentHudMessage = "";
   if (hudDisplayTimeout) {
     clearTimeout(hudDisplayTimeout);
