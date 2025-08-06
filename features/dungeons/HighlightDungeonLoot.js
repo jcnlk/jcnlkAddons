@@ -1,9 +1,4 @@
-/**
- * Yes I should actually recode this shit some day.
- * But for not it works fine ig..
- */
 import { getSkyblockItemID, highlightSlot } from "../../../BloomCore/utils/Utils";
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import Location from "../../../tska/skyblock/Location";
 import PriceUtils from "../../../BloomCore/PriceUtils";
 import { registerWhen } from "../../utils/Utils";
@@ -37,9 +32,6 @@ const worthless = new Set([
   "GOLDOR_THE_FISH"
 ]);
 
-function isInDungeonArea() {
-  return Dungeon.inDungeon || Location.inArea("Dungeon Hub");
-}
 
 function createChestItem(item, slot) {
   let quantity = 1;
@@ -80,11 +72,9 @@ function createChestItem(item, slot) {
 }
 
 let currentChest = null;
-let lastUpdate = 0;
-const UPDATE_INTERVAL = 333;
+let chestCache = new Map();
 
 function updateChest() {
-  if (!World.isLoaded() || !isInDungeonArea()) return;
   const container = Player.getContainer();
   if (!container) return;
   const containerName = container.getName();
@@ -97,12 +87,11 @@ function updateChest() {
   if (!nugget) return;
 
   const lore = nugget.getLore();
-  const chest = { name: chestName, cost: 0, items: [] };
-
+  let cost = 0;
   if (lore && lore.length >= 7) {
     const costLine = lore[7].removeFormatting();
     const costMatch = costLine.match(/^([\d,]+) Coins$/);
-    if (costMatch) chest.cost = parseInt(costMatch[1].replace(/,/g, ""), 10);
+    if (costMatch) cost = parseInt(costMatch[1].replace(/,/g, ""), 10);
   }
 
   const lootItems = [];
@@ -111,15 +100,24 @@ function updateChest() {
     if (stack && stack.getID() !== 160) lootItems.push({ slot: i, item: stack });
   }
 
+  const cacheKey = chestName + "_" + cost + "_" + lootItems.map(({item}) => getSkyblockItemID(item) + item.getStackSize()).join("_");
+  
+  if (chestCache.has(cacheKey)) {
+    currentChest = chestCache.get(cacheKey);
+    return;
+  }
+
+  const chest = { name: chestName, cost, items: [] };
   chest.items = lootItems.map(({ slot, item }) => createChestItem(item, slot));
   chest.items.forEach(item => {
     item.profit = Math.floor(item.value - chest.cost);
   });
+  
+  chestCache.set(cacheKey, chest);
   currentChest = chest;
 }
 
 function renderChest() {
-  if (!World.isLoaded() || !isInDungeonArea()) return;
   const container = Player.getContainer();
   if (!container || !currentChest) return;
   if (!/^(\w+) Chest$/.test(container.getName())) return;
@@ -127,19 +125,17 @@ function renderChest() {
   const gui = Client.currentGui.get();
   currentChest.items.forEach(item => {
     if (alwaysBuy.has(item.itemID)) highlightSlot(gui, item.slot, 0, 1, 0, 0.5, true);
-    if (item.profit < LOW_PROFIT_THRESHOLD) highlightSlot(gui, item.slot, 1, 0, 0, 0.5, true);
-    if (item.profit < MEDIUM_PROFIT_THRESHOLD) highlightSlot(gui, item.slot, 1, 1, 0, 0.5, true);
+    else if (item.profit < LOW_PROFIT_THRESHOLD) highlightSlot(gui, item.slot, 1, 0, 0, 0.5, true);
+    else if (item.profit < MEDIUM_PROFIT_THRESHOLD) highlightSlot(gui, item.slot, 1, 1, 0, 0.5, true);
     else highlightSlot(gui, item.slot, 0, 1, 0, 0.5, true);
   });
 }
 
 registerWhen(register("guiRender", () => {
-  const now = Date.now();
-  if (now - lastUpdate >= UPDATE_INTERVAL) {
-    updateChest();
-    lastUpdate = now;
-  }
+  if (!World.isLoaded() || (!Location.inWorld("catacombs") && !Location.inWorld("dungeon hub"))) return;
+  updateChest();
   renderChest();
 }), () => config.dungeonChestHighlighting);
 
 register("guiClosed", () => currentChest = null);
+register("worldUnload", () => chestCache.clear());
