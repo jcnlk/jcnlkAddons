@@ -51,7 +51,10 @@ registerWhen(register("tick", () => {
           position.checkCondition(playerClass) &&
           position.checkPosition(entity)) {
         
-        if (position.checkPosition(Player)) return;
+        if (position.checkPosition(Player)) {
+          lastLocation[position.id] = true;
+          return;
+        }
         
         lastLocation[position.id] = true;
         showAlert(playerName, playerClass, position.messageText);
