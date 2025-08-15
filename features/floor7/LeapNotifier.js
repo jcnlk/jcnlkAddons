@@ -67,7 +67,7 @@ registerWhen(register("renderOverlay", () => {
     if (!section) return;
     
     if (section === currentSection) leapedPlayers.push(member);
-    else if (isInBox(41, 68, 110, 150, 49, 117, member)) ignoredPlayer.push(member); // ignore core and goldor tunnel
+    else if (isInBox(41, 68, 110, 150, 49, 117, player)) ignoredPlayer.push(member); // ignore core and goldor tunnel
     else waitingPlayers.push(member);
   });
   
