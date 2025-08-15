@@ -4,8 +4,7 @@ import config from "../../config";
 
 const hideGeneralMessages = [
   /Your radio is weak. Find another enjoyer to boost it./,
-  /Creeper Veil Activated!/,
-  /Creeper Veil De-activated!/,
+  /Creeper Veil (?:Activated|De-activated!)/,
   /.*Skytils-SC.*/,
   /Warping you to your SkyBlock island.../,
   /You earned .+ Event EXP from playing SkyBlock!/,
@@ -66,7 +65,8 @@ const hideGeneralMessages = [
   /Error initializing players: undefined(?: Hidden)?/,
   /.*?YouTube Premier .+ https:\/\/youtu.be\/.+/,
   /Your radio lost signal\. There's too many enjoyers on this channel\./,
-  /Your radio signal is strong!/
+  /Your radio signal is strong!/,
+  /^\s*Link looks suspicious\? - Don't click it!$|^\s*Clicking sketchy links can result in your account$|^\s*being stolen!$/
 ];
 
 const hideDungeonMessages = [ // only hide inside of dungeon
