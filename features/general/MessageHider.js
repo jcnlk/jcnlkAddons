@@ -4,7 +4,7 @@ import config from "../../config";
 
 const hideGeneralMessages = [
   /Your radio is weak. Find another enjoyer to boost it./,
-  /Creeper Veil (?:Activated|De-activated!)/,
+  /Creeper Veil (Activated|De-activated)!(?: \(Expired\))?/,
   /.*Skytils-SC.*/,
   /Warping you to your SkyBlock island.../,
   /You earned .+ Event EXP from playing SkyBlock!/,
