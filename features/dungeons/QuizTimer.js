@@ -1,36 +1,41 @@
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import { onTick } from "../../../tska/shared/ServerTick";
 import HudManager from "../../utils/Hud";
 import { data } from "../../utils/Data";
 import { Hud } from "../../utils/Hud";
 import config from "../../config";
 
-let timerStart = 0;
-let timerDuration = 0;
+let initialDuration = 0;
+let currentDuration = 0;
 
 const quizTimerHud = new Hud("quizTimerHud", `&bQuiz: &c12s`, HudManager, data);
 
 Dungeon.registerWhenInDungeon(register("renderOverlay", () => {
-  if (!config.quizTimer) return;
+  if (!config.quizTimer || currentDuration <= 0) return;
 
-  const elapsed = (Date.now() - timerStart) / 1000;
-  const remaining = timerDuration - elapsed;
-  if (remaining <= 0) return;
-
-  const formattedTime = remaining.toFixed(2);
-
-  const fraction = remaining / timerDuration;
+  const fraction = currentDuration / initialDuration;
   let color;
   if (fraction > 0.5) color = `&c`;
-  if (fraction > 0.25) color = `&e`;
+  else if (fraction > 0.25) color = `&e`;
   else color = `&a`;
 
-  quizTimerHud.draw(`${color}${formattedTime}s`);
+  quizTimerHud.draw(`${color}${currentDuration.toFixed(2)}s`);
 }));
 
-const startQuizTimer = (duration) => {
-  timerStart = Date.now();
-  timerDuration = duration;
+const startTimer = (duration) => {
+  initialDuration = duration;
+  currentDuration = duration;
 };
 
-register("chat", () => startQuizTimer(12)).setCriteria("[STATUE] Oruo the Omniscient: I am Oruo the Omniscient. I have lived many lives. I have learned all there is to know.");
-register("chat", () => startQuizTimer(8.2)).setCriteria(/\[STATUE\] Oruo the Omniscient: .+ answered Question #\d correctly!/);
+onTick(() => {
+  if (!config.quizTimer) return;
+  if (currentDuration > 0) currentDuration -= 0.05;
+});
+
+register("chat", () => startTimer(11)).setCriteria("[STATUE] Oruo the Omniscient: I am Oruo the Omniscient. I have lived many lives. I have learned all there is to know.");
+register("chat", () => startTimer(7)).setCriteria(/\[STATUE\] Oruo the Omniscient: .+ answered Question #\d correctly!/);
+
+register("worldUnload", () => {
+  initialDuration = 0;
+  currentDuration = 0;
+});
