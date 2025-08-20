@@ -1,4 +1,4 @@
-import Dungeon from "../../../BloomCore/dungeons/Dungeon";
+import { onTick } from "../../../tska/shared/ServerTick";
 import { registerWhen } from "../../utils/Utils";
 import HudManager from "../../utils/Hud";
 import { data } from "../../utils/Data";
@@ -6,28 +6,32 @@ import { Hud } from "../../utils/Hud";
 import config from "../../config";
 
 const fireFreezeHud = new Hud("fireFreezeHud", "&bFire Freeze: &c4.0s", HudManager, data);
-let timerStart = 0;
+let timerTicks = 0;
+
+onTick(() => {
+  if (!config.FireFreezeNotifier || timerTicks <= 0) return;
+  
+  if (timerTicks === 100) World.playSound("random.burp", 2, 1);
+  if (timerTicks === 20) World.playSound("random.anvil_land", 2, 1);
+  
+  timerTicks--;
+});
 
 registerWhen(register("chat", () => {
-  if (Dungeon.floor !== "M3") return;
-  
-  timerStart = Date.now();
-  
-  setTimeout(() => World.playSound("random.burp", 2, 1), 1000);
-  setTimeout(() => World.playSound("random.anvil_land", 2, 1), 5000);
+  timerTicks = 120;
 }).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?"), () => config.FireFreezeNotifier);
 
 registerWhen(register("renderOverlay", () => {
-  if (!World.isLoaded() || HudManager.isEditing || timerStart === 0) return;
+  if (!World.isLoaded() || HudManager.isEditing || timerTicks <= 0) return;
   
-  const elapsed = (Date.now() - timerStart) / 1000;
+  const elapsed = (120 - timerTicks) / 20;
   
-  if (elapsed > 1 && elapsed < 5) {
+  if (elapsed < 5) {
     const remaining = 5 - elapsed;
     const color = remaining > 3.35 ? "&c" : remaining > 1.7 ? "&6" : "&e";
-    fireFreezeHud.draw(`&bFire Freeze: ${color}In ${remaining.toFixed(1)}s`);
+    fireFreezeHud.draw(`&bFire Freeze: ${color}In ${remaining.toFixed(2)}s`);
   } 
-  if (elapsed >= 5 && elapsed < 6.5) fireFreezeHud.draw("&bFire Freeze: &aNOW!");
+  else if (elapsed >= 5 && elapsed < 6) fireFreezeHud.draw("&bFire Freeze: &aNOW!");
 }), () => config.FireFreezeNotifier);
 
-register("worldUnload", () => timerStart = 0);
+register("worldUnload", () => timerTicks = 0);
