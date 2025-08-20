@@ -18,13 +18,13 @@ onTick(() => {
 });
 
 registerWhen(register("chat", () => {
-  timerTicks = 120;
+  timerTicks = 126;
 }).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?"), () => config.FireFreezeNotifier);
 
 registerWhen(register("renderOverlay", () => {
   if (!World.isLoaded() || HudManager.isEditing || timerTicks <= 0) return;
   
-  const elapsed = (120 - timerTicks) / 20;
+  const elapsed = (126 - timerTicks) / 20;
   
   if (elapsed < 5) {
     const remaining = 5 - elapsed;
