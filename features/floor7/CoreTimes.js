@@ -16,7 +16,7 @@ function getPlayerCoreTimes() {
   const playerTimes = [];
   
   playersInCore.forEach((entranceTime, playerName) => {
-    const timeToEnter = ((entranceTime - coreEntranceOpenTime) / 1000).toFixed(2);
+    const timeToEnter = ((entranceTime - coreEntranceOpenTime) / 1000).toFixed(1);
     playerTimes.push({ playerName, timeToEnter });
   });
   
@@ -29,7 +29,7 @@ function formatPartyMessage() {
   let message = "Time Into Core | ";
 
   getPlayerCoreTimes().forEach(({ playerName, timeToEnter }) => {
-    message += `${playerName} took ${timeToEnter}s | `;
+    message += `${playerName}: ${timeToEnter}s | `;
   });
 
   return message;

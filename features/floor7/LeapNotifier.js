@@ -33,7 +33,7 @@ function playLeapSound() {
 
 registerWhen(register("renderOverlay", () => {
   if (!World.isLoaded() || HudManager.isEditing) return;
-  if (Dungeon.floor !== "F7" && Dungeon.floor !== "M7" || isNaN(Dungeon.bossEntry) || Dungeon.bossEntry === null) return;
+  if (Dungeon.floorNumber !== 7 || isNaN(Dungeon.bossEntry) || Dungeon.bossEntry === null) return;
 
   const currentStage = getStage();
   const currentSection = getSection(Player);

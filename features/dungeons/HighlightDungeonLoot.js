@@ -32,7 +32,6 @@ const worthless = new Set([
   "GOLDOR_THE_FISH"
 ]);
 
-
 function createChestItem(item, slot) {
   let quantity = 1;
   let itemID = getSkyblockItemID(item);
@@ -132,7 +131,7 @@ function renderChest() {
 }
 
 registerWhen(register("guiRender", () => {
-  if (!World.isLoaded() || (!Location.inWorld("catacombs") && !Location.inWorld("dungeon hub"))) return;
+  if (!Location.inWorld("catacombs") && !Location.inWorld("dungeon hub")) return;
   updateChest();
   renderChest();
 }), () => config.dungeonChestHighlighting);
