@@ -225,7 +225,7 @@ class Config {
 
     @SwitchProperty({
         name: "Toggle Positional Messages",
-        description: "Announce your position to party chat at specific spots (P2, EE2, EE3, At Core, In Core, At Mid, At P5).",
+        description: "Announce your position to party chat at specific spots (At P2, At SS, EE2, High EE2, EE2 Safespot, EE3, EE3 Safespot, At Core, Inside Goldor Tunnel, At Mid, At Pre4 Entry, At P5).",
         category: "F7/M7",
         subcategory: "General"
     })
@@ -233,7 +233,7 @@ class Config {
 
     @SwitchProperty({
         name: "Toggle Positional Titles",
-        description: "Show a title when your team is at a specific spots (P2, EE2, EE3, At Core, In Core, At Mid, At P5).",
+        description: "Show a title when your team is at a specific spots (At P2, At SS, EE2, High EE2, EE2 Safespot, EE3, EE3 Safespot, At Core, Inside Goldor Tunnel, At Mid, At Pre4 Entry, At P5).",
         category: "F7/M7",
         subcategory: "General"
     })
