@@ -201,11 +201,12 @@ class Config {
 
     @SwitchProperty({
         name: "Mask Timer",
-        description: "Displays a HUD with Masks/Phoenix cooldowns.",
+        description: "Shows a tick-accurate HUD for mask and Phoenix cooldowns, accounting for Mage cooldown reduction and class level.",
         category: "F7/M7",
         subcategory: "General"
     })
     maskTimer = false;
+
 
     @SwitchProperty({
         name: "Mask Reminder",

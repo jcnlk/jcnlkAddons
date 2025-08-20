@@ -44,6 +44,7 @@ register("guiClosed", (gui) => { if (gui instanceof Java.type("gg.essential.vigi
 
 // Checks if a entity is in a specific area
 export function isInBox(x1, x2, y1, y2, z1, z2, entity = Player) {
+  if (!entity) return false;
   const x = entity.getX();
   const y = entity.getY();
   const z = entity.getZ();
