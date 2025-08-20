@@ -9,24 +9,22 @@ export function getClassColor(playerClass) {
   if (playerClass === "Archer") return "&6";
 }
 
-// To track the current Goldor phase (S1, S2, S3, S4)
+let currentPhase = 0;
 let currentStage = 0;
 
-Dungeon.registerWhenInDungeon(register("chat", message => {
-  if (message === "[BOSS] Storm: I should have known that I stood no chance.") currentStage = 1;
-  if ((message.includes("(7/7)") || message.includes("(8/8)")) && !message.includes(":")) currentStage += 1;
-}).setCriteria("${message}"));
-
-register("worldUnload", () => currentStage = 0);
-
-export const getStage = () => currentStage;
-export const inStage = (stage) => Array.isArray(stage) ? stage.includes(currentStage) : currentStage === stage;
+// To track the current Goldor phase (S1, S2, S3, S4)
+Dungeon.registerWhenInDungeon(register("chat", (msg) => {
+  if (Dungeon.floorNumber !== 7) return;
+  if (msg === "[BOSS] Storm: I should have known that I stood no chance.") currentStage = 1;
+  if (msg.match(/^(\w+) (activated|completed) (a terminal|a device|a lever)! \((?:7\/7|8\/8)\)/)) currentStage += 1;
+  if (msg === "The Core entrance is opening!") currentStage = 5;
+}).setCriteria("${msg}"));
 
 // To Trach the current Phase (P1, P2, P3, P4, P5)
-let currentPhase = 0;
-
 Dungeon.registerWhenInDungeon(register("chat", (name) => {
+  if (Dungeon.floorNumber !== 7) return;
   name = name.removeFormatting();
+
   if (name === "Maxor") currentPhase = 1;
   if (name === "Storm") currentPhase = 2;
   if (name === "Goldor") currentPhase = 3;
@@ -34,10 +32,14 @@ Dungeon.registerWhenInDungeon(register("chat", (name) => {
   if (name === "Wither King") currentPhase = 5;
 }).setCriteria(/\[BOSS\] (Maxor|Storm|Goldor|Necron|Wither King): .+/));
 
-register("worldLoad", () => currentPhase = 0);
-
-export const getPhase = () => currentPhase;
+export const getStage = () => currentStage;
+export const inStage = (stage) => Array.isArray(stage) ? stage.includes(currentStage) : currentStage === stage;
 export const inPhase = (phase) => Array.isArray(phase) ? phase.includes(currentPhase) : currentPhase === phase;
+
+register("worldUnload", () => {
+  currentPhase = 0;
+  currentStage = 0;
+});
 
 // Criteria for PosMsg and PosTitles
 export const positionDefinitions = [
