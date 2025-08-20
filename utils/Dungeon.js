@@ -25,14 +25,14 @@ export const inStage = (stage) => Array.isArray(stage) ? stage.includes(currentS
 // To Trach the current Phase (P1, P2, P3, P4, P5)
 let currentPhase = 0;
 
-Dungeon.registerWhenInDungeon(register("chat", (name, event) => {
+Dungeon.registerWhenInDungeon(register("chat", (name) => {
   name = name.removeFormatting();
   if (name === "Maxor") currentPhase = 1;
   if (name === "Storm") currentPhase = 2;
   if (name === "Goldor") currentPhase = 3;
   if (name === "Necron") currentPhase = 4;
   if (name === "Wither King") currentPhase = 5;
-}).setCriteria("[BOSS] ${name}: ${*}"));
+}).setCriteria(/\[BOSS\] (Maxor|Storm|Goldor|Necron|Wither King): .+/));
 
 register("worldLoad", () => currentPhase = 0);
 
@@ -53,7 +53,7 @@ export const positionDefinitions = [
     messageText: "At SS!",
     checkCondition: () => inPhase([2,3]),
     checkPosition: (entity) => isInBox(106, 110, 118, 122, 92, 96, entity),
-    validMessages: ["at ss", "at simon says", "at ssc", "at simon says camp"]
+    validMessages: ["at ss", "at simon says", "at ssc"]
   },
   {
     id: "AtEE2",
@@ -67,7 +67,7 @@ export const positionDefinitions = [
     messageText: "At Pre Enter 2 (High)!",
     checkCondition: () => inStage(1),
     checkPosition: (entity) => isInBox(62, 59, 132, 135, 143, 138, entity),
-    validMessages: ["high pre enter 2", "high ee2", "ee2 high", "early enter high", "high early enter", "pre enter 2 (high)"],
+    validMessages: ["high pre enter 2", "high ee2", "ee2 high", "early enter high", "high early enter 2", "pre enter 2 (high)"],
   },
   {
     id: "AtSafespot2",
