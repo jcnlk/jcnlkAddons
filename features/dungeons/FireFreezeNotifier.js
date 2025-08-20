@@ -26,12 +26,12 @@ registerWhen(register("renderOverlay", () => {
   
   const elapsed = (126 - timerTicks) / 20;
   
-  if (elapsed < 5) {
-    const remaining = 5 - elapsed;
-    const color = remaining > 3.35 ? "&c" : remaining > 1.7 ? "&6" : "&e";
+  if (elapsed < 5.3) {
+    const remaining = 5.3 - elapsed;
+    const color = remaining > 3.5 ? "&c" : remaining > 1.75 ? "&6" : "&e";
     fireFreezeHud.draw(`&bFire Freeze: ${color}In ${remaining.toFixed(2)}s`);
   } 
-  else if (elapsed >= 5 && elapsed < 6) fireFreezeHud.draw("&bFire Freeze: &aNOW!");
+  else if (elapsed >= 5.3 && elapsed < 6.3) fireFreezeHud.draw("&bFire Freeze: &aNOW!");
 }), () => config.FireFreezeNotifier);
 
 register("worldUnload", () => timerTicks = 0);
