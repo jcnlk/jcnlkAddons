@@ -1,56 +1,62 @@
-name: Build Clean Release
+name: Build Clean Artifact
 
 on:
-  push:
-    branches: [ main, master ]
+  push: {}
+  pull_request_review:
+    types: [submitted]
 
 env:
-  MODULE_NAME: ${{ vars.MODULE_NAME || github.event.repository.name }}
+  MODULE_NAME: ${{ github.event.repository.name }}
 
 jobs:
   build:
+    if: github.event_name != 'pull_request_review' || github.event.review.state == 'approved'
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout repository
+      - name: Determine ref to checkout
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request_review" ]; then
+            echo "CHECKOUT_REF=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_ENV"
+          else
+            echo "CHECKOUT_REF=${GITHUB_SHA}" >> "$GITHUB_ENV"
+          fi
+
+      - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ env.CHECKOUT_REF }}
           fetch-depth: 0
 
       - name: Set build name
-        run: |
-          echo "BUILD_NAME=${MODULE_NAME} Build${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+        run: echo "BUILD_NAME=${MODULE_NAME} Build${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
 
-      - name: Create build directory
+      - name: Stage module into dist/${{ env.MODULE_NAME }}
         run: |
-          mkdir -p "build/${MODULE_NAME}"
-          find . -maxdepth 1 -not -path . -not -path ./build -exec cp -r {} "build/${MODULE_NAME}/" \;
+          rm -rf dist
+          mkdir -p "dist/${MODULE_NAME}"
+          find . -maxdepth 1 \
+            -not -path . \
+            -not -path ./dist \
+            -not -path ./.git \
+            -exec cp -r {} "dist/${MODULE_NAME}/" \;
 
       - name: Clean up unnecessary files
         run: |
-          cd "build/${MODULE_NAME}"
-
+          cd "dist/${MODULE_NAME}"
           rm -rf .git .github .svn .hg
           rm -f .gitignore .gitattributes .gitmodules
-
           rm -f README.md LICENSE CHANGELOG.md CONTRIBUTING.md .editorconfig
-
           rm -f CLAUDE.md AGENTS.md CURSOR_RULES.md .cursorrules
-
           rm -rf .vscode .idea .eclipse .netbeans *.sublime-project *.sublime-workspace
           find . -name ".DS_Store" -delete
           find . -name "Thumbs.db" -delete
-
           rm -f package.json package-lock.json yarn.lock
           rm -rf node_modules
-
           rm -f .eslintrc* .prettierrc* jsconfig.json tsconfig.json
-
           rm -rf .circleci .travis
           rm -f appveyor.yml azure-pipelines.yml
-
           rm -f Dockerfile docker-compose.yml .dockerignore
-
           rm -f *.log *.tmp
           rm -rf tmp temp
           find . -name "*.bak" -delete
@@ -58,20 +64,14 @@ jobs:
 
       - name: Show final structure
         run: |
-          echo "Final ${MODULE_NAME} structure:"
-          find "build/${MODULE_NAME}" -type f | head -20
-          echo "..."
-          echo "Total files: $(find "build/${MODULE_NAME}" -type f | wc -l)"
-
-      - name: Create ZIP archive (folder name == ${MODULE_NAME}, zip file == ${BUILD_NAME}.zip)
-        run: |
-          cd build
-          zip -r "${BUILD_NAME}.zip" "${MODULE_NAME}/"
-          echo "ZIP file created:"
-          ls -lh "${BUILD_NAME}.zip"
+          echo "Preview of ${MODULE_NAME}:"
+          find "dist/${MODULE_NAME}" -type f | head -20
+          echo "Total files: $(find "dist/${MODULE_NAME}" -type f | wc -l)"
 
       - name: Upload clean module
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.BUILD_NAME }}
-          path: build/${{ env.BUILD_NAME }}.zip
+          path: dist/**
+          if-no-files-found: error
+          include-hidden-files: true
