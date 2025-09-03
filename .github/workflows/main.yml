@@ -5,7 +5,6 @@ on:
     branches: [ main, master ]
 
 env:
-  # Set the module name - defaults to repository name if not set
   MODULE_NAME: ${{ vars.MODULE_NAME || github.event.repository.name }}
 
 jobs:
@@ -13,101 +12,66 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    
-    - name: Create build directory
-      run: |
-        mkdir -p build/${{ env.MODULE_NAME }}
-        # Copy all files except the build directory itself
-        find . -maxdepth 1 -not -path . -not -path ./build -exec cp -r {} build/${{ env.MODULE_NAME }}/ \;
-    
-    - name: Clean up unnecessary files
-      run: |
-        cd build/${{ env.MODULE_NAME }}
-        
-        # Remove Git-related files and directories
-        rm -rf .git
-        rm -rf .github
-        rm -f .gitignore
-        rm -f .gitattributes
-        rm -f .gitmodules
-        
-        # Remove GitHub/development files
-        rm -f README.md
-        rm -f LICENSE
-        rm -f CHANGELOG.md
-        rm -f CONTRIBUTING.md
-        rm -f .editorconfig
-        
-        # Remove AI/Claude related files
-        rm -f CLAUDE.md
-        rm -f AGENTS.md
-        rm -f CURSOR_RULES.md
-        rm -f .cursorrules
-        
-        # Remove IDE and system files
-        rm -rf .vscode
-        rm -rf .idea
-        rm -rf .eclipse
-        rm -rf .netbeans
-        rm -rf .sublime-project
-        rm -rf .sublime-workspace
-        rm -f .DS_Store
-        find . -name "*.DS_Store" -delete
-        find . -name "Thumbs.db" -delete
-        
-        # Remove Node.js/npm files (if any)
-        rm -f package.json
-        rm -f package-lock.json
-        rm -f yarn.lock
-        rm -rf node_modules
-        
-        # Remove common development files
-        rm -f .eslintrc*
-        rm -f .prettierrc*
-        rm -f jsconfig.json
-        rm -f tsconfig.json
-        
-        # Remove CI/CD files
-        rm -rf .circleci
-        rm -rf .travis
-        rm -f appveyor.yml
-        rm -f azure-pipelines.yml
-        
-        # Remove Docker files
-        rm -f Dockerfile
-        rm -f docker-compose.yml
-        rm -f .dockerignore
-        
-        # Remove other common files that users don't need
-        rm -f *.log
-        rm -f *.tmp
-        rm -rf tmp
-        rm -rf temp
-        find . -name "*.bak" -delete
-        find . -name "*.orig" -delete
-        
-    - name: Show final structure
-      run: |
-        echo "Final ${{ env.MODULE_NAME }} structure:"
-        find build/${{ env.MODULE_NAME }} -type f | head -20
-        echo "..."
-        echo "Total files: $(find build/${{ env.MODULE_NAME }} -type f | wc -l)"
-    
-    - name: Create ZIP archive
-      run: |
-        cd build
-        zip -r ${{ env.MODULE_NAME }}.zip ${{ env.MODULE_NAME }}/
-        
-        # Show zip info
-        echo "ZIP file created:"
-        ls -lh ${{ env.MODULE_NAME }}.zip
-    
-    - name: Upload clean module
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.MODULE_NAME }}
-        path: build/${{ env.MODULE_NAME }}.zip
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set build name
+        run: |
+          echo "BUILD_NAME=${MODULE_NAME} Build${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+
+      - name: Create build directory
+        run: |
+          mkdir -p "build/${MODULE_NAME}"
+          find . -maxdepth 1 -not -path . -not -path ./build -exec cp -r {} "build/${MODULE_NAME}/" \;
+
+      - name: Clean up unnecessary files
+        run: |
+          cd "build/${MODULE_NAME}"
+
+          rm -rf .git .github .svn .hg
+          rm -f .gitignore .gitattributes .gitmodules
+
+          rm -f README.md LICENSE CHANGELOG.md CONTRIBUTING.md .editorconfig
+
+          rm -f CLAUDE.md AGENTS.md CURSOR_RULES.md .cursorrules
+
+          rm -rf .vscode .idea .eclipse .netbeans *.sublime-project *.sublime-workspace
+          find . -name ".DS_Store" -delete
+          find . -name "Thumbs.db" -delete
+
+          rm -f package.json package-lock.json yarn.lock
+          rm -rf node_modules
+
+          rm -f .eslintrc* .prettierrc* jsconfig.json tsconfig.json
+
+          rm -rf .circleci .travis
+          rm -f appveyor.yml azure-pipelines.yml
+
+          rm -f Dockerfile docker-compose.yml .dockerignore
+
+          rm -f *.log *.tmp
+          rm -rf tmp temp
+          find . -name "*.bak" -delete
+          find . -name "*.orig" -delete
+
+      - name: Show final structure
+        run: |
+          echo "Final ${MODULE_NAME} structure:"
+          find "build/${MODULE_NAME}" -type f | head -20
+          echo "..."
+          echo "Total files: $(find "build/${MODULE_NAME}" -type f | wc -l)"
+
+      - name: Create ZIP archive (folder name == ${MODULE_NAME}, zip file == ${BUILD_NAME}.zip)
+        run: |
+          cd build
+          zip -r "${BUILD_NAME}.zip" "${MODULE_NAME}/"
+          echo "ZIP file created:"
+          ls -lh "${BUILD_NAME}.zip"
+
+      - name: Upload clean module
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BUILD_NAME }}
+          path: build/${{ env.BUILD_NAME }}.zip
